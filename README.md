@@ -1,6 +1,7 @@
 # la-bonne-franquette
 
 La Bonne Franquette, c'est l'application de gestion de commandes simple et efficace.
+
 Pensée spécialement pour les petits restaurateurs, elle ne dépend pas de systèmes informatique spécialisées, une simple tablette suffit !
 
 ## Technos
