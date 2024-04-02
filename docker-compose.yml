@@ -1,0 +1,17 @@
+version: 0.0.1
+name: franquette-sql
+services:
+  db:
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: bdd
+      MYSQL_ROOT_PASSWORD: test
+    volumes:
+      - franquette-sql-data:/var/lib/mysql
+    networks:
+      - franquette-network
+networks:
+  franquette-network:
+    driver: bridge
+volumes:
+  franquette-sql-data:
