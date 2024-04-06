@@ -3,13 +3,16 @@ name: franquette-sql
 services:
   db:
     image: mysql:latest
+    restart: always
     environment:
       MYSQL_DATABASE: bdd
       MYSQL_ROOT_PASSWORD: test
     volumes:
-      - franquette-sql-data:/var/lib/mysql
+      - ./db/sql:/var/lib/mysql
     networks:
       - franquette-network
+    ports:
+      - 33060:3306
 networks:
   franquette-network:
     driver: bridge
