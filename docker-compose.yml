@@ -16,5 +16,3 @@ services:
 networks:
   franquette-network:
     driver: bridge
-volumes:
-  franquette-sql-data:

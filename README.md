@@ -14,3 +14,7 @@ Base de données écrite en mySQL.
 
 * [Trello](https://trello.com/b/SJMgiPY2/2fast2go)
 * [Miro](https://miro.com/app/board/uXjVNdC3XNc=/)
+
+## Informations sur l'environnement de développement
+
+* Desoin de créer le dossier '~/.docker/volumes/franquette/db/sql' afin de faire fonctionner le volume du docker de la bdd.
