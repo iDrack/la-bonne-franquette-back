@@ -8,7 +8,7 @@ services:
       MYSQL_DATABASE: bdd
       MYSQL_ROOT_PASSWORD: test
     volumes:
-      - ./db/sql:/var/lib/mysql
+      - ~/.docker/volumes/franquette/db/sql:/var/lib/mysql
     networks:
       - franquette-network
     ports:
