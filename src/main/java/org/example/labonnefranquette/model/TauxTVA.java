@@ -3,6 +3,8 @@ package org.example.labonnefranquette.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Entity
 @Table (schema = "lbf_tauxTVA")
@@ -16,4 +18,7 @@ public class TauxTVA {
 
     @Column(name = "poucentage", nullable = false, length = 5)
     private double pourcentage;
+
+    @OneToMany(mappedBy = "tauxTVA")
+    private Set<Produit> produitSet;
 }

@@ -3,6 +3,7 @@ package org.example.labonnefranquette.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -18,4 +19,12 @@ public class Categorie {
 
     @OneToMany(mappedBy = "categorie")
     private Set<SousCategorie> sousCategorieSet;
+
+    @ManyToMany
+    @JoinTable(
+            name = "categorie_possede_produit",
+            joinColumns = @JoinColumn(name = "categorie_id"),
+            inverseJoinColumns = @JoinColumn(name = "produit_id")
+    )
+    private Collection<Produit> produitSet;
 }

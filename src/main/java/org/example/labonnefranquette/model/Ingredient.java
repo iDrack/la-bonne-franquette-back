@@ -3,6 +3,8 @@ package org.example.labonnefranquette.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Collection;
+
 @Data
 @Entity
 @Table(schema = "lbf-ingredient")
@@ -22,4 +24,7 @@ public class Ingredient {
 
     @OneToOne(mappedBy = "ingredient")
     private Extra extra;
+
+    @ManyToMany(mappedBy = "ingredientSet")
+    private Collection<Produit> produitSet;
 }
