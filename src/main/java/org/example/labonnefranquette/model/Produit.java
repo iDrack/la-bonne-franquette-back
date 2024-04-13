@@ -23,7 +23,12 @@ public class Produit {
     @JoinColumn(name = "tauxtva_id", nullable = false)
     private TauxTVA tauxTVA;
 
-    @ManyToMany(mappedBy = "produitSet")
+    @ManyToMany
+    @JoinTable(
+            name = "produit_appartient_categorie",
+            joinColumns = @JoinColumn(name = "produit_id"),
+            inverseJoinColumns = @JoinColumn(name = "categorie_id")
+    )
     private Set<Categorie> categorieSet;
 
     @ManyToMany

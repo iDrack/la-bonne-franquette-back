@@ -1,5 +1,6 @@
 package org.example.labonnefranquette.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,11 +21,7 @@ public class Categorie {
     @OneToMany(mappedBy = "categorie")
     private Set<SousCategorie> sousCategorieSet;
 
-    @ManyToMany
-    @JoinTable(
-            name = "categorie_possede_produit",
-            joinColumns = @JoinColumn(name = "categorie_id"),
-            inverseJoinColumns = @JoinColumn(name = "produit_id")
-    )
+    @ManyToMany(mappedBy = "categorieSet")
+    @JsonBackReference
     private Collection<Produit> produitSet;
 }

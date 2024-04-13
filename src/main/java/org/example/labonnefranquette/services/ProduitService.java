@@ -9,4 +9,6 @@ public interface ProduitService {
 
     List<Produit> getAllProduit();
 
+    List<Produit> getProduitById(long id);
+
 }

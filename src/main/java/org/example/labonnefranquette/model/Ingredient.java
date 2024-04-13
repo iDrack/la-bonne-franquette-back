@@ -1,9 +1,10 @@
 package org.example.labonnefranquette.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Collection;
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,7 +17,7 @@ public class Ingredient {
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
 
-    @Column(name = "aCuire", nullable = false)
+    @Column(name = "aCuire", nullable = false, columnDefinition = "BOOLEAN")
     private boolean aCuire;
 
     @Column(name = "typeTVA", nullable = false)
@@ -26,5 +27,6 @@ public class Ingredient {
     private Extra extra;
 
     @ManyToMany(mappedBy = "ingredientSet")
-    private Collection<Produit> produitSet;
+    @JsonBackReference
+    private Set<Produit> produitSet;
 }
