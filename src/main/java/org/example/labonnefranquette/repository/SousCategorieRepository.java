@@ -1,4 +1,4 @@
 package org.example.labonnefranquette.repository;
 
-public interface SousCategoryrepository {
+public interface SousCategorieRepository {
 }
