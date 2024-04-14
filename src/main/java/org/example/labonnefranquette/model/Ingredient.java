@@ -8,10 +8,10 @@ import java.util.Set;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(schema = "lbf-ingredient")
 public class Ingredient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "nom", nullable = false, length = 50)
@@ -19,12 +19,6 @@ public class Ingredient {
 
     @Column(name = "aCuire", nullable = false, columnDefinition = "BOOLEAN")
     private boolean aCuire;
-
-    @Column(name = "typeTVA", nullable = false)
-    private int typeTVA;
-
-    @OneToOne(mappedBy = "ingredient")
-    private Extra extra;
 
     @ManyToMany(mappedBy = "ingredientSet")
     @JsonBackReference

@@ -4,15 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(schema = "lbf-categorie")
 public class Categorie {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "nom", nullable = false, length = 20)
@@ -23,5 +22,5 @@ public class Categorie {
 
     @ManyToMany(mappedBy = "categorieSet")
     @JsonBackReference
-    private Collection<Produit> produitSet;
+    private Set<Produit> produitSet;
 }

@@ -1,25 +1,19 @@
 package org.example.labonnefranquette.model;
 
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Data;
 
 @Data
 @Entity
 @Table(schema = "lbf-extras")
-public class Extra {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+public class Extra extends Ingredient {
 
-    @Column(name = "nom", nullable = false, length = 20)
-    private String nom;
+    @Column(name = "typeTVA", nullable = false)
+    private int typeTVA;
 
     @Column(name = "prixHT", nullable = false)
     private int prixHT;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
-    private Ingredient ingredient;
-
 }
