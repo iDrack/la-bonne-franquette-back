@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Data
@@ -23,5 +22,5 @@ public class Categorie {
 
     @ManyToMany(mappedBy = "categorieSet")
     @JsonBackReference
-    private Collection<Produit> produitSet;
+    private Set<Produit> produitSet;
 }

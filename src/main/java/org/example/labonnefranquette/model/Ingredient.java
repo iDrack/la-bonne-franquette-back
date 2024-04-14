@@ -20,10 +20,8 @@ public class Ingredient {
     @Column(name = "aCuire", nullable = false, columnDefinition = "BOOLEAN")
     private boolean aCuire;
 
-    @Column(name = "typeTVA", nullable = false)
-    private int typeTVA;
-
     @OneToOne(mappedBy = "ingredient")
+    @JsonBackReference
     private Extra extra;
 
     @ManyToMany(mappedBy = "ingredientSet")

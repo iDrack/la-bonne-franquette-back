@@ -3,7 +3,7 @@ package org.example.labonnefranquette.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -29,7 +29,7 @@ public class Produit {
             joinColumns = @JoinColumn(name = "produit_id"),
             inverseJoinColumns = @JoinColumn(name = "categorie_id")
     )
-    private Set<Categorie> categorieSet;
+    private Collection<Categorie> categorieSet;
 
     @ManyToMany
     @JoinTable(
@@ -37,5 +37,5 @@ public class Produit {
             joinColumns = @JoinColumn(name = "produit_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
-    private Set<Ingredient> ingredientSet;
+    private Collection<Ingredient> ingredientSet;
 }

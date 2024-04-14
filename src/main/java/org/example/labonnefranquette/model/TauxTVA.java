@@ -1,9 +1,10 @@
 package org.example.labonnefranquette.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.Collection;
 
 @Data
 @Entity
@@ -16,9 +17,13 @@ public class TauxTVA {
     @Column(name = "nom", nullable = false, length = 20)
     private String nom;
 
-    @Column(name = "poucentage", nullable = false, length = 5)
+    @Column(name = "pourcentage", nullable = false, length = 5)
     private double pourcentage;
 
     @OneToMany(mappedBy = "tauxTVA")
-    private Set<Produit> produitSet;
+    @JsonBackReference
+    private Collection<Produit> produitSet;
+
+    @OneToMany(mappedBy = "tauxTVA")
+    private Collection<Extra> ExtraSet;
 }

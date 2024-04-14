@@ -1,6 +1,7 @@
 package org.example.labonnefranquette.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,8 +19,14 @@ public class Extra {
     @Column(name = "prixHT", nullable = false)
     private int prixHT;
 
+    @ManyToOne
+    @JoinColumn(name = "tauxtva_id", nullable = false)
+    @JsonBackReference
+    private TauxTVA tauxTVA;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
+    @JsonBackReference
     private Ingredient ingredient;
 
 }

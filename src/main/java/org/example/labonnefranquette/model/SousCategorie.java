@@ -1,5 +1,6 @@
 package org.example.labonnefranquette.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,5 +17,6 @@ public class SousCategorie {
 
     @ManyToOne
     @JoinColumn(name="categorie_id", nullable = false)
+    @JsonBackReference
     private Categorie categorie;
 }
