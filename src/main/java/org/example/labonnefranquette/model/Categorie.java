@@ -8,13 +8,13 @@ import java.util.Set;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(schema = "lbf-categorie")
 public class Categorie {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nom", nullable = false, length = 20)
+    @Column(name = "nom", nullable = false, length = 50)
     private String nom;
 
     @OneToMany(mappedBy = "categorie")

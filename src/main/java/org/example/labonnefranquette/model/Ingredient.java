@@ -8,10 +8,10 @@ import java.util.Set;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Table(schema = "lbf-ingredient")
 public class Ingredient {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "nom", nullable = false, length = 50)

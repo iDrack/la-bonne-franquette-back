@@ -21,4 +21,7 @@ public class TauxTVA {
 
     @OneToMany(mappedBy = "tauxTVA")
     private Set<Produit> produitSet;
+
+    @OneToMany(mappedBy = "tauxTVA")
+    private Set<Extra> extraSet;
 }
