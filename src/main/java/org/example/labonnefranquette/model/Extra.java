@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 @Entity
 @DiscriminatorValue("extra")
-@Table(schema = "lbf-extras")
+@Table(name = "extra")
 public class Extra extends Ingredient {
 
     @Column(name = "prixHT", nullable = false)

@@ -7,7 +7,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(schema = "lbf_produit")
+@Table(name = "produit")
 public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,4 +38,7 @@ public class Produit {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
     private Collection<Ingredient> ingredientSet;
+
+    @ManyToMany(mappedBy = "produitSet")
+    private Collection<Menu> menuSet;
 }

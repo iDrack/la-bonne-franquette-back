@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table (schema = "lbf_tauxTVA")
+@Table(name = "tauxTVA")
 public class TauxTVA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +25,8 @@ public class TauxTVA {
     private Collection<Produit> produitSet;
 
     @OneToMany(mappedBy = "tauxTVA")
-    private Collection<Extra> ExtraSet;
+    private Collection<Extra> extraSet;
+
+    @OneToMany(mappedBy = "tauxTVA")
+    private Collection<Menu> menuSet;
 }

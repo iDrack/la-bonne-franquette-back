@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/produit")
@@ -21,11 +22,12 @@ public class ProduitController {
 
     @GetMapping("/")
     public ResponseEntity<List<Produit>> getAllProduits() {
-        return new ResponseEntity<>(produitservice.getAllProduit(), HttpStatus.OK);
+        return new ResponseEntity<>(produitservice.getAllProduit(), HttpStatus.FOUND);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<Produit>> getProduitById(@PathVariable String id) {
-        return new ResponseEntity<>(produitservice.getProduitById(Long.getLong(id)), HttpStatus.OK);
+    public ResponseEntity<Produit> getProduitById(@PathVariable String id) {
+        Optional<Produit> resultat = produitservice.getProduitById(Long.getLong(id));
+        return resultat.map(produit -> new ResponseEntity<>(produit, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 }

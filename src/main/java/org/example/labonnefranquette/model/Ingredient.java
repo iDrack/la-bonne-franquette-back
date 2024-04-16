@@ -12,7 +12,7 @@ import java.util.Set;
 @DiscriminatorColumn(name = "ingredient_type",
         discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("ingredient")
-@Table(schema = "lbf-ingredient")
+@Table(name = "ingredient")
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

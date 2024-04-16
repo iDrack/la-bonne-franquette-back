@@ -5,8 +5,8 @@ import org.example.labonnefranquette.repository.ProduitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProduitServiceImpl implements ProduitService {
@@ -20,7 +20,7 @@ public class ProduitServiceImpl implements ProduitService {
     }
 
     @Override
-    public List<Produit> getProduitById(long id) {
-        return produitRepository.findAllById(Collections.singleton(id));
+    public Optional<Produit> getProduitById(long id) {
+        return produitRepository.findById(id);
     }
 }

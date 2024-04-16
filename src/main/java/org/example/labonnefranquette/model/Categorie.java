@@ -11,7 +11,7 @@ import java.util.Set;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "categorie_type",
         discriminatorType = DiscriminatorType.STRING)
-@Table(schema = "lbf-categorie")
+@Table(name = "categorie")
 public class Categorie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

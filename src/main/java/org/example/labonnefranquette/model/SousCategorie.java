@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Entity
 @DiscriminatorValue("sous-categorie")
-@Table(schema = "lbf-sousCategorie")
+@Table(name = "sousCategorie")
 public class SousCategorie extends Categorie {
     @ManyToOne
     @JoinColumn(name="categorie_id", nullable = false)
