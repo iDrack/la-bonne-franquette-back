@@ -8,6 +8,9 @@ import java.util.Set;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "categorie_type",
+        discriminatorType = DiscriminatorType.STRING)
 @Table(schema = "lbf-categorie")
 public class Categorie {
     @Id

@@ -8,6 +8,10 @@ import java.util.Set;
 
 @Data
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "ingredient_type",
+        discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("ingredient")
 @Table(schema = "lbf-ingredient")
 public class Ingredient {
     @Id

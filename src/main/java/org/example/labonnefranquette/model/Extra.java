@@ -7,14 +7,9 @@ import lombok.Data;
 
 @Data
 @Entity
+@DiscriminatorValue("extra")
 @Table(schema = "lbf-extras")
-public class Extra {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @Column(name = "nom", nullable = false, length = 20)
-    private String nom;
+public class Extra extends Ingredient {
 
     @Column(name = "prixHT", nullable = false)
     private int prixHT;
