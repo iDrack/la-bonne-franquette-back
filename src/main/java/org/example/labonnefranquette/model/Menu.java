@@ -10,17 +10,17 @@ import java.util.Collection;
 @Table(name = "menu")
 public class Menu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
 
-    @Column(name = "prixHT", nullable = false, length = 50)
+    @Column(name = "prix_ht", nullable = false, length = 50)
     private int prixHT;
 
     @ManyToOne
-    @JoinColumn(name = "tauxtva_id", nullable = false)
+    @JoinColumn(name = "taux_tva_id", nullable = false)
     private TauxTVA tauxTVA;
 
     @ManyToMany

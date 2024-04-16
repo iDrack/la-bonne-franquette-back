@@ -8,7 +8,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "tauxTVA")
+@Table(name = "taux_tva")
 public class TauxTVA {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

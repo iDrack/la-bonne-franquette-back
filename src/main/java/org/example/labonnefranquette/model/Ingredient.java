@@ -21,7 +21,7 @@ public class Ingredient {
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
 
-    @Column(name = "aCuire", nullable = false, columnDefinition = "BOOLEAN")
+    @Column(name = "a_cuire", nullable = false, columnDefinition = "BOOLEAN")
     private boolean aCuire;
 
     @OneToOne(mappedBy = "ingredient")

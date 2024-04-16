@@ -16,11 +16,11 @@ public class Produit {
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
 
-    @Column(name = "prixHT", nullable = false, length = 10)
+    @Column(name = "prix_ht", nullable = false, length = 10)
     private int prixHT;
 
     @ManyToOne
-    @JoinColumn(name = "tauxtva_id", nullable = false)
+    @JoinColumn(name = "taux_tva_id", nullable = false)
     private TauxTVA tauxTVA;
 
     @ManyToMany

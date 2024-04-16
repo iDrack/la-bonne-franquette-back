@@ -15,7 +15,7 @@ public class Extra extends Ingredient {
     private int prixHT;
 
     @ManyToOne
-    @JoinColumn(name = "tauxtva_id", nullable = false)
+    @JoinColumn(name = "taux_tva_id", nullable = false)
     @JsonBackReference
     private TauxTVA tauxTVA;
 
