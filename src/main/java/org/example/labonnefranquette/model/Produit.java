@@ -20,10 +20,6 @@ public class Produit {
     @Column(name = "prix_ht", nullable = false, length = 10)
     private int prixHT;
 
-    @ManyToOne
-    @JoinColumn(name = "taux_tva_id", nullable = false)
-    private TauxTVA tauxTVA;
-
     @ManyToMany
     @JoinTable(
             name = "produit_appartient_categorie",
@@ -43,4 +39,8 @@ public class Produit {
     @ManyToMany(mappedBy = "produitSet")
     @JsonBackReference
     private Collection<Menu> menuSet;
+
+    @ManyToMany(mappedBy = "produitSet")
+    @JsonBackReference
+    private Collection<Commande> commandeSet;
 }

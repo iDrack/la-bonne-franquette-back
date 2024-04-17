@@ -14,11 +14,6 @@ public class Extra extends Ingredient {
     @Column(name = "prixHT", nullable = true)
     private int prixHT;
 
-    @ManyToOne
-    @JoinColumn(name = "taux_tva_id", nullable = true)
-    @JsonBackReference
-    private TauxTVA tauxTVA;
-
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
     @JsonBackReference
