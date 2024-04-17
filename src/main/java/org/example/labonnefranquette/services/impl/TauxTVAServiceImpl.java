@@ -1,7 +1,8 @@
-package org.example.labonnefranquette.services;
+package org.example.labonnefranquette.services.impl;
 
 import org.example.labonnefranquette.model.TauxTVA;
 import org.example.labonnefranquette.repository.TauxTVARepository;
+import org.example.labonnefranquette.services.TauxTVAService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
