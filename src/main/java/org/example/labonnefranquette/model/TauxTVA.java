@@ -25,8 +25,10 @@ public class TauxTVA {
     private Collection<Produit> produitSet;
 
     @OneToMany(mappedBy = "tauxTVA")
+    @JsonBackReference
     private Collection<Extra> extraSet;
 
     @OneToMany(mappedBy = "tauxTVA")
+    @JsonBackReference
     private Collection<Menu> menuSet;
 }

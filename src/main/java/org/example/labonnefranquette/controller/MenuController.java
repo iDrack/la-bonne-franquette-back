@@ -26,8 +26,8 @@ public class MenuController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Menu> getMenuById(@PathVariable String id) {
-        Optional<Menu> resultat = menuService.getMenuById(Long.getLong(id));
+    public ResponseEntity<Menu> getMenuById(@PathVariable Long id) {
+        Optional<Menu> resultat = menuService.getMenuById(id);
         return resultat.map(menu -> new ResponseEntity<>(menu, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 }

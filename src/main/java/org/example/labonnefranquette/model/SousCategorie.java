@@ -10,7 +10,7 @@ import lombok.Data;
 @Table(name = "sousCategorie")
 public class SousCategorie extends Categorie {
     @ManyToOne
-    @JoinColumn(name="categorie_id", nullable = false)
+    @JoinColumn(name = "categorie_id", nullable = true)
     @JsonBackReference
     private Categorie categorie;
 }

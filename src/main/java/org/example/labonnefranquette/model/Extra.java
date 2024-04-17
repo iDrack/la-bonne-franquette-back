@@ -11,11 +11,11 @@ import lombok.Data;
 @Table(name = "extra")
 public class Extra extends Ingredient {
 
-    @Column(name = "prixHT", nullable = false)
+    @Column(name = "prixHT", nullable = true)
     private int prixHT;
 
     @ManyToOne
-    @JoinColumn(name = "taux_tva_id", nullable = false)
+    @JoinColumn(name = "taux_tva_id", nullable = true)
     @JsonBackReference
     private TauxTVA tauxTVA;
 

@@ -4,13 +4,14 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.Collection;
 
 @Data
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "categorie_type",
         discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("categorie")
 @Table(name = "categorie")
 public class Categorie {
     @Id
@@ -21,9 +22,9 @@ public class Categorie {
     private String nom;
 
     @OneToMany(mappedBy = "categorie")
-    private Set<SousCategorie> sousCategorieSet;
+    private Collection<SousCategorie> sousCategorieSet;
 
     @ManyToMany(mappedBy = "categorieSet")
     @JsonBackReference
-    private Set<Produit> produitSet;
+    private Collection<Produit> produitSet;
 }

@@ -1,5 +1,6 @@
 package org.example.labonnefranquette.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -40,5 +41,6 @@ public class Produit {
     private Collection<Ingredient> ingredientSet;
 
     @ManyToMany(mappedBy = "produitSet")
+    @JsonBackReference
     private Collection<Menu> menuSet;
 }
