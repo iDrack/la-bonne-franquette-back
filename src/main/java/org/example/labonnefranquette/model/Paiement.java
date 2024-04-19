@@ -1,10 +1,14 @@
 package org.example.labonnefranquette.model;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
+@Data
+@Table(name = "paiement")
 public class Paiement {
 
     @Id
@@ -29,4 +33,13 @@ public class Paiement {
     @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
     private Commande commande;
+
+    public Paiement(String type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {
+        this.date = Date.valueOf(LocalDate.now());
+        this.type = type;
+        this.ticketEnvoye = ticketEnvoye;
+        this.prixHT = prixHT;
+        this.prixTTC = prixTTC;
+        this.commande = commande;
+    }
 }

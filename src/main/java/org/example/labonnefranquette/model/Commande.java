@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.Collection;
 
 @Data
@@ -25,7 +26,7 @@ public class Commande {
     private Date dateLivraison;
 
     @Column(name = "status", length = 10, nullable = false)
-    private String status;
+    private StatusCommande status;
 
     @Column(name = "sur_place")
     private Boolean surPlace;
@@ -57,4 +58,18 @@ public class Commande {
 
     @OneToMany(mappedBy = "commande")
     private Collection<Paiement> paiementSet;
+
+    public Commande(int numero, Boolean surPlace, int prixHT, Collection<Produit> produitSet, Collection<Menu> menuSet) {
+        this.numero = numero;
+        this.dateSaisie = Date.valueOf(LocalDate.now());
+        this.dateLivraison = null;
+        this.status = StatusCommande.EN_COURS;
+        this.surPlace = surPlace;
+        this.nbArticle = produitSet.size();
+        this.prixHT = prixHT;
+        this.tauxTVA = 10;
+        this.produitSet = produitSet;
+        this.menuSet = menuSet;
+        this.paiementSet = null;
+    }
 }

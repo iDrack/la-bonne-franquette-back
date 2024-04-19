@@ -1,7 +1,7 @@
 package org.example.labonnefranquette.controller;
 
 import org.example.labonnefranquette.model.Menu;
-import org.example.labonnefranquette.services.MenuService;
+import org.example.labonnefranquette.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +18,16 @@ import java.util.Optional;
 public class MenuController {
 
     @Autowired
-    MenuService menuService;
+    GenericService<Menu, Long> menuService;
 
     @GetMapping("/")
     public ResponseEntity<List<Menu>> getAllMenu() {
-        return new ResponseEntity<>(menuService.getAllMenu(), HttpStatus.OK);
+        return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Menu> getMenuById(@PathVariable Long id) {
-        Optional<Menu> resultat = menuService.getMenuById(id);
+        Optional<Menu> resultat = menuService.findAllById(id);
         return resultat.map(menu -> new ResponseEntity<>(menu, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 }
