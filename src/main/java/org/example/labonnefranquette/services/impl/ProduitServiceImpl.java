@@ -24,4 +24,11 @@ public class ProduitServiceImpl implements ProduitService {
     public Optional<Produit> getProduitById(long id) {
         return produitRepository.findById(id);
     }
+
+    @Override
+    public Produit createProduit(Produit newProduit) {
+        return produitRepository.save(newProduit);
+    }
+
+
 }

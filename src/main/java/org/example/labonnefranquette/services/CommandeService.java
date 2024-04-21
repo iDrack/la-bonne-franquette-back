@@ -1,9 +1,6 @@
 package org.example.labonnefranquette.services;
 
 import org.example.labonnefranquette.model.Commande;
-import org.example.labonnefranquette.model.Extra;
-import org.example.labonnefranquette.model.Menu;
-import org.example.labonnefranquette.model.Produit;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,6 +15,6 @@ public interface CommandeService {
 
     public Commande createCommande(int numero,
                                    Boolean surPlace,
-                                   Collection<Menu> menuSet,
-                                   Map<Produit, List<Extra>> produits);
+                                   Collection<Long> menuSet,
+                                   Map<Long, List<Long>> produits);
 }

@@ -25,10 +25,10 @@ public class Ingredient {
     private boolean aCuire;
 
     @OneToOne(mappedBy = "ingredient")
-    @JsonBackReference
+    @JsonBackReference(value = "ingredient-extra")
     private Extra extra;
 
     @ManyToMany(mappedBy = "ingredientSet")
-    @JsonBackReference
+    @JsonBackReference(value = "produit-ingredient")
     private Set<Produit> produitSet;
 }

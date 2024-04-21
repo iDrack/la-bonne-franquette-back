@@ -29,6 +29,6 @@ public class Menu {
     private Collection<Produit> produitSet;
 
     @ManyToMany(mappedBy = "menuSet")
-    @JsonBackReference
+    @JsonBackReference(value = "menu-commande")
     private Collection<Commande> commandeSet;
 }

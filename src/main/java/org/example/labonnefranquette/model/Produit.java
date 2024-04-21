@@ -12,7 +12,7 @@ import java.util.Collection;
 public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
@@ -37,10 +37,10 @@ public class Produit {
     private Collection<Ingredient> ingredientSet;
 
     @ManyToMany(mappedBy = "produitSet")
-    @JsonBackReference
+    @JsonBackReference(value = "menu-produit")
     private Collection<Menu> menuSet;
 
     @ManyToMany(mappedBy = "produitSet")
-    @JsonBackReference
+    @JsonBackReference(value = "produit-commande")
     private Collection<Commande> commandeSet;
 }

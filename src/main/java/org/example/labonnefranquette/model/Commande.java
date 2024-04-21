@@ -2,12 +2,14 @@ package org.example.labonnefranquette.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.Collection;
 
 @Data
+@NoArgsConstructor
 @Entity
 @Table(name = "commandes")
 public class Commande {

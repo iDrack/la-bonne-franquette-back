@@ -12,4 +12,6 @@ public interface ProduitService {
 
     Optional<Produit> getProduitById(long id);
 
+    Produit createProduit(Produit newProduit);
+
 }

@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 @Entity
 @DiscriminatorValue("extra")
-@Table(name = "extra")
 public class Extra extends Ingredient {
 
     @Column(name = "prixHT", nullable = true)
@@ -16,7 +15,7 @@ public class Extra extends Ingredient {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
-    @JsonBackReference
+    @JsonBackReference(value = "extra-ingredient")
     private Ingredient ingredient;
 
 }

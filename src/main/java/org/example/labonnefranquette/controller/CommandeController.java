@@ -38,8 +38,8 @@ public class CommandeController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<CommandeReadDTO> createCommande(@RequestBody CommandeCreateDTO commadeDTO) {
-        System.out.println(commadeDTO.toString());
-        return new ResponseEntity<>(null, HttpStatus.FORBIDDEN);
+    public ResponseEntity<CommandeReadDTO> createCommande(@RequestBody CommandeCreateDTO commandeDTO) {
+        Commande commande = commandeService.createCommande(commandeDTO.getNumero(), commandeDTO.getSurPlace(), commandeDTO.getMenuSet(), commandeDTO.getProduitsAndExtras());
+        return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.CREATED);
     }
 }

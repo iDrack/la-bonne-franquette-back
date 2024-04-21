@@ -2,12 +2,14 @@ package org.example.labonnefranquette.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "paiement")
 public class Paiement {
 

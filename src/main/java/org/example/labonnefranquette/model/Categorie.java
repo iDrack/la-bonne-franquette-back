@@ -25,6 +25,6 @@ public class Categorie {
     private Collection<SousCategorie> sousCategorieSet;
 
     @ManyToMany(mappedBy = "categorieSet")
-    @JsonBackReference
+    @JsonBackReference(value = "categorie-produit")
     private Collection<Produit> produitSet;
 }
