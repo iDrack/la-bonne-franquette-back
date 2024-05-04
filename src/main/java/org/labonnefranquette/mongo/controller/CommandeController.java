@@ -45,4 +45,12 @@ public class CommandeController {
         Commande commande = commandeService.createCommande(new Commande(commandeRef.getNumero(), commandeRef.getSurPlace(), commandeRef.getPrixHT(), commandeRef.getProduitsAvecExtras(), commandeRef.getMenuSet()));
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteCommande(@PathVariable Long id) {
+        if (commandeService.deleteCommande(id)) {
+            return new ResponseEntity<>(true, HttpStatus.FOUND);
+        }
+        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+    }
 }

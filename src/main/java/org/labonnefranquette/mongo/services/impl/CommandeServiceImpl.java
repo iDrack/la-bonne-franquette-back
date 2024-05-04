@@ -52,4 +52,15 @@ public class CommandeServiceImpl implements CommandeService {
         return commande;
     }
 
+    @Override
+    public Boolean deleteCommande(Long id) {
+        Optional<Commande> commandeFound = findCommandeById(id);
+        if (commandeFound.isEmpty()) {
+            return false;
+        }
+        commandeRepository.delete(commandeFound.get());
+        return true;
+    }
+
+
 }

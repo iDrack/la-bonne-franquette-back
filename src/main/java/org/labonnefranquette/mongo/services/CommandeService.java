@@ -12,4 +12,6 @@ public interface CommandeService {
     public Optional<Commande> findCommandeById(Long id);
 
     public Commande createCommande(Commande commande);
+
+    public Boolean deleteCommande(Long id);
 }
