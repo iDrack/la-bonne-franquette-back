@@ -2,6 +2,7 @@ package org.labonnefranquette.mongo.controller;
 
 import org.labonnefranquette.mongo.dto.CommandeCreateDTO;
 import org.labonnefranquette.mongo.dto.CommandeReadDTO;
+import org.labonnefranquette.mongo.dto.CommandeUpdateDTO;
 import org.labonnefranquette.mongo.model.Commande;
 import org.labonnefranquette.mongo.services.CommandeService;
 import org.labonnefranquette.utils.DtoTools;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/v1/commande")
@@ -27,7 +27,7 @@ public class CommandeController {
     @GetMapping("/")
     public ResponseEntity<List<CommandeReadDTO>> fetAllCommandes() {
         List<Commande> commandes = commandeService.findAllCommande();
-        List<CommandeReadDTO> resultat = commandes.stream().map(x -> dtoTools.convertToDto(x, CommandeReadDTO.class)).collect(Collectors.toList());
+        List<CommandeReadDTO> resultat = commandes.stream().map(x -> dtoTools.convertToDto(x, CommandeReadDTO.class)).toList();
         return new ResponseEntity<>(resultat, HttpStatus.FOUND);
     }
 
@@ -53,4 +53,27 @@ public class CommandeController {
         }
         return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/")
+    public ResponseEntity<CommandeReadDTO> updateCommande(@RequestBody CommandeUpdateDTO commandeDTO) {
+        Commande commande = commandeService.updateCommande(dtoTools.convertToEntity(commandeDTO, Commande.class));
+        if (commande == null) return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
+    }
+
+    @PutMapping("/advanceStatus/{id}")
+    public ResponseEntity<CommandeReadDTO> advanceStatus(@PathVariable long id) {
+        Optional<Commande> commandeFound = commandeService.findCommandeById(id);
+        if (commandeFound.isEmpty()) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        Commande currentCommande = commandeFound.get();
+        try {
+            currentCommande = commandeService.advanceStatusCommande(currentCommande);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.METHOD_NOT_ALLOWED);
+        }
+        return new ResponseEntity<>(dtoTools.convertToDto(currentCommande, CommandeReadDTO.class), HttpStatus.OK);
+    }
+
 }

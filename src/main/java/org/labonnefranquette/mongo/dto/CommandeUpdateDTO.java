@@ -1,16 +1,13 @@
 package org.labonnefranquette.mongo.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.labonnefranquette.mongo.model.StatusCommande;
 
 import java.util.Collection;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
-public class CommandeCreateDTO implements CommandeDTO {
+public class CommandeUpdateDTO implements CommandeDTO {
+    private Long commandeId;
     private int numero;
     private Boolean surPlace;
     private Collection<Long> menuSet;

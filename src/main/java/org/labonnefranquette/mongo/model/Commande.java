@@ -1,6 +1,7 @@
 package org.labonnefranquette.mongo.model;
 
 import lombok.Data;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Collection;
@@ -11,8 +12,9 @@ import java.util.List;
 @Document("commandes")
 public class Commande {
 
-    private static long counter = 0;
-
+    //on map _id du document Mongo avec commandeId de notre objet
+    //TODO supprimmer toutes les instances de setter de commandeID afin de laisser gérer mongo
+    @Id
     private long commandeId;
 
     private int numero;
@@ -41,7 +43,6 @@ public class Commande {
     private Collection<Long> paiementSet;
 
     public Commande(int numero, Boolean surPlace, int prixHT, List<List<Long>> produitsAvecExtras, Collection<Long> menuSet) {
-        this.commandeId = counter++;
         this.numero = numero;
         this.dateSaisie = new Date();
         this.dateLivraison = null;
@@ -53,10 +54,6 @@ public class Commande {
         this.produitsAvecExtras = produitsAvecExtras;
         this.menuSet = menuSet;
         this.paiementSet = null;
-    }
-
-    public Commande() {
-        this.commandeId = counter++;
     }
 
     public int getPrixTTC() {

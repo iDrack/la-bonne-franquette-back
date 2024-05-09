@@ -41,6 +41,7 @@ public class PaiementServiceImpl implements PaiementService {
         }
         Paiement nouveauPaiement = new Paiement(type, ticketEnvoye, prixPaye, prixPaye * commande.getTauxTVA(), commande.getCommandeId());
         commande.getPaiementSet().add(nouveauPaiement.getId());
+        commandeService.ajoutPaiement(commande, nouveauPaiement.getId());
         return nouveauPaiement;
     }
 }

@@ -7,11 +7,21 @@ import java.util.Optional;
 
 public interface CommandeService {
 
-    public List<Commande> findAllCommande();
+    List<Commande> findAllCommande();
 
-    public Optional<Commande> findCommandeById(Long id);
+    Optional<Commande> findCommandeById(Long id);
 
-    public Commande createCommande(Commande commande);
+    Commande createCommande(Commande commande);
 
-    public Boolean deleteCommande(Long id);
+    Boolean deleteCommande(Long id);
+
+    Commande updateCommande(Commande commande);
+
+    Commande ajoutPaiement(Commande commande, Long paiementId);
+
+    Commande updateProduitsEtExtras(Commande commande, List<List<Long>> produitsEtExtrasIds);
+
+    <T> Commande updateCommandeByField(Commande commande, String fieldName, T value);
+
+    Commande advanceStatusCommande(Commande commande) throws RuntimeException;
 }
