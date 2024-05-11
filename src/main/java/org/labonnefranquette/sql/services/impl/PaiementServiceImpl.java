@@ -46,4 +46,13 @@ public class PaiementServiceImpl implements PaiementService {
         commandeService.ajoutPaiement(commande, nouveauPaiement.getId());
         return nouveauPaiement;
     }
+
+    @Override
+    public List<Paiement> getPaiementByCommande(Long commandeId) throws RuntimeException {
+        Optional<List<Paiement>> paiementList = paiementRepository.findByCommandeId(commandeId);
+        if (paiementList.isPresent()) {
+            return paiementList.get();
+        }
+        throw new RuntimeException("Aucun paiement n'éxiste pour cette commande.");
+    }
 }

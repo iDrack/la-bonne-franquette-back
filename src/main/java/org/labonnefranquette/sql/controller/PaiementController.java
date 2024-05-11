@@ -45,4 +45,17 @@ public class PaiementController {
         }
         return new ResponseEntity<>(dtoTools.convertToDto(retPaiement, PaiementReadDTO.class), HttpStatus.OK);
     }
+
+    @GetMapping("/commande/{commandeId}")
+    public ResponseEntity<List<PaiementReadDTO>> getPaiementsByCommande(@PathVariable Long commandeId) {
+        List<Paiement> paiements;
+        try {
+            paiements = paiementService.getPaiementByCommande(commandeId);
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        List<PaiementReadDTO> resultat = paiements.stream().map(x -> dtoTools.convertToDto(x, PaiementReadDTO.class)).toList();
+        return new ResponseEntity<>(resultat, HttpStatus.FOUND);
+    }
 }
