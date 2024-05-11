@@ -1,5 +1,6 @@
 package org.labonnefranquette.mongo.model;
 
+import com.google.common.hash.HashCode;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -7,6 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Document("commandes")
@@ -54,9 +56,18 @@ public class Commande {
         this.produitsAvecExtras = produitsAvecExtras;
         this.menuSet = menuSet;
         this.paiementSet = null;
+
+        UUID tempId = new UUID(HashCode.fromLong(dateSaisie.getTime()).asLong(), HashCode.fromLong(dateSaisie.getTime() + numero).asLong());
+        this.commandeId = tempId.getMostSignificantBits();
+    }
+
+    public Commande() {
     }
 
     public int getPrixTTC() {
         return this.prixHT * this.tauxTVA;
+    }
+
+    public void setCommandeId() {
     }
 }

@@ -9,11 +9,11 @@ public interface CommandeService {
 
     List<Commande> findAllCommande();
 
-    Optional<Commande> findCommandeById(Long id);
+    Optional<Commande> findCommandeById(long id);
 
     Commande createCommande(Commande commande);
 
-    Boolean deleteCommande(Long id);
+    Boolean deleteCommande(long id);
 
     Commande updateCommande(Commande commande);
 

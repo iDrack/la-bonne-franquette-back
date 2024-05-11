@@ -14,6 +14,7 @@ public class CommandeCreateDTO implements CommandeDTO {
     private int numero;
     private Boolean surPlace;
     private Collection<Long> menuSet;
+    private Collection<Long> paiementSet;
     private StatusCommande status;
     @JsonProperty("produitsAvecExtras")
     private List<List<Long>> produitsAvecExtras;

@@ -47,7 +47,7 @@ public class CommandeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> deleteCommande(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteCommande(@PathVariable long id) {
         if (commandeService.deleteCommande(id)) {
             return new ResponseEntity<>(true, HttpStatus.FOUND);
         }

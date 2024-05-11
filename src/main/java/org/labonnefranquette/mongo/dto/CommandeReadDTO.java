@@ -9,6 +9,7 @@ import java.util.List;
 
 @Data
 public class CommandeReadDTO implements CommandeDTO {
+    private long commandeId;
     private int numero;
     private Date dateSaisie;
     private Date dateLivraison;

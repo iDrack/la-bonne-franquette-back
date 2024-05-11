@@ -40,6 +40,8 @@ public class PaiementServiceImpl implements PaiementService {
             throw new RuntimeException("Commande n'existe pas.");
         }
         Paiement nouveauPaiement = new Paiement(type, ticketEnvoye, prixPaye, prixPaye * commande.getTauxTVA(), commande.getCommandeId());
+        paiementRepository.save(nouveauPaiement);
+        System.out.println("id " + nouveauPaiement.getId());
         commande.getPaiementSet().add(nouveauPaiement.getId());
         commandeService.ajoutPaiement(commande, nouveauPaiement.getId());
         return nouveauPaiement;

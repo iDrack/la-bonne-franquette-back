@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class CommandeUpdateDTO implements CommandeDTO {
-    private Long commandeId;
+    private long commandeId;
     private int numero;
     private Boolean surPlace;
     private Collection<Long> menuSet;

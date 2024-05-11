@@ -43,7 +43,7 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public Optional<Commande> findCommandeById(Long id) {
+    public Optional<Commande> findCommandeById(long id) {
         return commandeRepository.findById(id);
     }
 
@@ -60,7 +60,7 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public Boolean deleteCommande(Long id) {
+    public Boolean deleteCommande(long id) {
         Optional<Commande> commandeFound = findCommandeById(id);
         if (commandeFound.isEmpty()) {
             return false;
@@ -87,14 +87,14 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Override
     public Commande ajoutPaiement(Commande commande, Long paiementId) {
-        Optional<Commande> commandeFound = findCommandeById(commande.getCommandeId());
         Optional<Paiement> paiementFound = paiementRepository.findById(paiementId);
-        if (commandeFound.isEmpty() || paiementFound.isEmpty()) {
-            return null;
+        if (paiementFound.isEmpty()) {
+            throw new RuntimeException("Paiement n'existe pas");
         }
+        System.out.println("Enregistrement de la commande");
         UpdateResult result = mongoTemplate.updateFirst(
                 Query.query(Criteria.where("commandeId").is(commande.getCommandeId())),
-                Update.update("paiementSet", commande.getPaiementSet().add(paiementId)),
+                Update.update("paiementSet", commande.getPaiementSet()),
                 Commande.class);
         if (result.wasAcknowledged()) {
             return findCommandeById(commande.getCommandeId()).get();
