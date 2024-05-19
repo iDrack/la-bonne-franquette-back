@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>org.example</groupId>
 	<artifactId>laBonneFranquette</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>laBonneFranquette</name>
-	<description>laBonneFranquette</description>
+	<version>0.0.1</version>
+	<name>LaBonneFranquette</name>
+	<description>LaBonneFranquette, application de gestion de commande de restauration.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
