@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>org.example</groupId>
 	<artifactId>laBonneFranquette</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>laBonneFranquette</name>
-	<description>laBonneFranquette</description>
+	<version>0.0.1</version>
+	<name>LaBonneFranquette</name>
+	<description>LaBonneFranquette, application de gestion de commande de restauration.</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
@@ -59,7 +59,14 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<version>8.3.0</version>
 		</dependency>
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jdbc</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
 	</dependencies>
 
 	<build>

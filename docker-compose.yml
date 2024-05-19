@@ -1,18 +1,11 @@
-version: 0.0.1
-name: franquette-sql
+name: franquette-db
 services:
   db:
     image: mysql:latest
-    restart: always
     environment:
-      MYSQL_DATABASE: bdd
+      MYSQL_DATABASE: franquette-bdd
       MYSQL_ROOT_PASSWORD: test
     volumes:
-      - ~/.docker/volumes/franquette/db/sql:/var/lib/mysql
-    networks:
-      - franquette-network
+      - ~/.docker/volumes/franquette/db/data:/var/lib/mysql
     ports:
       - 33060:3306
-networks:
-  franquette-network:
-    driver: bridge
