@@ -5,9 +5,12 @@ import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.StatusCommande;
 import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
+import org.labonnefranquette.data.services.ProduitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +19,12 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Autowired
     private CommandeRepository commandeRepository;
+
+    @Autowired
+    private ProduitService produitService;
+
+    @Autowired
+    private MenuServiceImpl menuService;
 
     @Override
     public List<Commande> findAllCommande() {
@@ -28,7 +37,13 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
+    @Transactional
     public Commande createCommande(Commande commande) {
+        commande.setDateSaisie(new Date());
+        commande.setNbArticle(commande.getProduitSet().size());
+        commande.getProduitSet().forEach(produitCommande -> {
+            produitCommande.setCommande(commande);
+        });
         return commandeRepository.save(commande);
     }
 

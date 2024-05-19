@@ -2,7 +2,6 @@ name: franquette-db
 services:
   db:
     image: mysql:latest
-    restart: always
     environment:
       MYSQL_DATABASE: franquette-bdd
       MYSQL_ROOT_PASSWORD: test

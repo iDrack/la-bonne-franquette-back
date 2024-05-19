@@ -41,6 +41,7 @@ public class Produit {
     private Collection<Menu> menuSet;
 
     @OneToOne(mappedBy = "produit")
+    @JsonBackReference(value = "produit_commande-produit")
     private ProduitCommande produitCommande;
 
 }

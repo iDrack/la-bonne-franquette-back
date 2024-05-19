@@ -1,4 +1,4 @@
-package org.labonnefranquette.utils;
+package org.labonnefranquette.data.utils;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;

@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -26,4 +27,8 @@ public class Menu {
             inverseJoinColumns = @JoinColumn(name = "produit_id")
     )
     private Collection<Produit> produitSet;
+
+    @ManyToMany(mappedBy = "menuSet")
+    @JsonBackReference(value = "commande-menu")
+    private Collection<Commande> commandeSet;
 }

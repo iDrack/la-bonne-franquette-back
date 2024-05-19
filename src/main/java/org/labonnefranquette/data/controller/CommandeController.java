@@ -1,9 +1,10 @@
 package org.labonnefranquette.data.controller;
 
+import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.services.CommandeService;
-import org.labonnefranquette.utils.DtoTools;
+import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class CommandeController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<CommandeReadDTO> createCommande(@RequestBody CommandeReadDTO commandeDto) {
+    public ResponseEntity<CommandeReadDTO> createCommande(@RequestBody CommandeCreateDTO commandeDto) {
         Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.CREATED);
     }

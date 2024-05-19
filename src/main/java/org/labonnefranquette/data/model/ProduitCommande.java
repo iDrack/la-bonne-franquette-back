@@ -14,15 +14,15 @@ public class ProduitCommande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "produit")
     private Produit produit;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "commande")
     private Commande commande;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "produit_commande_contient_extra",
             joinColumns = @JoinColumn(name = "produit_commande_id"),
