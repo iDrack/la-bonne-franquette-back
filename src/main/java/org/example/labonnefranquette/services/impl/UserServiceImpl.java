@@ -20,41 +20,42 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private DtoTools dtoTools;
 
     @Override
     public Boolean createUser(UserCreateDto userCreateDto) {
 
-        if (!this.dataIsConformed(userCreateDto) || this.userRepository.existsByEmail(userCreateDto.getEmail())) {
+        if (!this.dataIsConformed(userCreateDto) || this.userRepository.existsByUsername(userCreateDto.getUsername())) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur");
         }
 
         userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
-        User user = dtoTools.convertToEntity(userCreateDto, User.class);
+        User user = new User();
+        user.setUsername(userCreateDto.getUsername());
+        user.setPassword(userCreateDto.getPassword());
         user.setRoles(Roles.ROLE_USER);
+
         this.userRepository.save(user);
 
         return true;
     }
 
     @Override
-    public User findByEmail(String email) {
+    public User findByUsername(String username) {
         try {
-            return this.userRepository.findByEmail(email);
+            return this.userRepository.findByUsername(username);
         } catch (Exception e) {
             return null;
         }
     }
 
     @Override
-    public Date returnLastConnectionFromEmail(String email) {
-        User user = this.findByEmail(email);
+    public Date returnLastConnectionFromUsername(String username) {
+        User user = this.findByUsername(username);
         return user.getLastConnection();
     }
 
-    public void updateLastConnection(String email) {
-        User user = this.userRepository.findByEmail(email);
+    public void updateLastConnection(String username) {
+        User user = this.userRepository.findByUsername(username);
         user.setLastConnection(new Date());
         this.userRepository.save(user);
     }
@@ -63,7 +64,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return false;
         }
-        if (user.getEmail() == null || !this.isValidEmail(user.getEmail())) {
+        if (user.getUsername() == null ) {
             return false;
         }
         if (user.getPassword() == null || !this.isValidPassword(user.getPassword())) {
@@ -73,15 +74,17 @@ public class UserServiceImpl implements UserService {
         return true;
     }
 
-    private boolean isValidEmail(String email) {
-        String emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
-        Pattern pattern = Pattern.compile(emailRegex);
-        return pattern.matcher(email).matches();
-    }
-
     private boolean isValidPassword(String password) {
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
     }
+
+    public User checkCredentials(String username, String password) {
+        User user =  this.findByUsername(username);
+        return user != null && passwordEncoder.matches(password, user.getPassword()) ? user : null;
+    }
 }
+
+
+
 
 

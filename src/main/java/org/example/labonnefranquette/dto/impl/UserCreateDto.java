@@ -8,11 +8,11 @@ import org.example.labonnefranquette.dto.UserDto;
 @Setter
 public class UserCreateDto implements UserDto {
 
-    private String email;
+    private String username;
     private String password;
 
     @Override
     public String toString() {
-        return "user="+this.email+".";
+        return "user="+this.username+".";
     }
 }

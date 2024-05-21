@@ -16,10 +16,10 @@ import java.util.Date;
 
 @Component
 public class TokenGenerator {
-    @Autowired
-    private UserService userService;
+
     @Autowired
     private PasswordEncoder passwordEncoder;
+
     private final Key key;
     @Autowired
     public TokenGenerator(Key key) {
@@ -29,8 +29,7 @@ public class TokenGenerator {
     public String generateToken(User user) {
         return Jwts.builder()
                 .setSubject(user.getId().toString())
-                .claim("email", user.getEmail())
-                .claim("roles", user.getRoles())
+                .claim("username", user.getUsername())
                 .setExpiration(new Date(System.currentTimeMillis() + (60 * 20 * 1000)))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
@@ -42,10 +41,7 @@ public class TokenGenerator {
                 .parseClaimsJws(token)
                 .getBody();
     }
-    public User checkCredentials(String email, String password) {
-        User user =  this.userService.findByEmail(email);
-        return user != null && passwordEncoder.matches(password, user.getPassword()) ? user : null;
-    }
+
     public TokenStatus verifyToken(String token) {
         if (token == null) return TokenStatus.Invalid;
         try {
@@ -65,13 +61,13 @@ public class TokenGenerator {
             return TokenStatus.Invalid;
         }
     }
-    public String getEmailFromtoken(String token) {
+    public String getUsernameFromtoken(String token) {
         Claims claims = Jwts.parserBuilder()
-                          .setSigningKey(this.key)
-                          .build()
-                          .parseClaimsJws(token)
-                          .getBody();
-        return claims.get("email", String.class);
+                .setSigningKey(this.key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("username", String.class);
     }
 
     public String getRolesFromToken(String token) {

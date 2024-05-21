@@ -1,36 +1,32 @@
 package org.example.labonnefranquette.security.filter;
 
-import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import org.example.labonnefranquette.security.filter.application.ApplyFilter;
 import org.example.labonnefranquette.services.AuthService;
 import org.example.labonnefranquette.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import java.io.IOException;
 import java.util.Date;
 
 @Component
-@Order(1)
-@Slf4j
-public class JwtTokenForbiddenFilter implements Filter {
+public class JwtTokenFilter implements Filter {
+
     @Autowired
     private AuthService authService;
     @Autowired
     private UserService userService;
 
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
-        Filter.super.init(filterConfig);
-    }
-    @Override
+
+@Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         final HttpServletRequest httpRequest = (HttpServletRequest) request;
         final ApplyFilter applyFilter = new ApplyFilter(httpRequest.getRequestURL().toString());
-
         if (applyFilter.doFilterOne()) {
             final HttpServletResponse httpRes = (HttpServletResponse) response;
             String token = this.getJWTFromRequest(httpRequest);
@@ -40,8 +36,8 @@ public class JwtTokenForbiddenFilter implements Filter {
                 return;
             }
 
-           switch (this.authService.verifyToken(token)) {
-                case Valid -> { chain.doFilter(request, response); }
+            switch (this.authService.verifyToken(token)) {
+                case Valid -> {} // ok
                 case Imminent -> this.updateExpirationByLastConnection(token);
                 case Expired ->   {
                     if (this.verifyTokenIsStillAvailable(token)) {
@@ -70,13 +66,13 @@ public class JwtTokenForbiddenFilter implements Filter {
 
 
     private Boolean verifyTokenIsStillAvailable(String token) {
-        Date lastConnection = this.userService.returnLastConnectionFromEmail(this.authService.getEmailFromtoken(token));
+        Date lastConnection = this.userService.returnLastConnectionFromUsername(this.authService.getUsernameFromtoken(token));
         Date tenMinutsAgo = new Date(System.currentTimeMillis() - (10 * 60 * 1000));
         return !lastConnection.before(tenMinutsAgo);
     }
 
     private void updateExpirationByLastConnection(String token) {
-       String email = this.authService.getEmailFromtoken(token);
-       this.userService.updateLastConnection(email);
+        String username = this.authService.getUsernameFromtoken(token);
+        this.userService.updateLastConnection(username);
     }
 }

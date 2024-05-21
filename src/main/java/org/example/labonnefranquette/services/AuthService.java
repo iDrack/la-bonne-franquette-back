@@ -8,6 +8,5 @@ public interface AuthService {
     public String login(UserLoginDto userLoginDto);
     public String refreshToken(UserLoginDto userLoginDto, String token);
     public TokenStatus verifyToken(String token);
-    public String getEmailFromtoken(String token);
-    public String getRolesFromToken(String token);
+    public String getUsernameFromtoken(String username);
 }

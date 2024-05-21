@@ -5,6 +5,6 @@ import org.example.labonnefranquette.dto.UserDto;
 
 @Data
 public class UserLoginDto implements UserDto {
-    private String email;
+    private String username;
     private String password;
 }

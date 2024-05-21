@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AuthServiceImpl implements AuthService {
+public class AuthServiceImpl implements org.example.labonnefranquette.services.AuthService {
     @Autowired
     private TokenGenerator tokenGenerator;
     @Autowired
@@ -24,14 +24,14 @@ public class AuthServiceImpl implements AuthService {
     public String login(UserLoginDto userLoginDto) {
 
         if (userLoginDto == null) return null;
-        User user = this.tokenGenerator.checkCredentials(userLoginDto.getEmail(), userLoginDto.getPassword());
-        System.out.println("Les roles : "+ user.getRoles());
+        User user = this.userService.checkCredentials(userLoginDto.getUsername(), userLoginDto.getPassword());
         if (user != null) {
-            this.userService.updateLastConnection(user.getEmail());
+            this.userService.updateLastConnection(user.getUsername());
             return this.tokenGenerator.generateToken(user);
         }
 
         return null;
+
     }
     @Override
     public String refreshToken(UserLoginDto userLoginDto, String token) {
@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
             return switch (this.tokenGenerator.verifyToken(token)) {
                 case Valid -> token;
                 case Invalid, Expired -> {
-                    User user = this.tokenGenerator.checkCredentials(userLoginDto.getEmail(), userLoginDto.getPassword());
+                    User user = this.userService.checkCredentials(userLoginDto.getUsername(), userLoginDto.getPassword());
                     yield user != null ? this.tokenGenerator.generateToken(user) : null;
                 }
                 default -> null;
@@ -53,22 +53,14 @@ public class AuthServiceImpl implements AuthService {
         return this.tokenGenerator.verifyToken(token);
     }
     @Override
-    public String getEmailFromtoken(String token) {
-        try {
-            return this.tokenGenerator.getEmailFromtoken(token);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public String getRolesFromToken(String token) {
-        try {
-            return this.tokenGenerator.getRolesFromToken(token);
-        } catch (Exception e) {
-            return Roles.ROLE_USER.name();
-        }
+    public String getUsernameFromtoken(String token) {
+        return this.tokenGenerator.getUsernameFromtoken(token);
     }
 }
+
+
+
+
 
 
 

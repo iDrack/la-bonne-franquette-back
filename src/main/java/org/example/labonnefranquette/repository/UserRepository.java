@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface UserRepository extends JpaRepository<User, Byte> {
 
-    Boolean existsByEmail(String email);
-    User findByEmail(String email);
+
+    Boolean existsByUsername(String username);
+    User findByUsername(String username);
 
 }

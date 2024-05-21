@@ -18,8 +18,8 @@ public class User {
     @Column(name = "id", nullable = false)
     private Byte id;
 
-    @Column(name = "email", length = 100, nullable = false, unique = true)
-    private String email;
+    @Column(name = "username", length = 100, nullable = false, unique = true)
+    private String username;
 
     @Column(name = "password", length = 255, nullable = false)
     private String password;
@@ -41,6 +41,6 @@ public class User {
 
     @Override
     public String toString() {
-      return "user="+this.email+".";
+      return "user="+this.username+".";
     }
 }

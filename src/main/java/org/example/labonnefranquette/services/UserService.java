@@ -8,8 +8,8 @@ import java.util.Date;
 public interface UserService {
 
     public Boolean createUser(UserCreateDto user);
-    public void updateLastConnection(String email);
-    public User findByEmail(String email);
-    public Date returnLastConnectionFromEmail(String email);
-
+    public void updateLastConnection(String username);
+    public User findByUsername(String username);
+    public Date returnLastConnectionFromUsername(String username);
+    public User checkCredentials(String username, String password);
 }
