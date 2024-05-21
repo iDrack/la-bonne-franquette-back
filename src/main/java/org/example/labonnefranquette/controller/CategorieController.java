@@ -18,8 +18,8 @@ public class CategorieController {
     @Autowired
     CategorieService categorieService;
 
-    @GetMapping("/")
-    public ResponseEntity<List<Categorie>> getCategorie() {
-        return new ResponseEntity<>(categorieService.getAllcategorie(), HttpStatus.OK);
+    @GetMapping("/ ")
+    public ResponseEntity<String> getCategorie() {
+        return new ResponseEntity<>("{\"Youpi\": \"Youpi\"  }", HttpStatus.OK);
     }
 }

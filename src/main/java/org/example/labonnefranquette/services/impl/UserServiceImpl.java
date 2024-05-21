@@ -1,15 +1,16 @@
 package org.example.labonnefranquette.services.impl;
 
-import org.example.labonnefranquette.model.Roles;
+import org.example.labonnefranquette.dto.impl.UserCreateDto;
 import org.example.labonnefranquette.model.User;
+import org.example.labonnefranquette.model.enums.Roles;
 import org.example.labonnefranquette.repository.UserRepository;
 import org.example.labonnefranquette.services.UserService;
+import org.example.labonnefranquette.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 @Service
@@ -17,24 +18,47 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Override
-    public Boolean createUser(User user) {
+    @Autowired
+    private DtoTools dtoTools;
 
-        if (!this.dataIsConformed(user) || this.userRepository.existsByEmail(user.getEmail())) {
+    @Override
+    public Boolean createUser(UserCreateDto userCreateDto) {
+
+        if (!this.dataIsConformed(userCreateDto) || this.userRepository.existsByEmail(userCreateDto.getEmail())) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur");
         }
 
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
+        User user = dtoTools.convertToEntity(userCreateDto, User.class);
+        user.setRoles(Roles.ROLE_USER);
         this.userRepository.save(user);
 
         return true;
     }
 
+    @Override
+    public User findByEmail(String email) {
+        try {
+            return this.userRepository.findByEmail(email);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
-    private Boolean dataIsConformed(User user) {
+    @Override
+    public Date returnLastConnectionFromEmail(String email) {
+        User user = this.findByEmail(email);
+        return user.getLastConnection();
+    }
+
+    public void updateLastConnection(String email) {
+        User user = this.userRepository.findByEmail(email);
+        user.setLastConnection(new Date());
+        this.userRepository.save(user);
+    }
+    private Boolean dataIsConformed(UserCreateDto user) {
 
         if (user == null) {
             return false;
@@ -45,15 +69,7 @@ public class UserServiceImpl implements UserService {
         if (user.getPassword() == null || !this.isValidPassword(user.getPassword())) {
             return false;
         }
-        if (user.getRoles() == null || user.getRoles().isEmpty()) {
-            return false;
-        }
-        Set<Roles> roles = user.getRoles();
-        for (Roles role : roles) {
-            if (!Arrays.asList(Roles.values()).contains(role)) {
-                return false;
-            }
-        }
+
         return true;
     }
 
