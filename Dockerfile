@@ -1,4 +1,5 @@
 FROM openjdk:17-jdk-alpine
+LABEL name="la-franquette-back-docker"
 LABEL maintainer="tdignoire@pm.me"
 LABEL authors="Thomas Dignoire"
 
