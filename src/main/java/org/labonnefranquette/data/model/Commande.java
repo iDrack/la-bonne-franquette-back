@@ -1,6 +1,8 @@
 package org.labonnefranquette.data.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
@@ -25,24 +27,31 @@ public class Commande {
     private long id;
 
     @Column(name = "numero", nullable = false, length = 50)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private int numero;
 
     @Column(name = "date_saisie", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private Date dateSaisie;
 
     @Column(name = "date_livraison", nullable = true)
     private Date dateLivraison;
 
     @Column(name = "status", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private StatusCommande status;
 
     @Column(name = "sur_place", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private Boolean surPlace;
 
     @Column(name = "nb_article", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private int nbArticle;
 
     @Column(name = "prix_ht", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
+    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixHT;
 
     @Column(name = "articles", nullable = true, length = 1000)

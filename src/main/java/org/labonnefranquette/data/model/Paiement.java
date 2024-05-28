@@ -1,6 +1,8 @@
 package org.labonnefranquette.data.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -21,15 +23,21 @@ public class Paiement {
     private Date date;
 
     @Column(name = "type", nullable = false, length = 3)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private String type;
 
     @Column(name = "ticket_envoye", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private Boolean ticketEnvoye;
 
     @Column(name = "prix_ht", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
+    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixHT;
 
     @Column(name = "prix_ttc", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
+    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixTTC;
 
     @ManyToOne

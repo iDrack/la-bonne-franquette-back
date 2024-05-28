@@ -1,6 +1,7 @@
 package org.labonnefranquette.data.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.labonnefranquette.data.model.enums.Roles;
 
@@ -18,15 +19,18 @@ public class User {
     private Byte id;
 
     @Column(name = "username", length = 100, nullable = false, unique = true)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private String username;
 
     @Column(name = "password", length = 255, nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private String password;
 
     @Column(name = "last_connection", nullable = true)
     private Date lastConnection;
 
     @Column(name = "roles", length = 100, nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private String roles;
 
 
