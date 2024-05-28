@@ -35,7 +35,9 @@ jobs:
         java-version: 17
         distribution: 'temurin'
     - run: mvn -B package --file pom.xml -DskipTests
-    - run: mkdir staging && cp target/*.jar  staging
+    - run: mkdir staging 
+    - run: mkdir staging/target
+    - run: cp target/*.jar  staging/target
     - run: cp docker-compose.yml staging
     - run: cp Dockerfile staging
     - uses: actions/upload-artifact@v4
