@@ -3,6 +3,7 @@ package org.labonnefranquette.data.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.labonnefranquette.data.model.entity.Article;
 
 import java.util.Collection;
 
@@ -39,9 +40,5 @@ public class Produit {
     @ManyToMany(mappedBy = "produitSet")
     @JsonBackReference(value = "menu-produit")
     private Collection<Menu> menuSet;
-
-    @OneToOne(mappedBy = "produit")
-    @JsonBackReference(value = "produit_commande-produit")
-    private ProduitCommande produitCommande;
 
 }

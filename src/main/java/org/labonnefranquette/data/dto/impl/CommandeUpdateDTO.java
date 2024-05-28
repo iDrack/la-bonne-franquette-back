@@ -2,8 +2,8 @@ package org.labonnefranquette.data.dto.impl;
 
 import lombok.Data;
 import org.labonnefranquette.data.dto.CommandeDTO;
-import org.labonnefranquette.data.model.ProduitCommande;
-import org.labonnefranquette.data.model.StatusCommande;
+import org.labonnefranquette.data.model.entity.Article;
+import org.labonnefranquette.data.model.enums.StatusCommande;
 
 import java.util.Collection;
 import java.util.List;
@@ -15,6 +15,6 @@ public class CommandeUpdateDTO implements CommandeDTO {
     private Boolean surPlace;
     private Collection<Long> menuSet;
     private StatusCommande status;
-    private List<ProduitCommande> produiutSet;
+    private List<Article> produiutSet;
     private int prixHT;
 }

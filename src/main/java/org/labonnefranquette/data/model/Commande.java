@@ -2,6 +2,10 @@ package org.labonnefranquette.data.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.labonnefranquette.data.model.entity.Article;
+import org.labonnefranquette.data.model.entity.Selection;
+import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.labonnefranquette.data.model.enums.StatusCommande;
 
 import java.util.Collection;
 import java.util.Date;
@@ -39,19 +43,15 @@ public class Commande {
     @Column(name = "prix_ht", nullable = false)
     private int prixHT;
 
-    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
-    private Collection<ProduitCommande> produitSet;
+    @Column(name = "articles", nullable = true, length = 1000)
+    private Collection<Article> articles;
 
-    @ManyToMany
-    @JoinTable(
-            name = "commande_contient_menu",
-            joinColumns = @JoinColumn(name = "commande_id"),
-            inverseJoinColumns = @JoinColumn(name = "menu_id")
-    )
-    private Collection<Menu> menuSet;
+    @Column(name = "menus", nullable = true, length = 1000)
+    private Collection<Selection> menus;
 
     @OneToMany(mappedBy = "commande")
     private Collection<Paiement> paiementSet;
 
-
+    @Column(name = "paiement_type", nullable = true, length = 5)
+    private PaiementTypeCommande paiementType;
 }

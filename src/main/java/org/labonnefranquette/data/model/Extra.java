@@ -4,6 +4,7 @@ package org.labonnefranquette.data.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
+import org.labonnefranquette.data.model.entity.Article;
 
 import java.util.Collection;
 
@@ -22,5 +23,5 @@ public class Extra extends Ingredient {
 
     @ManyToMany(mappedBy = "extraSet", cascade = CascadeType.ALL)
     @JsonBackReference(value = "produit_commande-extra")
-    private Collection<ProduitCommande> produitCommandeSet;
+    private Collection<Article> articleSet;
 }
