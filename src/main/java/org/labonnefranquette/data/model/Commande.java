@@ -6,6 +6,8 @@ import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.utils.JsonConverterTools;
+
 
 import java.util.Collection;
 import java.util.Date;
@@ -44,9 +46,11 @@ public class Commande {
     private int prixHT;
 
     @Column(name = "articles", nullable = true, length = 1000)
+    @Convert(converter = JsonConverterTools.class)
     private Collection<Article> articles;
 
     @Column(name = "menus", nullable = true, length = 1000)
+    @Convert(converter = JsonConverterTools.class)
     private Collection<Selection> menus;
 
     @OneToMany(mappedBy = "commande")

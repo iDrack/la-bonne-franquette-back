@@ -1,11 +1,12 @@
 package org.labonnefranquette.data.utils;
 
 import org.labonnefranquette.data.model.Commande;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+@Component
 public class PriceTools {
-
     public Boolean isCorrectPrice(Commande commande) {
 
         int articlesPrice = commande.getArticles().stream()

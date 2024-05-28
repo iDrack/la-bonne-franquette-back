@@ -23,6 +23,10 @@ public class CommandeController {
     private final SimpMessagingTemplate template;
 
     @Autowired
+    public CommandeController(SimpMessagingTemplate template) {
+        this.template = template;
+    }
+    @Autowired
     private CommandeService commandeService;
 
     @Autowired

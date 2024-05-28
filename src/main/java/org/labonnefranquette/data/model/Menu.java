@@ -27,8 +27,4 @@ public class Menu {
             inverseJoinColumns = @JoinColumn(name = "produit_id")
     )
     private Collection<Produit> produitSet;
-
-    @ManyToMany(mappedBy = "menuSet")
-    @JsonBackReference(value = "commande-menu")
-    private Collection<Commande> commandeSet;
 }

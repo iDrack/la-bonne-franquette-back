@@ -13,6 +13,7 @@ import org.labonnefranquette.data.model.Produit;
 import java.util.Collection;
 
 @Data
+@Embeddable
 public class Article {
 
     private String nom;

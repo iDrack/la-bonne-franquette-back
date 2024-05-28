@@ -20,8 +20,4 @@ public class Extra extends Ingredient {
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
     @JsonBackReference(value = "extra-ingredient")
     private Ingredient ingredient;
-
-    @ManyToMany(mappedBy = "extraSet", cascade = CascadeType.ALL)
-    @JsonBackReference(value = "produit_commande-extra")
-    private Collection<Article> articleSet;
 }
