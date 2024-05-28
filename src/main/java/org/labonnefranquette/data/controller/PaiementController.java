@@ -22,7 +22,7 @@ public class PaiementController {
     @Autowired
     private DtoTools dtoTools;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<PaiementReadDTO>> getAllPaiements() {
         List<Paiement> paiements = paiementService.getAllPaiement();
         List<PaiementReadDTO> resultat = paiements.stream().map(x -> dtoTools.convertToDto(x, PaiementReadDTO.class)).toList();

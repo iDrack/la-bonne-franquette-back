@@ -32,7 +32,7 @@ public class CommandeController {
     @Autowired
     private DtoTools dtoTools;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandes() {
         List<Commande> commandes = commandeService.findAllCommande();
         if (commandes == null || commandes.isEmpty())
@@ -56,7 +56,7 @@ public class CommandeController {
         return commande.map(value -> new ResponseEntity<>(dtoTools.convertToDto(value, CommandeReadDTO.class), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<?> createCommande(@RequestBody CommandeCreateDTO commandeDto) {
         try  {
             Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));

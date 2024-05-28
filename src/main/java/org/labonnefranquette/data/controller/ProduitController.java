@@ -17,7 +17,7 @@ public class ProduitController {
     @Autowired
     ProduitService produitservice;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Produit>> getAllProduits() {
         return new ResponseEntity<>(produitservice.getAllProduit(), HttpStatus.FOUND);
     }
@@ -28,7 +28,7 @@ public class ProduitController {
         return resultat.map(produit -> new ResponseEntity<>(produit, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
-    @PostMapping("/create/")
+    @PostMapping("/create")
     public ResponseEntity<Produit> createNewProduit(@RequestBody Produit produit) {
         return new ResponseEntity<Produit>(produitservice.createProduit(produit), HttpStatus.CREATED);
     }
