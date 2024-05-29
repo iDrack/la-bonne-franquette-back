@@ -2,7 +2,10 @@ package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import org.labonnefranquette.data.model.entity.Article;
 
 import java.util.Collection;
 
@@ -18,6 +21,8 @@ public class Produit {
     private String nom;
 
     @Column(name = "prix_ht", nullable = false, length = 10)
+    @NotNull(message = "Ce champs ne peut pas être vide")
+    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixHT;
 
     @ManyToMany
@@ -39,9 +44,5 @@ public class Produit {
     @ManyToMany(mappedBy = "produitSet")
     @JsonBackReference(value = "menu-produit")
     private Collection<Menu> menuSet;
-
-    @OneToOne(mappedBy = "produit")
-    @JsonBackReference(value = "produit_commande-produit")
-    private ProduitCommande produitCommande;
 
 }

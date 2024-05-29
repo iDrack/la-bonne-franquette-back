@@ -1,4 +1,4 @@
-package org.labonnefranquette.data.security.config;
+package org.labonnefranquette.data.config;
 
 import org.labonnefranquette.data.security.filter.AuthorizedFilter;
 import org.labonnefranquette.data.security.filter.JwtTokenFilter;

@@ -2,6 +2,8 @@ package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.util.Collection;
@@ -15,9 +17,12 @@ public class Menu {
     private long id;
 
     @Column(name = "nom", nullable = false, length = 50)
+    @NotNull(message = "Ce champs ne peut pas être vide")
     private String nom;
 
     @Column(name = "prix_ht", nullable = false, length = 50)
+    @NotNull(message = "Ce champs ne peut pas être vide")
+    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixHT;
 
     @ManyToMany
@@ -27,8 +32,4 @@ public class Menu {
             inverseJoinColumns = @JoinColumn(name = "produit_id")
     )
     private Collection<Produit> produitSet;
-
-    @ManyToMany(mappedBy = "menuSet")
-    @JsonBackReference(value = "commande-menu")
-    private Collection<Commande> commandeSet;
 }

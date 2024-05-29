@@ -9,10 +9,6 @@ public class ApplyFilter {
     }
 
     public Boolean doFilterOne() {
-        boolean authRoute = this.AuthRoutes();
-        boolean userRoutes = this.UsersRoutes();
-        System.out.println("User : " + userRoutes);
-        System.out.println("Auth : " + authRoute);
         return this.AuthRoutes() && this.UsersRoutes();
     }
 
