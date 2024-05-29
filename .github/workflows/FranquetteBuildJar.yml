@@ -40,7 +40,7 @@ jobs:
     - run: cp target/*.jar  staging/target
     - run: cp docker-compose.yml staging
     - run: cp Dockerfile staging
-    - run: cp runner_la_Franquette.sh
+    - run: cp runner_la_Franquette.sh staging
     - uses: actions/upload-artifact@v4
       with:
         name: Package
