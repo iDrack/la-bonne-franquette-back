@@ -1,4 +1,4 @@
-package org.labonnefranquette.data.security.config;
+package org.labonnefranquette.data.config;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;

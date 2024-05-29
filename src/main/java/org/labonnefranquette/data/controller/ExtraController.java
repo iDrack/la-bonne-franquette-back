@@ -20,7 +20,7 @@ public class ExtraController {
     @Autowired
     GenericService<Extra, Long> extraService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Extra>> getAllExtra() {
         return new ResponseEntity<>(extraService.findAll(), HttpStatus.OK);
     }

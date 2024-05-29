@@ -20,7 +20,7 @@ public class CategorieController {
     @Autowired
     GenericService<Categorie, Long> categorieService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Categorie>> getAllCategorie() {
         return new ResponseEntity<>(categorieService.findAll(), HttpStatus.OK);
     }

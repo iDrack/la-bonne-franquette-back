@@ -20,7 +20,7 @@ public class MenuController {
     @Autowired
     GenericService<Menu, Long> menuService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<Menu>> getAllMenu() {
         return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
     }

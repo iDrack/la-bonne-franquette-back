@@ -1,11 +1,13 @@
 package org.labonnefranquette.data.services.impl;
 
+import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.StatusCommande;
+import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.projection.CommandeListeProjection;
 import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
-import org.labonnefranquette.data.services.ProduitService;
+import org.labonnefranquette.data.utils.PriceTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,12 +21,8 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Autowired
     private CommandeRepository commandeRepository;
-
     @Autowired
-    private ProduitService produitService;
-
-    @Autowired
-    private MenuServiceImpl menuService;
+    private PriceTools priceTools;
 
     @Override
     public List<Commande> findAllCommande() {
@@ -32,19 +30,25 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
+    public List<CommandeListeProjection> findAllCommandeListe()  {
+        return commandeRepository.findAllCommandeListe();
+    }
+    @Override
     public Optional<Commande> findCommandeById(long id) {
         return commandeRepository.findById(id);
     }
 
     @Override
     @Transactional
-    public Commande createCommande(Commande commande) {
+    public Commande createCommande(Commande commande) throws PriceException {
         commande.setDateSaisie(new Date());
-        commande.setNbArticle(commande.getProduitSet().size());
-        commande.getProduitSet().forEach(produitCommande -> {
-            produitCommande.setCommande(commande);
-        });
-        return commandeRepository.save(commande);
+        commande.setNbArticle(commande.getArticles().size() + commande.getMenus().size());
+
+        if (priceTools.isCorrectPrice(commande)) {
+            return commandeRepository.save(commande);
+        } else  {
+            throw new PriceException("Le prix saisie est incorrect");
+        }
     }
 
     @Override
