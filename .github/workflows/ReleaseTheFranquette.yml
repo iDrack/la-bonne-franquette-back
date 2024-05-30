@@ -50,5 +50,3 @@ jobs:
         tag_name: ${{ github.ref  }}
         name: Release ${{ github.ref_name }}
         token: ${{ secrets.GITHUB_TOKEN }}
-      env: 
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
