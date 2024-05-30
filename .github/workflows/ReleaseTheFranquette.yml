@@ -42,10 +42,9 @@ jobs:
     - run: cp Dockerfile staging
     - run: cp runner_la_Franquette.sh staging
     - run: zip -r -q LaBonneFranquette.zip staging
-    - uses: softprops/action-gh-release@v2
+    - uses: svenstaro/upload-release-action@v2
       with:
-        files: LaBonneFranquette.zip
-        draft: false
-        prerelease: false
-        tag_name: ${{ github.ref }}
-        name: Release ${{ github.ref_name }}
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: LaBonneFranquette.zip
+        tag: ${{ github.ref }}
+        overwrite: true
