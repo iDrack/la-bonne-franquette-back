@@ -47,6 +47,5 @@ jobs:
         files: LaBonneFranquette.zip
         draft: false
         prerelease: false
-        tag_name: ${{ github.ref  }}
+        tag_name: ${{ github.ref }}
         name: Release ${{ github.ref_name }}
-        token: ${{ secrets.GITHUB_TOKEN }}
