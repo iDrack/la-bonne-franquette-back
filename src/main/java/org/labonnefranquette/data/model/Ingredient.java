@@ -2,7 +2,6 @@ package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -34,4 +33,7 @@ public class Ingredient {
     @ManyToMany(mappedBy = "ingredientSet")
     @JsonBackReference(value = "produit-ingredient")
     private Set<Produit> produitSet;
+
+    @Column(name = "ingredient_type", insertable = false, updatable = false)
+    private String ingredientType;
 }
