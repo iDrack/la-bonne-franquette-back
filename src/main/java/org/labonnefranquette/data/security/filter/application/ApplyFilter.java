@@ -17,7 +17,10 @@ public class ApplyFilter {
     }
 
     private Boolean AuthRoutes() {
-        return !this.requestUrl.endsWith("/login");
+        return !this.requestUrl.endsWith("/login") &&
+                !this.requestUrl.endsWith("/verify-token") &&
+                !this.requestUrl.endsWith("/update-token") &&
+                !this.requestUrl.endsWith("/testConnection");
     }
 
     //TODO : Retirer avant MEP

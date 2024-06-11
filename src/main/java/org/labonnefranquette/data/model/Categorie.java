@@ -29,4 +29,7 @@ public class Categorie {
     @ManyToMany(mappedBy = "categorieSet")
     @JsonBackReference(value = "categorie-produit")
     private Collection<Produit> produitSet;
+
+    @Column(name = "categorie_type", insertable = false, updatable = false)
+    private String categorieType;
 }
