@@ -1,4 +1,4 @@
-package org.labonnefranquette.data.controller;
+package org.labonnefranquette.data.controller.admin;
 
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.services.UserService;
@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/users")
-public class UserRestController {
+@RequestMapping("/api/v1/admin/users")
+public class AdminUserController {
 
     @Autowired
     private UserService userService;
