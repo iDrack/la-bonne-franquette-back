@@ -9,11 +9,9 @@ import java.util.Objects;
 public class AuthorizationVoter {
 
     public Boolean vote(String url, String roles) {
-
         if (!this.isAdminRoutes(url)) {
             return true;
         }
-
         return Objects.equals(roles, Roles.ROLE_MANAGER.name()) || Objects.equals(roles, Roles.ROLE_ADMIN.name());
     }
 

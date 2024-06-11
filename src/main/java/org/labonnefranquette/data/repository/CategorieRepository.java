@@ -1,6 +1,10 @@
 package org.labonnefranquette.data.repository;
 
 import org.labonnefranquette.data.model.Categorie;
+import org.labonnefranquette.data.model.Ingredient;
+import org.labonnefranquette.data.services.CacheService;
+import org.labonnefranquette.data.services.impl.CacheServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;

@@ -5,10 +5,7 @@ import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +21,6 @@ public class MenuController {
     public ResponseEntity<List<Menu>> getAllMenu() {
         return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
     }
-
     @GetMapping("/{id}")
     public ResponseEntity<Menu> getMenuById(@PathVariable Long id) {
         Optional<Menu> resultat = menuService.findAllById(id);

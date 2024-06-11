@@ -2,6 +2,7 @@ package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.model.Ingredient;
 import org.labonnefranquette.data.repository.IngredientRepository;
+import org.labonnefranquette.data.services.CacheService;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,14 +15,25 @@ public class IngredientServiceImpl implements GenericService<Ingredient, Long> {
 
     @Autowired
     IngredientRepository ingredientRepository;
+    @Autowired
+    CacheService cacheService;
 
     @Override
     public List<Ingredient> findAll() {
         return ingredientRepository.findAll();
     }
-
     @Override
     public Optional<Ingredient> findAllById(Long id) {
         return ingredientRepository.findById(id);
+    }
+    @Override
+    public Ingredient create(Ingredient newIngredient) {
+        cacheService.incrementCacheVersion();
+        return ingredientRepository.save(newIngredient);
+    }
+    @Override
+    public void deleteById(Long id) {
+        cacheService.incrementCacheVersion();
+        ingredientRepository.deleteById(id);
     }
 }
