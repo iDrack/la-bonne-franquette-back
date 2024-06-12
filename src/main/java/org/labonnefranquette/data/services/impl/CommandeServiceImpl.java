@@ -28,7 +28,10 @@ public class CommandeServiceImpl implements CommandeService {
     public List<Commande> findAllCommande() {
         return commandeRepository.findAll();
     }
-
+    @Override
+    public List<Commande> findAllCommandeWithStatut(StatusCommande status) {
+        return commandeRepository.findAllCommandeWithStatut(status);
+    }
     @Override
     public List<CommandeListeProjection> findAllCommandeListe()  {
         return commandeRepository.findAllCommandeListe();
@@ -79,7 +82,7 @@ public class CommandeServiceImpl implements CommandeService {
             throw new RuntimeException("Commande not found");
         }
         if (commandeFound.get().getStatus().equals(StatusCommande.EN_COURS)) {
-            commandeFound.get().setStatus(StatusCommande.TERMINE);
+            commandeFound.get().setStatus(StatusCommande.TERMINEE);
             return commandeRepository.save(commandeFound.get());
         }
         return commandeFound.get();

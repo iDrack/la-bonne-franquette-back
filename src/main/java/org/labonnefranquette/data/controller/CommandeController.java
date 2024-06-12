@@ -4,6 +4,7 @@ import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
 import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
+import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.projection.CommandeListeProjection;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.utils.DtoTools;
@@ -34,18 +35,24 @@ public class CommandeController {
     @GetMapping
     public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandes() {
         List<Commande> commandes = commandeService.findAllCommande();
-        if (commandes == null || commandes.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
         return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
+    }
+    @GetMapping("/status/{status}")
+    public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandesEnCours(@PathVariable String status) {
+        try {
+            StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-","_").toUpperCase());
+            List<Commande> commandes = commandeService.findAllCommandeWithStatut(statusCommande);
+            List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
+            return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping("/liste")
     public ResponseEntity<List<CommandeListeProjection>> fetchAllCommandesListe() {
         List<CommandeListeProjection> commandes = commandeService.findAllCommandeListe();
-        if (commandes == null || commandes.isEmpty()) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
         return new ResponseEntity<>(commandes, HttpStatus.OK);
     }
 
@@ -68,17 +75,12 @@ public class CommandeController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCommande(long id) {
-        if (commandeService.deleteCommande(id))
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(commandeService.deleteCommande(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CommandeReadDTO> updateCommande(@PathVariable long id) {
         Commande commande = commandeService.advanceStatusCommande(id);
-
-        if (commande == null)
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
     }
 }
