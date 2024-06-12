@@ -60,7 +60,7 @@ public class CommandeController {
         try  {
             Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));
             this.template.convertAndSend("/socket/commande", commande);
-            return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.CREATED);
+            return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
         } catch (PriceException priceException) {
             return new ResponseEntity<>(priceException.getMessage(), HttpStatus.BAD_REQUEST);
         }
