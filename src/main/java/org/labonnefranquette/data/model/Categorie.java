@@ -23,7 +23,7 @@ public class Categorie {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String nom;
 
-    @OneToMany(mappedBy = "categorie")
+    @OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
     private Collection<SousCategorie> sousCategorieSet;
 
     @ManyToMany(mappedBy = "categorieSet")

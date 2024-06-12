@@ -28,6 +28,7 @@ public class TokenGenerator {
         return Jwts.builder()
                 .setSubject(user.getId().toString())
                 .claim("username", user.getUsername())
+                .claim("roles", user.getRoles())
                 .setExpiration(new Date(System.currentTimeMillis() + (60 * 20 * 1000)))
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
