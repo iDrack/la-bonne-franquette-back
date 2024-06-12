@@ -11,20 +11,20 @@ public class ApplyFilter {
     public Boolean doFilterOne() {
         return this.AuthRoutes() && this.UsersRoutes();
     }
-
     public Boolean doFilterTwo() {
-        return this.AuthRoutes() && this.UsersRoutes();
+        return this.AdminRoutes();
     }
 
     private Boolean AuthRoutes() {
         return !this.requestUrl.endsWith("/login") &&
-                !this.requestUrl.endsWith("/verify-token") &&
-                !this.requestUrl.endsWith("/update-token") &&
                 !this.requestUrl.endsWith("/testConnection");
     }
-
     //TODO : Retirer avant MEP
     private Boolean UsersRoutes() {
         return !this.requestUrl.endsWith("/users/create");
     }
+    private Boolean AdminRoutes() {
+        return this.requestUrl.contains("admin");
+    }
+
 }
