@@ -25,7 +25,7 @@ public class Produit {
     @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixHT;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "produit_appartient_categorie",
             joinColumns = @JoinColumn(name = "produit_id"),
@@ -33,7 +33,7 @@ public class Produit {
     )
     private Collection<Categorie> categorieSet;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "produit_contient_ingredient",
             joinColumns = @JoinColumn(name = "produit_id"),
@@ -41,7 +41,7 @@ public class Produit {
     )
     private Collection<Ingredient> ingredientSet;
 
-    @ManyToMany(mappedBy = "produitSet")
+    @ManyToMany(mappedBy = "produitSet", fetch = FetchType.EAGER)
     @JsonBackReference(value = "menu-produit")
     private Collection<Menu> menuSet;
 
