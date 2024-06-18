@@ -21,4 +21,8 @@ public class LoginController {
         }
         return new ResponseEntity<>("{\"token\":\"" + token + "\"}", HttpStatus.OK);
     }
+    @PostMapping("/logout")
+    public ResponseEntity<Boolean> logout(@RequestHeader("auth-token") String token) {
+        return new ResponseEntity<>(this.authService.logout(token), HttpStatus.OK);
+    }
 }

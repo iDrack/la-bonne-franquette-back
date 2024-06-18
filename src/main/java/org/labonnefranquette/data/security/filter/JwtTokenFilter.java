@@ -35,7 +35,7 @@ public class JwtTokenFilter implements Filter {
                 return;
             }
 
-            switch (this.authService.verifyToken(token)) {
+            switch (this.authService.checkStatus(token)) {
                 case Valid -> {
                 } // ok
                 case Imminent -> this.updateExpirationByLastConnection(token);
@@ -68,13 +68,13 @@ public class JwtTokenFilter implements Filter {
 
 
     private Boolean verifyTokenIsStillAvailable(String token) {
-        Date lastConnection = this.userService.returnLastConnectionFromUsername(this.authService.getUsernameFromtoken(token));
+        Date lastConnection = this.userService.getLastConnectionByUsername(this.authService.getUsernameFromtoken(token));
         Date tenMinutsAgo = new Date(System.currentTimeMillis() - (10 * 60 * 1000));
         return !lastConnection.before(tenMinutsAgo);
     }
 
     private void updateExpirationByLastConnection(String token) {
         String username = this.authService.getUsernameFromtoken(token);
-        this.userService.updateLastConnection(username);
+        this.userService.setLastConnectionByUsername(username);
     }
 }
