@@ -19,8 +19,15 @@ import java.util.Optional;
 public interface CategorieRepository extends JpaRepository<Categorie, Long> {
 
     @Cacheable(value = "categorie")
-    @Query("SELECT c FROM Categorie c WHERE c.categorieType = 'categorie'")
     List<Categorie> findAll();
+
+    @Cacheable(value = "categorie")
+    @Query("SELECT c FROM Categorie c WHERE c.categorieType = 'categorie'")
+    List<Categorie> findAllCategorie();
+
+    @Cacheable(value = "categorie")
+    @Query("SELECT c FROM Categorie c WHERE c.categorieType = 'sous-categorie'")
+    List<Categorie> findAllSousCategorie();
 
     @Cacheable(value = "categorie", key = "#id")
     Optional<Categorie> findById(Long id);
