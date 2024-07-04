@@ -22,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
         if (userLoginDto == null) return null;
         User user = this.userService.checkCredentials(userLoginDto.getUsername(), userLoginDto.getPassword());
         if (user != null) {
-            this.userService.updateLastConnection(user.getUsername());
+            this.userService.setLastConnectionByUsername(user.getUsername());
             return this.tokenGenerator.generateToken(user);
         }
 
@@ -30,29 +30,16 @@ public class AuthServiceImpl implements AuthService {
 
     }
     @Override
-    public String refreshToken(UserLoginDto userLoginDto, String token) {
-        try {
-            return switch (this.tokenGenerator.verifyToken(token)) {
-                case Valid -> token;
-                case Invalid, Expired -> {
-                    User user = this.userService.checkCredentials(userLoginDto.getUsername(), userLoginDto.getPassword());
-                    yield user != null ? this.tokenGenerator.generateToken(user) : null;
-                }
-                default -> null;
-            };
-        } catch (Exception e) {
-            return null;
-        }
+    public boolean logout(String token) {
+        return this.tokenGenerator.invalidateToken(token);
     }
-
     @Override
-    public TokenStatus verifyToken(String token) {
-        return this.tokenGenerator.verifyToken(token);
+    public TokenStatus checkStatus(String token) {
+        return this.tokenGenerator.checkToken(token);
     }
-
     @Override
     public String getUsernameFromtoken(String token) {
-        return this.tokenGenerator.getUsernameFromtoken(token);
+        return this.tokenGenerator.getUsernameByToken(token);
     }
 }
 

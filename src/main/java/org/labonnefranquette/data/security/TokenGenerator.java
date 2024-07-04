@@ -6,16 +6,19 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.model.enums.TokenStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class TokenGenerator {
 
     private final Key key;
+    private ConcurrentHashMap<String, Date> blacklistedTokens = new ConcurrentHashMap<>();
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -42,8 +45,8 @@ public class TokenGenerator {
                 .getBody();
     }
 
-    public TokenStatus verifyToken(String token) {
-        if (token == null) return TokenStatus.Invalid;
+    public TokenStatus checkToken(String token) {
+        if (token == null || blacklistedTokens.containsKey(token)) return TokenStatus.Invalid;
         try {
             Claims claims = this.parseToken(token);
             long expirationTime = claims.getExpiration().getTime();
@@ -62,7 +65,23 @@ public class TokenGenerator {
         }
     }
 
-    public String getUsernameFromtoken(String token) {
+    public boolean invalidateToken(String token) {
+        try {
+            Claims claims = parseToken(token);
+            Date expirationDate = claims.getExpiration();
+            blacklistedTokens.put(token, expirationDate);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @Scheduled(fixedRate = 60 * 60 * 1000)
+    public void removeExpiredTokens() {
+        blacklistedTokens.entrySet().removeIf(entry -> entry.getValue().getTime() < System.currentTimeMillis());
+    }
+
+    public String getUsernameByToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.key)
                 .build()
@@ -71,7 +90,7 @@ public class TokenGenerator {
         return claims.get("username", String.class);
     }
 
-    public String getRolesFromToken(String token) {
+    public String getRolesByToken(String token) {
         Claims claims = Jwts.parserBuilder()
                 .setSigningKey(this.key)
                 .build()

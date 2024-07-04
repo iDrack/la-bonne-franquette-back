@@ -1,11 +1,11 @@
 package org.labonnefranquette.data.dto.impl;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.labonnefranquette.data.dto.UserDto;
 
-@Getter
-@Setter
+@Data
 public class UserCreateDto implements UserDto {
 
     private String username;
