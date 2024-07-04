@@ -2,7 +2,7 @@ package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.model.Menu;
 import org.labonnefranquette.data.repository.MenuRepository;
-import org.labonnefranquette.data.services.CacheService;
+import org.labonnefranquette.data.cache.CacheService;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,6 @@ public class MenuServiceImpl implements GenericService<Menu, Long> {
 
     @Autowired
     MenuRepository menuRepository;
-    @Autowired
-    CacheService cacheService;
 
     @Override
     public List<Menu> findAll() {
@@ -28,12 +26,12 @@ public class MenuServiceImpl implements GenericService<Menu, Long> {
     }
     @Override
     public Menu create(Menu newMenu) {
-        cacheService.incrementCacheVersion();
+        CacheService.changeCacheVersion();
         return menuRepository.save(newMenu);
     }
     @Override
     public void deleteById(Long id) {
-        cacheService.incrementCacheVersion();
+        CacheService.changeCacheVersion();
         menuRepository.deleteById(id);
     }
 
