@@ -27,10 +27,26 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws").setAllowedOrigins("*");
     }
 
-
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/socket");
         registry.setApplicationDestinationPrefixes("/app");
+    }
+
+    @Override
+    public void configureClientInboundChannel(ChannelRegistration registration) {
+        registration.interceptors(new ChannelInterceptor() {
+            @Override
+            public Message<?> preSend(Message<?> message, MessageChannel channel) {
+                StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+                if (StompCommand.CONNECT.equals(accessor.getCommand())) {
+                    String authToken = accessor.getFirstNativeHeader("auth-token");
+                    if (authToken == null || !authService.checkConnected(authToken)) {
+                        throw new AccessDeniedException("Vous devez être connecté");
+                    }
+                }
+                return message;
+            }
+        });
     }
 }

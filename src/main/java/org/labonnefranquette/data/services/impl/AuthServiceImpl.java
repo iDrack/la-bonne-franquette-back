@@ -2,12 +2,10 @@ package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.model.User;
-import org.labonnefranquette.data.model.enums.TokenStatus;
 import org.labonnefranquette.data.security.TokenGenerator;
 import org.labonnefranquette.data.services.AuthService;
 import org.labonnefranquette.data.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;

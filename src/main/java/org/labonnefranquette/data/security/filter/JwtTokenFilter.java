@@ -36,7 +36,8 @@ public class JwtTokenFilter implements Filter {
             }
 
             if (!this.authService.checkConnected(token)) {
-                    httpRes.setStatus(HttpStatus.FORBIDDEN.value());
+                httpRes.setStatus(HttpStatus.FORBIDDEN.value());
+                return;
             }
         }
         chain.doFilter(request, response);
