@@ -13,12 +13,15 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 
 @Component
 public class TokenGenerator {
 
     private final Key key;
     private ConcurrentHashMap<String, Date> blacklistedTokens = new ConcurrentHashMap<>();
+    private AtomicLong lastTokenAjoute = new AtomicLong(System.currentTimeMillis());
+
     @Autowired
     private PasswordEncoder passwordEncoder;
     @Autowired
@@ -69,6 +72,7 @@ public class TokenGenerator {
             Claims claims = parseToken(token);
             Date expirationDate = claims.getExpiration();
             blacklistedTokens.put(token, expirationDate);
+            lastTokenAjoute.set(System.currentTimeMillis());
             return true;
         } catch (Exception e) {
             return false;
@@ -78,7 +82,9 @@ public class TokenGenerator {
     @Scheduled(fixedRate = 3 * 60 * 60 * 1000)
     public void removeExpiredTokens() {
         long currentTime = System.currentTimeMillis();
-        blacklistedTokens.entrySet().removeIf(entry -> entry.getValue().getTime() < System.currentTimeMillis());
+        if (currentTime - lastTokenAjoute.get() >= 60 * 25 * 1000) {
+            blacklistedTokens.entrySet().removeIf(entry -> entry.getValue().getTime() < currentTime);
+        }
     }
 
     public String getUsernameByToken(String token) {
