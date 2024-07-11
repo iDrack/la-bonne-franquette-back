@@ -21,7 +21,6 @@ public class TokenGenerator {
     private ConcurrentHashMap<String, Date> blacklistedTokens = new ConcurrentHashMap<>();
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     public TokenGenerator(Key key) {
         this.key = key;
@@ -76,8 +75,9 @@ public class TokenGenerator {
         }
     }
 
-    @Scheduled(fixedRate = 60 * 60 * 1000)
+    @Scheduled(fixedRate = 3 * 60 * 60 * 1000)
     public void removeExpiredTokens() {
+        long currentTime = System.currentTimeMillis();
         blacklistedTokens.entrySet().removeIf(entry -> entry.getValue().getTime() < System.currentTimeMillis());
     }
 

@@ -5,24 +5,21 @@ import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.EnumMap;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 @Component
 public class CommandeTools {
 
     private static short compteurNumeroCommande = 0;
-    private static LocalDateTime dernierUsageCompteur = LocalDateTime.now();
+    private static AtomicLong dernierUsageCompteur = new AtomicLong(System.currentTimeMillis());
 
 
     private static synchronized void verifierEtReinitialiserSiNecessaire() {
-        if (ChronoUnit.HOURS.between(dernierUsageCompteur, LocalDateTime.now()) >= 3) {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - dernierUsageCompteur.get() >= 3 * 60 * 60 * 1000) { // 3 heures
             compteurNumeroCommande = 0;
         }
     }
@@ -32,7 +29,7 @@ public class CommandeTools {
             compteurNumeroCommande = 0;
         }
         compteurNumeroCommande++;
-        dernierUsageCompteur = LocalDateTime.now();
+        dernierUsageCompteur.set(System.currentTimeMillis());
         return compteurNumeroCommande;
     }
 
