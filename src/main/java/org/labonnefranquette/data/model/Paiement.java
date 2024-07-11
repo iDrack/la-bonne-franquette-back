@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -24,7 +25,7 @@ public class Paiement {
 
     @Column(name = "type", nullable = false, length = 3)
     @NotNull(message = "Ce champs ne peut pas être vide")
-    private String type;
+    private PaiementTypeCommande type;
 
     @Column(name = "ticket_envoye", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide")
@@ -44,7 +45,7 @@ public class Paiement {
     @JoinColumn(name = "commande")
     private Commande commande;
 
-    public Paiement(String type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {
+    public Paiement(PaiementTypeCommande type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {
         this.date = Date.valueOf(LocalDate.now());
         this.type = type;
         this.ticketEnvoye = ticketEnvoye;

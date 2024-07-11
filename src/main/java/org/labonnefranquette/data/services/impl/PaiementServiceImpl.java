@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.services.impl;
 
+import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.repository.PaiementRepository;
@@ -31,7 +32,7 @@ public class PaiementServiceImpl implements PaiementService {
     }
 
     @Override
-    public Paiement createPaiement(Long idCommande, String type, Boolean ticketEnvoye, int prixPaye) throws RuntimeException {
+    public Paiement createPaiement(Long idCommande, PaiementCreateDTO paiementCreateDTO) throws RuntimeException {
         Commande commande;
         Optional<Commande> commandeFound = commandeService.findCommandeById(idCommande);
         if (commandeFound.isPresent()) {
@@ -39,7 +40,7 @@ public class PaiementServiceImpl implements PaiementService {
         } else {
             throw new RuntimeException("Commande n'existe pas.");
         }
-        Paiement nouveauPaiement = new Paiement(type, ticketEnvoye, prixPaye, prixPaye * commande.getTauxTVA(), commande);
+        Paiement nouveauPaiement = new Paiement(paiementCreateDTO.getType(), paiementCreateDTO.getTicketEnvoye(), paiementCreateDTO.getPrixPaye(), paiementCreateDTO.getPrixPaye() * commande.getTauxTVA(), commande);
         paiementRepository.save(nouveauPaiement);
         commande.getPaiementSet().add(nouveauPaiement);
         commandeService.ajoutPaiement(commande, nouveauPaiement);

@@ -39,7 +39,7 @@ public class PaiementController {
     public ResponseEntity<PaiementReadDTO> createNewPaiement(@RequestBody PaiementCreateDTO paiementDTO, @PathVariable Long commandeId) {
         Paiement retPaiement;
         try {
-            retPaiement = paiementService.createPaiement(commandeId, paiementDTO.getType(), paiementDTO.getTicketEnvoye(), paiementDTO.getPrixPaye());
+            retPaiement = paiementService.createPaiement(commandeId, paiementDTO);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
