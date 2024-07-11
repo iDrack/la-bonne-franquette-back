@@ -52,7 +52,6 @@ public class PaiementController {
         try {
             paiements = paiementService.getPaiementByCommande(commandeId);
         } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
         List<PaiementReadDTO> resultat = paiements.stream().map(x -> dtoTools.convertToDto(x, PaiementReadDTO.class)).toList();
