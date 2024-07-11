@@ -14,7 +14,7 @@ import java.util.Collection;
 @Data
 @AllArgsConstructor
 public class CommandeCreateDTO implements CommandeDTO {
-    private int numero;
+    private String numero;
     private Boolean surPlace;
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;
