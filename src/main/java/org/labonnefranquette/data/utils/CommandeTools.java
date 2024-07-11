@@ -17,33 +17,23 @@ import java.util.stream.Collectors;
 @Component
 public class CommandeTools {
 
-    private static final Map<PaiementTypeCommande, Integer> compteurNumeroCommande = new EnumMap<>(PaiementTypeCommande.class);
-    private static int compteurNumeroCommandePhone = 0;
+    private static short compteurNumeroCommande = 0;
     private static LocalDateTime dernierUsageCompteur = LocalDateTime.now();
 
-    static {
-        for (PaiementTypeCommande type : PaiementTypeCommande.values()) {
-            compteurNumeroCommande.put(type, 0);
-        }
-    }
 
     private static synchronized void verifierEtReinitialiserSiNecessaire() {
         if (ChronoUnit.HOURS.between(dernierUsageCompteur, LocalDateTime.now()) >= 3) {
-            for (PaiementTypeCommande type : PaiementTypeCommande.values()) {
-                compteurNumeroCommande.put(type, 0);
-            }
+            compteurNumeroCommande = 0;
         }
     }
-    private static synchronized int incrementeCompteur(PaiementTypeCommande type) {
+    private static synchronized short incrementeCompteur() {
         verifierEtReinitialiserSiNecessaire();
-        int currentCount = compteurNumeroCommande.get(type);
-        if (currentCount > 100) {
-            compteurNumeroCommande.put(type, 0);
-        } else {
-            compteurNumeroCommande.put(type, currentCount + 1);
+        if (compteurNumeroCommande > 400) {
+            compteurNumeroCommande = 0;
         }
+        compteurNumeroCommande++;
         dernierUsageCompteur = LocalDateTime.now();
-        return compteurNumeroCommande.get(type);
+        return compteurNumeroCommande;
     }
 
     public Boolean isCorrectPrice(@NotNull  Commande commande) {
@@ -60,25 +50,9 @@ public class CommandeTools {
 
         return correctPrice == commande.getPrixHT();
     }
-
-    public String calculNumeroCommande(@NotNull Commande commande) {
-        PaiementTypeCommande typeCommande = this.calculPaiementTypeCommande(commande.getPaiementSet());
-        if (typeCommande == PaiementTypeCommande.AUCUN) {
-            return String.valueOf(incrementeCompteur(typeCommande));
-        }
-        int numeroCommande = incrementeCompteur(typeCommande);
-        return typeCommande.name() + numeroCommande;
+    public short calculNumeroCommande() {
+        return incrementeCompteur();
     }
-
-    public PaiementTypeCommande initialisePaiementTypeCommande(String numeroCommande) {
-        for (PaiementTypeCommande type : PaiementTypeCommande.values()) {
-            if (numeroCommande.startsWith(type.name())) {
-                return type;
-            }
-        }
-        return PaiementTypeCommande.AUCUN;
-    }
-
     public PaiementTypeCommande calculPaiementTypeCommande(Collection<Paiement> paiementSet) {
         if (paiementSet.isEmpty()) {
             return PaiementTypeCommande.AUCUN;

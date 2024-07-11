@@ -14,7 +14,7 @@ import java.util.Date;
 @Data
 public class CommandeReadDTO implements CommandeDTO {
     private long commandeId;
-    private String numero;
+    private short numero;
     private Date dateSaisie;
     private Date dateLivraison;
     private StatusCommande status;

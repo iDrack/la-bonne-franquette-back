@@ -27,9 +27,9 @@ public class Commande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "numero", nullable = false, length = 10)
+    @Column(name = "numero", nullable = false, length = 200)
     @NotNull(message = "Ce champs ne peut pas être vide")
-    private String numero;
+    private short numero;
 
     @Column(name = "date_saisie", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide")
