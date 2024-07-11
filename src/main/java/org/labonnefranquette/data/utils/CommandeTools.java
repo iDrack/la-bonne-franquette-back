@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Set;
@@ -61,29 +62,33 @@ public class CommandeTools {
     }
 
     public String calculNumeroCommande(@NotNull Commande commande) {
-        if (commande.getPaiementSet().isEmpty()) {
-            return String.valueOf(incrementeCompteur(PaiementTypeCommande.AUCUN));
+        PaiementTypeCommande typeCommande = this.calculPaiementTypeCommande(commande.getPaiementSet());
+        if (typeCommande == PaiementTypeCommande.AUCUN) {
+            return String.valueOf(incrementeCompteur(typeCommande));
         }
-        Set<PaiementTypeCommande> typesPaiement = commande.getPaiementSet().stream()
-                .map(Paiement::getType)
-                .collect(Collectors.toSet());
-        PaiementTypeCommande typeCommande;
-        if (typesPaiement.size() == 1) {
-            typeCommande = typesPaiement.iterator().next();
-        } else {
-            typeCommande = PaiementTypeCommande.MIXED;
-        }
-
         int numeroCommande = incrementeCompteur(typeCommande);
         return typeCommande.name() + numeroCommande;
     }
 
-    public PaiementTypeCommande calculPaiementTypeCommande(String numeroCommande) {
+    public PaiementTypeCommande initialisePaiementTypeCommande(String numeroCommande) {
         for (PaiementTypeCommande type : PaiementTypeCommande.values()) {
             if (numeroCommande.startsWith(type.name())) {
                 return type;
             }
         }
         return PaiementTypeCommande.AUCUN;
+    }
+
+    public PaiementTypeCommande calculPaiementTypeCommande(Collection<Paiement> paiementSet) {
+        if (paiementSet.isEmpty()) {
+            return PaiementTypeCommande.AUCUN;
+        }
+        Set<PaiementTypeCommande> typesPaiement = paiementSet.stream()
+                .map(Paiement::getType)
+                .collect(Collectors.toSet());
+        if (typesPaiement.size() == 1) {
+            return typesPaiement.iterator().next();
+        }
+        return PaiementTypeCommande.MIXED;
     }
 }

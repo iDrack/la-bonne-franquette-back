@@ -50,7 +50,7 @@ public class CommandeServiceImpl implements CommandeService {
             throw new PriceException("Le prix saisie est incorrect");
         }
         commande.setNumero(commandeTools.calculNumeroCommande(commande));
-        commande.setPaiementType(commandeTools.calculPaiementTypeCommande(commande.getNumero()));
+        commande.setPaiementType(commandeTools.initialisePaiementTypeCommande(commande.getNumero()));
         return commandeRepository.save(commande);
     }
 
@@ -72,6 +72,7 @@ public class CommandeServiceImpl implements CommandeService {
         }
         Commande commandeToUpdate = commandeFound.get();
         commandeToUpdate.getPaiementSet().add(paiement);
+        commandeToUpdate.setPaiementType(commandeTools.calculPaiementTypeCommande(commandeToUpdate.getPaiementSet()));
         return commandeRepository.save(commandeToUpdate);
     }
 
