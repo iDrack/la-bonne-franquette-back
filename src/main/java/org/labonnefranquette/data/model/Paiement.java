@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -43,6 +44,7 @@ public class Paiement {
 
     @ManyToOne
     @JoinColumn(name = "commande")
+    @JsonBackReference
     private Commande commande;
 
     public Paiement(PaiementTypeCommande type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {

@@ -57,7 +57,7 @@ public class CommandeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<CommandeReadDTO> fetchCommandeById(long id) {
+    public ResponseEntity<CommandeReadDTO> fetchCommandeById(@PathVariable  Long id) {
         Optional<Commande> commande = commandeService.findCommandeById(id);
         return commande.map(value -> new ResponseEntity<>(dtoTools.convertToDto(value, CommandeReadDTO.class), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
@@ -65,14 +65,20 @@ public class CommandeController {
     @PostMapping
     public ResponseEntity<?> createCommande(@RequestBody CommandeCreateDTO commandeDto) {
         try  {
+            Commande cmd = dtoTools.convertToEntity(commandeDto, Commande.class);
+            System.out.println("cmd : " + cmd.toString());
             Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));
+            System.out.println("commande : " + commande.toString());
             CommandeReadDTO commandeReadDTO = dtoTools.convertToDto(commande, CommandeReadDTO.class);
+            System.out.println("commandeReadDTO : " + commandeReadDTO.toString());
             this.template.convertAndSend("/socket/commande", commandeReadDTO);
             return new ResponseEntity<>(commandeReadDTO, HttpStatus.CREATED);
         } catch (PriceException priceException) {
             return new ResponseEntity<>(priceException.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
+
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteCommande(long id) {

@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -63,6 +64,7 @@ public class Commande {
     private Collection<Selection> menus;
 
     @OneToMany(mappedBy = "commande")
+    @JsonManagedReference
     private Collection<Paiement> paiementSet;
 
     @Column(name = "paiement_type", nullable = true, length = 5)

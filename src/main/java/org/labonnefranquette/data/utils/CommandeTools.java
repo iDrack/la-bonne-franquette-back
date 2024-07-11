@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 public class CommandeTools {
 
     private static final Map<PaiementTypeCommande, Integer> compteurNumeroCommande = new EnumMap<>(PaiementTypeCommande.class);
+    private static int compteurNumeroCommandePhone = 0;
     private static LocalDateTime dernierUsageCompteur = LocalDateTime.now();
 
     static {
@@ -60,6 +61,9 @@ public class CommandeTools {
     }
 
     public String calculNumeroCommande(@NotNull Commande commande) {
+        if (commande.getPaiementSet().isEmpty()) {
+            return String.valueOf(incrementeCompteur(PaiementTypeCommande.AUCUN));
+        }
         Set<PaiementTypeCommande> typesPaiement = commande.getPaiementSet().stream()
                 .map(Paiement::getType)
                 .collect(Collectors.toSet());
@@ -72,5 +76,14 @@ public class CommandeTools {
 
         int numeroCommande = incrementeCompteur(typeCommande);
         return typeCommande.name() + numeroCommande;
+    }
+
+    public PaiementTypeCommande calculPaiementTypeCommande(String numeroCommande) {
+        for (PaiementTypeCommande type : PaiementTypeCommande.values()) {
+            if (numeroCommande.startsWith(type.name())) {
+                return type;
+            }
+        }
+        return PaiementTypeCommande.AUCUN;
     }
 }
