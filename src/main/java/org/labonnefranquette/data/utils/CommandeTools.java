@@ -5,6 +5,7 @@ import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.springframework.stereotype.Component;
+
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
@@ -35,13 +36,20 @@ public class CommandeTools {
 
     public Boolean isCorrectPrice(@NotNull  Commande commande) {
 
-        int articlesPrice = commande.getArticles().stream()
-            .mapToInt(article -> article.getQuantite() * article.getPrixHT())
-            .sum();
+        int articlesPrice = 0;
+        if (commande.getArticles() != null) {
+            articlesPrice = commande.getArticles().stream()
+                    .mapToInt(article -> article.getQuantite() * article.getPrixHT())
+                    .sum();
+        }
 
-        int menusPrice = commande.getMenus().stream()
-            .mapToInt(menu -> menu.getQuantite() * menu.getPrixHT())
-            .sum();
+        int menusPrice = 0;
+        if (commande.getMenus() != null) {
+            menusPrice = commande.getMenus().stream()
+                    .mapToInt(menu -> menu.getQuantite() * menu.getPrixHT())
+                    .sum();
+        }
+
 
         int correctPrice = articlesPrice + menusPrice;
 
