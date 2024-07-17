@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Data
@@ -53,5 +54,30 @@ public class Paiement {
         this.prixHT = prixHT;
         this.prixTTC = prixTTC;
         this.commande = commande;
+    }
+
+    @Override
+    public String toString() {
+        return "Paiement{" +
+                "id=" + id +
+                ", date=" + date +
+                ", type=" + type +
+                ", ticketEnvoye=" + ticketEnvoye +
+                ", prixHT=" + prixHT +
+                ", prixTTC=" + prixTTC +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Paiement paiement = (Paiement) o;
+        return prixHT == paiement.prixHT && prixTTC == paiement.prixTTC && type == paiement.type && Objects.equals(ticketEnvoye, paiement.ticketEnvoye) && Objects.equals(commande, paiement.commande);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, ticketEnvoye, prixHT, prixTTC, commande);
     }
 }

@@ -9,6 +9,7 @@ import org.labonnefranquette.data.services.PaiementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,9 @@ public class PaiementServiceImpl implements PaiementService {
         }
         Paiement nouveauPaiement = new Paiement(paiementCreateDTO.getType(), paiementCreateDTO.getTicketEnvoye(), paiementCreateDTO.getPrixPaye(), paiementCreateDTO.getPrixPaye() * commande.getTauxTVA(), commande);
         paiementRepository.save(nouveauPaiement);
+        if (commande.getPaiementSet() == null) {
+            commande.setPaiementSet(new ArrayList<Paiement>());
+        }
         commande.getPaiementSet().add(nouveauPaiement);
         commandeService.ajoutPaiement(commande, nouveauPaiement);
         return nouveauPaiement;
