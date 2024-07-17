@@ -8,8 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 
-import java.sql.Date;
-import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Data
@@ -48,7 +47,7 @@ public class Paiement {
     private Commande commande;
 
     public Paiement(PaiementTypeCommande type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {
-        this.date = Date.valueOf(LocalDate.now());
+        this.date = new Date();
         this.type = type;
         this.ticketEnvoye = ticketEnvoye;
         this.prixHT = prixHT;
