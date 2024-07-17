@@ -11,7 +11,6 @@ import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.utils.JsonConverterTools;
 
-
 import java.util.Collection;
 import java.util.Date;
 
@@ -69,4 +68,22 @@ public class Commande {
 
     @Column(name = "paiement_type", nullable = true, length = 5)
     private PaiementTypeCommande paiementType;
+
+    @Override
+    public String toString() {
+        return "Commande{" +
+                "tauxTVA=" + tauxTVA +
+                ", id=" + id +
+                ", numero=" + numero +
+                ", dateSaisie=" + dateSaisie +
+                ", dateLivraison=" + dateLivraison +
+                ", status=" + status +
+                ", surPlace=" + surPlace +
+                ", nbArticle=" + nbArticle +
+                ", prixHT=" + prixHT +
+                ", articles=" + articles +
+                ", menus=" + menus +
+                ", paiementType=" + paiementType +
+                '}';
+    }
 }
