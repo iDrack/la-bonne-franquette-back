@@ -1,6 +1,7 @@
 package org.labonnefranquette.data.security;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.labonnefranquette.data.model.User;
@@ -23,8 +24,6 @@ public class TokenGenerator {
     private AtomicLong lastTokenAjoute = new AtomicLong(System.currentTimeMillis());
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
     public TokenGenerator(Key key) {
         this.key = key;
     }
@@ -39,7 +38,7 @@ public class TokenGenerator {
                 .compact();
     }
 
-    public Claims parseToken(String token) {
+    public Claims parseToken(String token) throws ExpiredJwtException {
         return Jwts.parserBuilder()
                 .setSigningKey(key)
                 .build()
@@ -48,8 +47,8 @@ public class TokenGenerator {
     }
 
     public TokenStatus checkToken(String token) {
-        if (token == null || blacklistedTokens.containsKey(token)) return TokenStatus.Invalid;
-        try {
+       if (token == null || blacklistedTokens.containsKey(token)) return TokenStatus.Invalid;
+       try {
             Claims claims = this.parseToken(token);
             long expirationTime = claims.getExpiration().getTime();
             long currentTime = System.currentTimeMillis();
@@ -58,13 +57,12 @@ public class TokenGenerator {
                 return TokenStatus.Imminent;
             }
 
-            if (expirationTime < currentTime) {
-                return TokenStatus.Expired;
-            }
             return TokenStatus.Valid;
-        } catch (Exception e) {
-            return TokenStatus.Invalid;
-        }
+        } catch (ExpiredJwtException e) {
+           return TokenStatus.Expired;
+       } catch (Exception e) {
+           return TokenStatus.Invalid;
+       }
     }
 
     public boolean invalidateToken(String token) {
