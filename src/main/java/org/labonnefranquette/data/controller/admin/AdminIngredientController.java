@@ -16,6 +16,7 @@ public class AdminIngredientController {
 
     @PostMapping("/create")
     public ResponseEntity<Ingredient> createNewIngredient(@RequestBody Ingredient ingredient) {
+        if (ingredient == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Ingredient>(ingredientService.create(ingredient), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")

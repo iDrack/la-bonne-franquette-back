@@ -16,6 +16,7 @@ public class AdminExtraController {
 
     @PostMapping("/create")
     public ResponseEntity<Extra> createNewExtra(@RequestBody Extra extra) {
+        if (extra == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Extra>(extraService.create(extra), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
