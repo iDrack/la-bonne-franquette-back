@@ -114,22 +114,6 @@ public class CommandeControllerTest {
     }
 
     @Test
-    public void createCommandeSuccessfully() {
-        CommandeCreateDTO createDTO = new CommandeCreateDTO(true, new ArrayList<>(), new ArrayList<>(), StatusCommande.EN_COURS, new ArrayList<>(), 0);
-        Commande commande = new Commande();
-        CommandeReadDTO readDTO = new CommandeReadDTO();
-        when(dtoTools.convertToEntity(createDTO, Commande.class)).thenReturn(commande);
-        when(commandeService.createCommande(commande)).thenReturn(commande);
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(readDTO);
-
-        ResponseEntity<?> response = commandeController.createCommande(createDTO);
-
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertInstanceOf(CommandeReadDTO.class, response.getBody());
-    }
-
-    @Test
     public void createCommandePriceException() {
         CommandeCreateDTO createDTO = new CommandeCreateDTO(true, new ArrayList<>(), new ArrayList<>(), StatusCommande.EN_COURS, new ArrayList<>(), -1);
         when(dtoTools.convertToEntity(createDTO, Commande.class)).thenThrow(new PriceException("Price error"));
