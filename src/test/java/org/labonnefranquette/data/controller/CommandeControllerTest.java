@@ -36,10 +36,10 @@ public class CommandeControllerTest {
     private DtoTools dtoTools;
 
     @Mock
-    private SimpMessagingTemplate template;
+    private SimpMessagingTemplate simpMessagingTemplate;
 
     @InjectMocks
-    private CommandeController commandeController;
+    private CommandeController commandeController = new CommandeController(simpMessagingTemplate);
 
     @Test
     public void fetchAllCommandesSuccessfully() {
@@ -126,6 +126,7 @@ public class CommandeControllerTest {
 
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         assertNotNull(response.getBody());
+        assertInstanceOf(CommandeReadDTO.class, response.getBody());
     }
 
     @Test
@@ -136,7 +137,7 @@ public class CommandeControllerTest {
         ResponseEntity<?> response = commandeController.createCommande(createDTO);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Price error", response.getBody());
+        assertEquals("Price error", response.getBody().toString());
     }
 
     @Test
