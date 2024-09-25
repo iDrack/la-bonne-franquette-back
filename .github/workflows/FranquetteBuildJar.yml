@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 17
@@ -22,7 +21,6 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml')}}
           restore-keys: ${{ runner.os }}-m2
-
       - name: Build with Maven
         run: mvn -B package --file pom.xml
   publish:
@@ -34,8 +32,8 @@ jobs:
       with:
         java-version: 17
         distribution: 'temurin'
-    - run: mvn -B package --file pom.xml -DskipTests
-    - run: mkdir staging 
+    - run: mvn -B package --file pom.xml
+    - run: mkdir staging
     - run: mkdir staging/target
     - run: cp target/*.jar  staging/target
     - run: cp docker-compose.yml staging
