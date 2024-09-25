@@ -7,7 +7,7 @@ import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.projection.CommandeListeProjection;
 import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
-import org.labonnefranquette.data.utils.PriceTools;
+import org.labonnefranquette.data.utils.CommandeTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class CommandeServiceImpl implements CommandeService {
     @Autowired
     private CommandeRepository commandeRepository;
     @Autowired
-    private PriceTools priceTools;
+    private CommandeTools commandeTools;
 
     @Override
     public List<Commande> findAllCommande() {
@@ -46,12 +46,12 @@ public class CommandeServiceImpl implements CommandeService {
     public Commande createCommande(Commande commande) throws PriceException {
         commande.setDateSaisie(new Date());
         commande.setNbArticle(commande.getArticles().size() + commande.getMenus().size());
-
-        if (priceTools.isCorrectPrice(commande)) {
-            return commandeRepository.save(commande);
-        } else  {
+        if (!commandeTools.isCorrectPrice(commande)) {
             throw new PriceException("Le prix saisie est incorrect");
         }
+        commande.setNumero(commandeTools.calculNumeroCommande());
+        commande.setPaiementType(commandeTools.calculPaiementTypeCommande(commande.getPaiementSet()));
+        return commandeRepository.save(commande);
     }
 
     @Override
@@ -72,6 +72,7 @@ public class CommandeServiceImpl implements CommandeService {
         }
         Commande commandeToUpdate = commandeFound.get();
         commandeToUpdate.getPaiementSet().add(paiement);
+        commandeToUpdate.setPaiementType(commandeTools.calculPaiementTypeCommande(commandeToUpdate.getPaiementSet()));
         return commandeRepository.save(commandeToUpdate);
     }
 

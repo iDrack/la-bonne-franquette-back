@@ -2,12 +2,13 @@ package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.model.User;
-import org.labonnefranquette.data.model.enums.TokenStatus;
 import org.labonnefranquette.data.security.TokenGenerator;
 import org.labonnefranquette.data.services.AuthService;
 import org.labonnefranquette.data.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -22,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
         if (userLoginDto == null) return null;
         User user = this.userService.checkCredentials(userLoginDto.getUsername(), userLoginDto.getPassword());
         if (user != null) {
-            this.userService.updateLastConnection(user.getUsername());
+            this.userService.setLastConnectionByUsername(user.getUsername());
             return this.tokenGenerator.generateToken(user);
         }
 
@@ -30,31 +31,49 @@ public class AuthServiceImpl implements AuthService {
 
     }
     @Override
-    public String refreshToken(UserLoginDto userLoginDto, String token) {
-        try {
-            return switch (this.tokenGenerator.verifyToken(token)) {
-                case Valid -> token;
-                case Invalid, Expired -> {
-                    User user = this.userService.checkCredentials(userLoginDto.getUsername(), userLoginDto.getPassword());
-                    yield user != null ? this.tokenGenerator.generateToken(user) : null;
+    public boolean logout(String token) {
+        return this.tokenGenerator.invalidateToken(token);
+    }
+    @Override
+    public boolean checkConnected(String token) {
+        switch (this.tokenGenerator.checkToken(token)) {
+            case Valid -> {
+                return true;
+            }
+            case Imminent -> {
+                this.updateExpirationByLastConnection(token);
+                return true;
+            }
+            case Expired -> {
+                if (this.verifyTokenIsStillAvailable(token)) {
+                    this.updateExpirationByLastConnection(token);
+                    return true;
+                } else {
+                    return false;
                 }
-                default -> null;
-            };
-        } catch (Exception e) {
-            return null;
+            }
+            default -> {
+                return false;
+            }
         }
     }
-
-    @Override
-    public TokenStatus verifyToken(String token) {
-        return this.tokenGenerator.verifyToken(token);
-    }
-
     @Override
     public String getUsernameFromtoken(String token) {
-        return this.tokenGenerator.getUsernameFromtoken(token);
+        return this.tokenGenerator.getUsernameByToken(token);
+    }
+
+    private Boolean verifyTokenIsStillAvailable(String token) {
+        Date lastConnection = this.userService.getLastConnectionByUsername(this.getUsernameFromtoken(token));
+        Date tenMinutsAgo = new Date(System.currentTimeMillis() - (10 * 60 * 1000));
+        return !lastConnection.before(tenMinutsAgo);
+    }
+
+    private void updateExpirationByLastConnection(String token) {
+        String username = this.getUsernameFromtoken(token);
+        this.userService.setLastConnectionByUsername(username);
     }
 }
+
 
 
 

@@ -1,6 +1,7 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -35,5 +36,6 @@ public class Ingredient {
     private Set<Produit> produitSet;
 
     @Column(name = "ingredient_type", insertable = false, updatable = false)
+    @JsonIgnore
     private String ingredientType;
 }

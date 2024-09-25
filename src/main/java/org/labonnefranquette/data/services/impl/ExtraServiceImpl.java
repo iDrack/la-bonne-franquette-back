@@ -2,7 +2,7 @@ package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.model.Extra;
 import org.labonnefranquette.data.repository.ExtraRepository;
-import org.labonnefranquette.data.services.CacheService;
+import org.labonnefranquette.data.cache.CacheService;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +15,6 @@ public class ExtraServiceImpl implements GenericService<Extra, Long> {
 
     @Autowired
     ExtraRepository extraRepository;
-    @Autowired
-    CacheService cacheService;
 
     @Override
     public List<Extra> findAll() {
@@ -28,12 +26,12 @@ public class ExtraServiceImpl implements GenericService<Extra, Long> {
     }
     @Override
     public Extra create(Extra newExtra) {
-        cacheService.incrementCacheVersion();
+        CacheService.changeCacheVersion();
         return extraRepository.save(newExtra);
     }
     @Override
     public void deleteById(Long id) {
-        cacheService.incrementCacheVersion();
+        CacheService.changeCacheVersion();
         extraRepository.deleteById(id);
     }
 }

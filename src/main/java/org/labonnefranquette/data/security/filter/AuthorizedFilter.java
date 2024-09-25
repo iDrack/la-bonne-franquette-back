@@ -31,7 +31,7 @@ public class AuthorizedFilter implements Filter {
         if (applyFilter.doFilterTwo()) {
 
             String token = httpRequest.getHeader("auth-token");
-            String roles = this.tokenGenerator.getRolesFromToken(token);
+            String roles = this.tokenGenerator.getRolesByToken(token);
             if (!this.authorizationVoter.voteAdminRole(roles)) {
                 httpRes.setStatus(HttpStatus.FORBIDDEN.value());
                 return;

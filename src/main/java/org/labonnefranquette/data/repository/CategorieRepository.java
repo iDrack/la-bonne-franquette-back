@@ -1,10 +1,6 @@
 package org.labonnefranquette.data.repository;
 
 import org.labonnefranquette.data.model.Categorie;
-import org.labonnefranquette.data.model.Ingredient;
-import org.labonnefranquette.data.services.CacheService;
-import org.labonnefranquette.data.services.impl.CacheServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -19,8 +15,15 @@ import java.util.Optional;
 public interface CategorieRepository extends JpaRepository<Categorie, Long> {
 
     @Cacheable(value = "categorie")
-    @Query("SELECT c FROM Categorie c WHERE c.categorieType = 'categorie'")
     List<Categorie> findAll();
+
+    @Cacheable(value = "categorie")
+    @Query("SELECT c FROM Categorie c WHERE c.categorieType = 'categorie'")
+    List<Categorie> findAllCategorie();
+
+    @Cacheable(value = "categorie")
+    @Query("SELECT c FROM Categorie c WHERE c.categorieType = 'sous-categorie'")
+    List<Categorie> findAllSousCategorie();
 
     @Cacheable(value = "categorie", key = "#id")
     Optional<Categorie> findById(Long id);

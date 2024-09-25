@@ -47,12 +47,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Date returnLastConnectionFromUsername(String username) {
+    public Date getLastConnectionByUsername(String username) {
         User user = this.findByUsername(username);
         return user.getLastConnection();
     }
 
-    public void updateLastConnection(String username) {
+    public void setLastConnectionByUsername(String username) {
         User user = this.userRepository.findByUsername(username);
         user.setLastConnection(new Date());
         this.userRepository.save(user);
@@ -63,14 +63,14 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return false;
         }
-        if (user.getUsername() == null) {
+        if (user.getUsername() == null || !isValidUsername(user.getUsername())) {
             return false;
         }
-        if (user.getPassword() == null || !this.isValidPassword(user.getPassword())) {
-            return false;
-        }
-
-        return true;
+        return user.getPassword() != null && this.isValidPassword(user.getPassword());
+    }
+    private boolean isValidUsername(String username) {
+        User user = this.userRepository.findByUsername(username);
+        return user == null;
     }
 
     private boolean isValidPassword(String password) {

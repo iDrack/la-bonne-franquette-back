@@ -1,6 +1,7 @@
 package org.labonnefranquette.data.config;
 
-import io.github.cdimascio.dotenv.Dotenv;
+import org.labonnefranquette.data.services.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
@@ -17,6 +18,9 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
+
+    @Autowired
+    private AuthService authService;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -36,14 +40,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
             public Message<?> preSend(Message<?> message, MessageChannel channel) {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    String passwordHeader = accessor.getFirstNativeHeader("socket-password");
-                    Dotenv dotenv = Dotenv.configure()
-                                        .directory("./")
-                                        .filename(".env.local")
-                                        .load();
-                    String socketPassword = dotenv.get("socket_password");
-                    if (passwordHeader == null || !passwordHeader.equals(socketPassword)) {
-                        throw new AccessDeniedException("Accès refusé");
+                    String authToken = accessor.getFirstNativeHeader("auth-token");
+                    if (authToken == null || !authService.checkConnected(authToken)) {
+                        throw new AccessDeniedException("Vous devez être connecté");
                     }
                 }
                 return message;

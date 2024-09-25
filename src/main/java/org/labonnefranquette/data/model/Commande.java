@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +10,6 @@ import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.utils.JsonConverterTools;
-
 
 import java.util.Collection;
 import java.util.Date;
@@ -26,9 +26,9 @@ public class Commande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "numero", nullable = false, length = 50)
+    @Column(name = "numero", nullable = false, length = 200)
     @NotNull(message = "Ce champs ne peut pas être vide")
-    private int numero;
+    private short numero;
 
     @Column(name = "date_saisie", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide")
@@ -63,8 +63,27 @@ public class Commande {
     private Collection<Selection> menus;
 
     @OneToMany(mappedBy = "commande")
+    @JsonManagedReference
     private Collection<Paiement> paiementSet;
 
     @Column(name = "paiement_type", nullable = true, length = 5)
     private PaiementTypeCommande paiementType;
+
+    @Override
+    public String toString() {
+        return "Commande{" +
+                "tauxTVA=" + tauxTVA +
+                ", id=" + id +
+                ", numero=" + numero +
+                ", dateSaisie=" + dateSaisie +
+                ", dateLivraison=" + dateLivraison +
+                ", status=" + status +
+                ", surPlace=" + surPlace +
+                ", nbArticle=" + nbArticle +
+                ", prixHT=" + prixHT +
+                ", articles=" + articles +
+                ", menus=" + menus +
+                ", paiementType=" + paiementType +
+                '}';
+    }
 }
