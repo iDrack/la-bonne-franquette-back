@@ -16,6 +16,7 @@ public class AdminMenuController {
 
     @PostMapping("/create")
     public ResponseEntity<Menu> createNewMenu(@RequestBody Menu menu) {
+        if (menu == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Menu>(menuService.create(menu), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")

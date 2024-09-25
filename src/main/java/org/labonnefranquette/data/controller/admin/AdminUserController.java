@@ -19,6 +19,8 @@ public class AdminUserController {
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody UserCreateDto userDto) {
+        if (userDto == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de créer un utilisateur");
         try {
             userService.createUser(userDto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Création réussi");

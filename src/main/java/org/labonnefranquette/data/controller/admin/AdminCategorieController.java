@@ -16,6 +16,7 @@ public class AdminCategorieController {
 
     @PostMapping("/create")
     public ResponseEntity<Categorie> createNewCategorie(@RequestBody Categorie categorie) {
+        if (categorie == null) return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Categorie>(categorieService.create(categorie), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
