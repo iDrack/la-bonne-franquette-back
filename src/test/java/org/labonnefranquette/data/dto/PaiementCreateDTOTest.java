@@ -39,7 +39,7 @@ public class PaiementCreateDTOTest {
 
     @Test
     public void testPrixPaye() {
-        assertEquals(prixPaye, paiementCreateDTO.getPrixPaye());
+        assertEquals(prixPaye, paiementCreateDTO.getPrixTTC());
     }
 
     @Test
@@ -62,7 +62,6 @@ public class PaiementCreateDTOTest {
     @Test
     public void testConvertedPrixPaye() {
         Paiement paiement = dtoTools.convertToEntity(paiementCreateDTO, Paiement.class);
-        System.out.println(paiement.toString());
         assertEquals(prixPaye, paiement.getPrixTTC());
     }
 

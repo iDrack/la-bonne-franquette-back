@@ -12,6 +12,6 @@ import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 @NoArgsConstructor
 public class PaiementCreateDTO implements PaiementDTO {
     private PaiementTypeCommande type;
-    private int prixPaye;
+    private int prixTTC;
     private Boolean ticketEnvoye;
 }

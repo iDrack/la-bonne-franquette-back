@@ -87,7 +87,7 @@ public class PaiementServiceImplTest {
         PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
         paiementCreateDTO.setType(paiement.getType());
         paiementCreateDTO.setTicketEnvoye(paiement.getTicketEnvoye());
-        paiementCreateDTO.setPrixPaye(paiement.getPrixHT());
+        paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
 
         Paiement result = paiementService.createPaiement(1L, paiementCreateDTO);
         assertEquals(paiement, result);
