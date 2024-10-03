@@ -15,7 +15,8 @@ public interface CommandeService {
     List<CommandeListeProjection> findAllCommandeListe();
     Optional<Commande> findCommandeById(long id);
     Commande createCommande(Commande commande);
-    Boolean deleteCommande(long id);
+
+    Boolean deleteCommande(Long id);
     Commande ajoutPaiement(Commande commande, Paiement paiement);
     Commande advanceStatusCommande(Long id) throws RuntimeException;
 }

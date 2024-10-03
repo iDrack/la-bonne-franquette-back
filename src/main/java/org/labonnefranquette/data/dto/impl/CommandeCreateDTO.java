@@ -3,7 +3,6 @@ package org.labonnefranquette.data.dto.impl;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.labonnefranquette.data.dto.CommandeDTO;
-import org.labonnefranquette.data.model.Menu;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
