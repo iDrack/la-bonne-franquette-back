@@ -1,17 +1,10 @@
 package org.labonnefranquette.data.controller;
 
-import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
-import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
-import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/paiement")
@@ -21,6 +14,9 @@ public class PaiementController {
     private PaiementService paiementService;
     @Autowired
     private DtoTools dtoTools;
+/*
+TODO: Implémenter la gestion des paiements
+Les endpoints des paiements ne sont pas encore utilisés
 
     @GetMapping
     public ResponseEntity<List<PaiementReadDTO>> getAllPaiements() {
@@ -56,5 +52,5 @@ public class PaiementController {
         }
         List<PaiementReadDTO> resultat = paiements.stream().map(x -> dtoTools.convertToDto(x, PaiementReadDTO.class)).toList();
         return new ResponseEntity<>(resultat, HttpStatus.FOUND);
-    }
+    }*/
 }

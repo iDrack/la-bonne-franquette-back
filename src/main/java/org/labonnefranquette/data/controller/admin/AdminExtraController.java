@@ -3,9 +3,8 @@ package org.labonnefranquette.data.controller.admin;
 import org.labonnefranquette.data.model.Extra;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/admin/extra")
@@ -13,6 +12,8 @@ public class AdminExtraController {
 
     @Autowired
     GenericService<Extra, Long> extraService;
+/*
+La gestion des extras n'est pas encore implémenté dans l'application
 
     @PostMapping("/create")
     public ResponseEntity<Extra> createNewExtra(@RequestBody Extra extra) {
@@ -24,4 +25,5 @@ public class AdminExtraController {
         extraService.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
+*/
 }
