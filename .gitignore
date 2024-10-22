@@ -58,3 +58,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### App properties ###
+src/main/resources/application.properties
