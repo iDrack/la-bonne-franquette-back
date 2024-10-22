@@ -14,7 +14,7 @@ public class LoginController {
     private AuthServiceImpl authService;
 
     //Utilisé lors de la connexion de l'utilisateur
-    @PostMapping("/login")
+    @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<String> login(@RequestBody(required = false) UserLoginDto userLoginDto) {
         String token = this.authService.login(userLoginDto);
         if (token == null) {
@@ -24,8 +24,13 @@ public class LoginController {
     }
 
     //Utilisé lors de la déconnexion
-    @PostMapping("/logout")
+    @PostMapping(value = "/logout", produces = "application/plain")
     public ResponseEntity<Boolean> logout(@RequestHeader("auth-token") String token) {
         return new ResponseEntity<>(this.authService.logout(token), HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/is-connected", produces = "application/plain")
+    public ResponseEntity<Boolean> isConnected(@RequestHeader("auth-token") String token) {
+        return new ResponseEntity<>(this.authService.checkConnected(token), HttpStatus.OK);
     }
 }

@@ -19,14 +19,14 @@ public class CategorieController {
     GenericService<Categorie, Long> categorieService;
 
     //Utilisé lors de l'initialisation de l'application
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<List<Categorie>> getAllCategorie() {
         return new ResponseEntity<>(categorieService.findAll(), HttpStatus.OK);
     }
 
 /*
 Les catégories ne sont jamais appelé par leur id
-    @GetMapping("/{id}")
+    @GetMapping("/{id}", produces = "application/json")
     public ResponseEntity<Categorie> getCategorieById(@PathVariable long id) {
         Optional<Categorie> categorieFound = categorieService.findAllById(id);
         return categorieFound.map(categorie -> new ResponseEntity<>(categorie, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));

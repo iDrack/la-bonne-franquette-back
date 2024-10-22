@@ -19,7 +19,7 @@ public class ExtraController {
     GenericService<Extra, Long> extraService;
 
     //Utilisé lors de l'initialisation de l'application
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<List<Extra>> getAllExtra() {
         return new ResponseEntity<>(extraService.findAll(), HttpStatus.OK);
     }

@@ -19,7 +19,7 @@ public class MenuController {
     GenericService<Menu, Long> menuService;
 
     //Utilisé lors de l'initialisation de l'application
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<List<Menu>> getAllMenu() {
         return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
     }

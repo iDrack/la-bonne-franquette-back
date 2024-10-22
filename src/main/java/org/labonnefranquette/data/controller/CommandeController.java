@@ -40,7 +40,7 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
 */
 
     //Utilisé lors d'affichage de l'écran de la cuisine
-    @GetMapping("/status/{status}")
+    @GetMapping(value= "/status/{status}", produces = "application/json")
     public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandesEnCours(@PathVariable String status) {
         try {
             StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-","_").toUpperCase());
@@ -70,7 +70,7 @@ Les commandes ne sont jamais récupéré par leur id
 */
 
     //Utilisé lors de l'envoie du panier dans l'écran de prise de commande
-    @PostMapping
+    @PostMapping(produces = "application/json")
     public ResponseEntity<?> createCommande(@RequestBody CommandeCreateDTO commandeDto) {
         try  {
             Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));
@@ -84,13 +84,13 @@ Les commandes ne sont jamais récupéré par leur id
 
 
     //Utilisé lors de la suppression de des commandes dans l'écran de cuisine
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Boolean> deleteCommande(@PathVariable Long id) {
         return new ResponseEntity<>(commandeService.deleteCommande(id), HttpStatus.OK);
     }
 
     //Utilisé lors notamment lors de l'envoie de commande dans l'écran de cuisine
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<CommandeReadDTO> updateCommande(@PathVariable long id) {
         Commande commande = commandeService.advanceStatusCommande(id);
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);

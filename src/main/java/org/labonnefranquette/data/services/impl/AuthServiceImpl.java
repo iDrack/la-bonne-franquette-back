@@ -57,6 +57,7 @@ public class AuthServiceImpl implements AuthService {
             }
         }
     }
+
     @Override
     public String getUsernameFromtoken(String token) {
         return this.tokenGenerator.getUsernameByToken(token);

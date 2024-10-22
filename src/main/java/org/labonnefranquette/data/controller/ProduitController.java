@@ -19,7 +19,7 @@ public class ProduitController {
     GenericService<Produit, Long> produitservice;
 
     //Utilisé lors de l'initialisation de l'application
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<List<Produit>> getAllProduits() {
         return new ResponseEntity<>(produitservice.findAll(), HttpStatus.OK);
     }

@@ -19,7 +19,7 @@ public class IngredientController {
     IngredientServiceImpl ingredientService;
 
     //Utilisé lors de l'initialisation de l'application
-    @GetMapping
+    @GetMapping(produces = "application/json")
     public ResponseEntity<List<Ingredient>> getAllIngredients() {
         return new ResponseEntity<>(ingredientService.findAll(), HttpStatus.OK);
     }

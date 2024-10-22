@@ -18,13 +18,13 @@ public class CacheController {
     CacheService cacheService;
 
     //Utilisé lors de l'initialisation de l'application
-    @GetMapping("/version")
+    @GetMapping(value = "/version", produces = "application/plain")
     public ResponseEntity<String> getCache() {
          return new ResponseEntity<>(CacheService.getVersion(), HttpStatus.OK);
     }
 
     //Utilisé dans la modale de paramètre
-    @PostMapping("/rafraichir")
+    @PostMapping(value = "/rafraichir", produces = "application/plain")
     public ResponseEntity<Boolean> refreshCache() {
         return new ResponseEntity<>(cacheService.clear(), HttpStatus.OK);
     }

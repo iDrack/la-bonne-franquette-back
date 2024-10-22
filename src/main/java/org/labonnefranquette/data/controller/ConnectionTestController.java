@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/testConnection")
+@RequestMapping("/api/v1/test-connection")
 public class ConnectionTestController {
     //Utilisé lors de la connexion de l'utilisateur
-    @GetMapping()
-    public ResponseEntity<String> testConnection() {
-        return new ResponseEntity<>("Connection successful !", HttpStatus.OK);
+    @GetMapping(produces = "application/json")
+    public ResponseEntity<Boolean> testConnection() {
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }
