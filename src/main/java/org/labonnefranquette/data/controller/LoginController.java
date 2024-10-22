@@ -29,7 +29,7 @@ public class LoginController {
         return new ResponseEntity<>(this.authService.logout(token), HttpStatus.OK);
     }
 
-    @GetMapping(value = "/is-connected", produces = "application/plain")
+    @GetMapping(value = "/is-connected", produces = "application/json")
     public ResponseEntity<Boolean> isConnected(@RequestHeader("auth-token") String token) {
         return new ResponseEntity<>(this.authService.checkConnected(token), HttpStatus.OK);
     }
