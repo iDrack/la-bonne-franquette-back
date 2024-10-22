@@ -8,11 +8,9 @@ public class ApplyFilter {
         this.requestUrl = requestUrl;
     }
 
-    public Boolean doFilterOne() {
-        return this.AuthRoutes() && this.UsersRoutes();
-    }
+    public Boolean doFilterOne() {return this.AuthRoutes() && !this.UsersRoutes();}
     public Boolean doFilterTwo() {
-        return this.AdminRoutes();
+        return this.AdminRoutes() && !this.UsersRoutes();
     }
 
     private Boolean AuthRoutes() {
@@ -21,7 +19,7 @@ public class ApplyFilter {
     }
     //TODO : Retirer avant MEP
     private Boolean UsersRoutes() {
-        return !this.requestUrl.endsWith("/users/create");
+        return this.requestUrl.endsWith("/create");
     }
     private Boolean AdminRoutes() {
         return this.requestUrl.contains("admin");
