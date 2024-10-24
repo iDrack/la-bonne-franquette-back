@@ -13,7 +13,7 @@ public class ConnectionTestControllerTest {
 
     @Test
     public void testConnectionSuccessfully() {
-        ResponseEntity<String> response = connectionTestController.testConnection();
+        ResponseEntity<Boolean> response = connectionTestController.testConnection();
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -22,7 +22,7 @@ public class ConnectionTestControllerTest {
 
     @Test
     public void testConnectionResponseNotNull() {
-        ResponseEntity<String> response = connectionTestController.testConnection();
+        ResponseEntity<Boolean> response = connectionTestController.testConnection();
 
         assertNotNull(response);
     }

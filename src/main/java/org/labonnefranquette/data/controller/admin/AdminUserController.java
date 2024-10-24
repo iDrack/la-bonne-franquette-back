@@ -1,7 +1,12 @@
 package org.labonnefranquette.data.controller.admin;
 
+import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,8 +16,6 @@ public class AdminUserController {
 
     @Autowired
     private UserService userService;
-/*
-La création d'utilisateur n'est pas implémenté par l'application
 
     @PostMapping("/create")
     public ResponseEntity<String> createUser(@RequestBody UserCreateDto userDto) {
@@ -25,6 +28,5 @@ La création d'utilisateur n'est pas implémenté par l'application
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de créer un utilisateur");
         }
     }
-*/
 
 }
