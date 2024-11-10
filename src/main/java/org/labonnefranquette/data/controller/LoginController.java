@@ -53,16 +53,17 @@ public class LoginController {
     }
 
     @PostMapping(value = "/refresh", produces = "application/json")
-    public ResponseEntity<String> refreshToken(@RequestHeader("refresh-token") String refreshToken) {
-        System.out.println("refreshToken: " + refreshToken);
-        String newAccessToken = authService.refresh(refreshToken);
-        System.out.println("newAccessToken: " + newAccessToken);
-
-        if (newAccessToken != null) {
-            return ResponseEntity.ok("{\"accessToken\":\"" + newAccessToken + "\"}");
-        } else {
+    public ResponseEntity<String> refreshToken(@RequestBody(required = false) Map<String,String> refreshToken) {
+        try {
+            String token = refreshToken.get("refreshToken");
+            if (token != null) {
+                String newAccessToken = authService.refresh(token);
+                return ResponseEntity.ok("{\"accessToken\":\"" + newAccessToken + "\"}");
+            }
+        } catch (Exception e) {
             return new ResponseEntity<>("{\"erreur\":\"Vos données ne sont pas correctes\"}", HttpStatus.BAD_REQUEST);
         }
+        return new ResponseEntity<>("{\"erreur\":\"Vos données ne sont pas correctes\"}", HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/is-connected", produces = "application/json")
