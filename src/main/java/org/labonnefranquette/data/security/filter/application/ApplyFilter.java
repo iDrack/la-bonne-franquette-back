@@ -9,7 +9,7 @@ public class ApplyFilter {
     }
 
     public Boolean doFilterOne() {return !this.AuthRoutes() && !this.UsersRoutes();}
-    public Boolean doFilterTwo() {return this.AdminRoutes() && !this.UsersRoutes();}
+    public Boolean doFilterTwo() {return !this.AdminRoutes() && !this.UsersRoutes();}
 
     private Boolean AuthRoutes() {
         return  this.requestUrl.endsWith("/login");
