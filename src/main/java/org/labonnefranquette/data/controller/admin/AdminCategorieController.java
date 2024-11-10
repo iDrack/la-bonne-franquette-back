@@ -3,6 +3,7 @@ package org.labonnefranquette.data.controller.admin;
 import org.labonnefranquette.data.model.Categorie;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.model.enums.Roles;
-import org.labonnefranquette.data.model.enums.TokenStatus;
 
 import java.lang.reflect.Field;
 import java.security.Key;

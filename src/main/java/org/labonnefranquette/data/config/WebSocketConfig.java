@@ -41,7 +41,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     String authToken = accessor.getFirstNativeHeader("auth-token");
-                    if (authToken == null || !authService.checkConnected(authToken)) {
+                    if (authToken == null || !authService.isConnected()) {
                         throw new AccessDeniedException("Vous devez être connecté");
                     }
                 }

@@ -7,30 +7,66 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/v1/auth")
 public class LoginController {
+
     @Autowired
     private AuthServiceImpl authService;
 
-    //Utilisé lors de la connexion de l'utilisateur
-    @PostMapping(value = "/login", produces = "application/json")
-    public ResponseEntity<String> login(@RequestBody(required = false) UserLoginDto userLoginDto) {
-        String token = this.authService.login(userLoginDto);
+    @PostMapping(value = "/signup", produces = "application/json")
+    public ResponseEntity<Map<String,String>> signup(@RequestBody(required = false) UserLoginDto userLoginDto) {
+        Map<String, String> token = authService.authenticate(userLoginDto);
+
         if (token == null) {
-            return new ResponseEntity<>("{\"FORBIDDEN\":\"Vos données ne sont pas correctes\"}", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(Collections.singletonMap("erreur", "Vos données ne sont pas correctes"), HttpStatus.FORBIDDEN);
         }
-        return new ResponseEntity<>("{\"token\":\"" + token + "\"}", HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.OK);
     }
 
-    //Utilisé lors de la déconnexion
-    @PostMapping(value = "/logout", produces = "application/plain")
-    public ResponseEntity<Boolean> logout(@RequestHeader("auth-token") String token) {
-        return new ResponseEntity<>(this.authService.logout(token), HttpStatus.OK);
+    @PostMapping(value = "/login", produces = "application/json")
+    public ResponseEntity<Map<String, String>> login(@RequestBody(required = false) UserLoginDto userLoginDto) {
+        Map<String, String> token = authService.authenticate(userLoginDto);
+
+        if (token == null) {
+            return new ResponseEntity<>(Collections.singletonMap("erreur", "Vos données ne sont pas correctes"), HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/logout", produces =  "application/json")
+    public ResponseEntity<String> logout(@RequestBody(required = false) Map<String,String> tokens) {
+        try {
+            if (!tokens.isEmpty()) {
+                String accessToken = tokens.get("accessToken");
+                String refreshToken = tokens.get("refreshToken");
+                authService.logout(accessToken, refreshToken);
+                return ResponseEntity.ok("Déconnexion réussie.");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur lors de la déconnexion.");
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur lors de la déconnexion.");
+    }
+
+    @PostMapping(value = "/refresh", produces = "application/json")
+    public ResponseEntity<String> refreshToken(@RequestHeader("refresh-token") String refreshToken) {
+        System.out.println("refreshToken: " + refreshToken);
+        String newAccessToken = authService.refresh(refreshToken);
+        System.out.println("newAccessToken: " + newAccessToken);
+
+        if (newAccessToken != null) {
+            return ResponseEntity.ok("{\"accessToken\":\"" + newAccessToken + "\"}");
+        } else {
+            return new ResponseEntity<>("{\"erreur\":\"Vos données ne sont pas correctes\"}", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @GetMapping(value = "/is-connected", produces = "application/json")
-    public ResponseEntity<Boolean> isConnected(@RequestHeader("auth-token") String token) {
-        return new ResponseEntity<>(this.authService.checkConnected(token), HttpStatus.OK);
+    public ResponseEntity<Boolean> isConnected() {
+        return ResponseEntity.ok(authService.isConnected());
     }
 }
