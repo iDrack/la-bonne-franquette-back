@@ -24,7 +24,7 @@ public class CacheController {
     }
 
     //Utilisé dans la modale de paramètre
-    @PostMapping(value = "/rafraichir", produces = "application/plain")
+    @GetMapping(value = "/rafraichir", produces = "application/json")
     public ResponseEntity<Boolean> refreshCache() {
         return new ResponseEntity<>(cacheService.clear(), HttpStatus.OK);
     }

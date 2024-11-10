@@ -1,6 +1,8 @@
 package org.labonnefranquette.data.config;
 
+import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.AuthService;
+import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.Message;
@@ -20,7 +22,7 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Autowired
-    private AuthService authService;
+    private JWTUtil jwtUtil;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
@@ -41,7 +43,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     String authToken = accessor.getFirstNativeHeader("auth-token");
-                    if (authToken == null || !authService.isConnected()) {
+                    if (authToken == null || !jwtUtil.isValidAccessToken(authToken)) {
+                        System.out.println("Je suis ici");
                         throw new AccessDeniedException("Vous devez être connecté");
                     }
                 }
