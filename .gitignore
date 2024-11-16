@@ -60,4 +60,4 @@ build/
 .vscode/
 
 ### App properties ###
-src/main/resources/application.properties
+**/src/main/resources/*

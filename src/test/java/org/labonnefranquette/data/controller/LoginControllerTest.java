@@ -3,7 +3,6 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
-import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -18,7 +17,7 @@ import static org.mockito.Mockito.when;
 public class LoginControllerTest {
 
     @Mock
-    private AuthServiceImpl authService;
+    private AuthService2Impl authService;
 
     @InjectMocks
     private LoginController loginController;
