@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.model.User;
+import org.labonnefranquette.data.model.enums.Roles;
 import org.labonnefranquette.data.repository.UserRepository;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,87 +37,85 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void createUserSuccessfully() {
+    public void createUserWithValidData() {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
 
-        Boolean result = userService.createUser(userCreateDto);
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setUsername("validUser");
+        userCreateDto.setPassword("ValidPassword1");
 
-        assertTrue(result);
+        User user = userService.createUser(userCreateDto);
+
+        assertEquals("validUser", user.getUsername());
+        assertEquals("encodedPassword", user.getPassword());
+        assertEquals(Roles.ROLE_USER.toString(), user.getRoles());
         verify(userRepository, times(1)).save(any(User.class));
+    }
+
+    @Test
+    public void createUserWithInvalidData() {
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setUsername("invalidUser");
+        userCreateDto.setPassword("invalid");
+
+        assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
     public void createUserWithExistingUsername() {
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
 
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setUsername("existingUser");
+        userCreateDto.setPassword("ValidPassword1");
+
         assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
+        verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
-    public void findByUsernameSuccessfully() {
+    public void dataIsConformedWithValidData() {
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setUsername("validUser");
+        userCreateDto.setPassword("ValidPassword1");
+
+        assertTrue(userService.dataIsConformed(userCreateDto));
+    }
+
+    @Test
+    public void dataIsConformedWithInvalidData() {
+        UserCreateDto userCreateDto = new UserCreateDto();
+        userCreateDto.setUsername("invalidUser");
+        userCreateDto.setPassword("invalid");
+
+        assertFalse(userService.dataIsConformed(userCreateDto));
+    }
+
+    @Test
+    public void isValidUsernameWithNonExistingUser() {
+        when(userRepository.findByUsername(anyString())).thenReturn(null);
+
+        assertTrue(userService.isValidUsername("newUser"));
+    }
+
+    @Test
+    public void isValidUsernameWithExistingUser() {
         User user = new User();
-        user.setUsername("testUser");
+        user.setUsername("existingUser");
         when(userRepository.findByUsername(anyString())).thenReturn(user);
 
-        User result = userService.findByUsername("testUser");
-
-        assertEquals("testUser", result.getUsername());
+        assertFalse(userService.isValidUsername("existingUser"));
     }
 
     @Test
-    public void findByUsernameWithException() {
-        when(userRepository.findByUsername(anyString())).thenThrow(new RuntimeException());
-
-        User result = userService.findByUsername("testUser");
-
-        assertNull(result);
+    public void isValidPasswordWithValidPassword() {
+        assertTrue(userService.isValidPassword("ValidPassword1"));
     }
 
     @Test
-    public void getLastConnectionByUsernameSuccessfully() {
-        User user = new User();
-        user.setLastConnection(new Date());
-        when(userRepository.findByUsername(anyString())).thenReturn(user);
-
-        Date result = userService.getLastConnectionByUsername("testUser");
-
-        assertEquals(user.getLastConnection(), result);
-    }
-
-    @Test
-    public void setLastConnectionByUsernameSuccessfully() {
-        User user = new User();
-        when(userRepository.findByUsername(anyString())).thenReturn(user);
-
-        userService.setLastConnectionByUsername("testUser");
-
-        verify(userRepository, times(1)).save(any(User.class));
-    }
-
-    @Test
-    public void checkCredentialsSuccessfully() {
-        User user = new User();
-        user.setUsername("testUser");
-        user.setPassword("encodedPassword");
-        when(userRepository.findByUsername(anyString())).thenReturn(user);
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(true);
-
-        User result = userService.checkCredentials("testUser", "TestPassword1");
-
-        assertEquals("testUser", result.getUsername());
-    }
-
-    @Test
-    public void checkCredentialsWithWrongPassword() {
-        User user = new User();
-        user.setUsername("testUser");
-        user.setPassword("encodedPassword");
-        when(userRepository.findByUsername(anyString())).thenReturn(user);
-        when(passwordEncoder.matches(anyString(), anyString())).thenReturn(false);
-
-        User result = userService.checkCredentials("testUser", "WrongPassword");
-
-        assertNull(result);
+    public void isValidPasswordWithInvalidPassword() {
+        assertFalse(userService.isValidPassword("invalid"));
     }
 }
