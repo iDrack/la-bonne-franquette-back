@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
+import org.labonnefranquette.data.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -21,13 +22,17 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ActiveProfiles("test")
 @Tag("functional")
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class CreateUserFunctionalTest {
+public class SetupFunctionalTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Test
-    void createUserSuccessfully() {
+    void createOneUserIfNotExists() {
+        userRepository.deleteAll();
         // Arrange
         String url = "/api/v1/user/register";
         HttpHeaders headers = new HttpHeaders();
