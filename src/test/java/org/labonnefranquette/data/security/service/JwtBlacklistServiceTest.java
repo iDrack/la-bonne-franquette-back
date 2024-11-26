@@ -2,12 +2,14 @@ package org.labonnefranquette.data.security.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Field;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 public class JwtBlacklistServiceTest {
 
     @BeforeEach

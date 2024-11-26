@@ -7,6 +7,7 @@ import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.mockito.Mockito;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ActiveProfiles("test")
 public class CommandeToolsTest {
 
     private CommandeTools commandeTools;
