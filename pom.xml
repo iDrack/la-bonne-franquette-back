@@ -108,7 +108,7 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>test</id>
+            <id>unit-tests</id>
             <properties>
                 <spring.profiles.active>test</spring.profiles.active>
             </properties>
@@ -146,6 +146,23 @@
                         <goals>
                             <goal>repackage</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Plugin Failsafe pour les tests fonctionnels -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>3.0.0-M5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                        <configuration>
+                            <groups>functional</groups>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

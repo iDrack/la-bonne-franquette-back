@@ -4,12 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Extra;
 import org.labonnefranquette.data.model.Ingredient;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
 import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 public class ArticleTest {
 
     private Article article;

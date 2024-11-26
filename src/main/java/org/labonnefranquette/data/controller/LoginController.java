@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

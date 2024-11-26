@@ -3,10 +3,11 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
+@ActiveProfiles("test")
 public class ConnectionTestControllerTest {
 
     private final ConnectionTestController connectionTestController = new ConnectionTestController();
@@ -17,7 +18,7 @@ public class ConnectionTestControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertEquals("Connection successful !", response.getBody());
+        assertTrue(response.getBody());
     }
 
     @Test

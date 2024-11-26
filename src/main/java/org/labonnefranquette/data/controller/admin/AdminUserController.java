@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/admin/users")
+@RequestMapping("/api/v1/user")
 public class AdminUserController {
 
     @Autowired
     private UserService userService;
 
-    @PostMapping("/create")
+    @PostMapping("/register")
     public ResponseEntity<String> createUser(@RequestBody UserCreateDto userDto) {
         if (userDto == null)
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de créer un utilisateur");

@@ -4,11 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ActiveProfiles("test")
 public class CommandeTest {
 
     private Commande commande;

@@ -5,8 +5,10 @@ import org.labonnefranquette.data.services.impl.IngredientServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
 
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
 public class AdminIngredientControllerTest {
 
     @Mock
