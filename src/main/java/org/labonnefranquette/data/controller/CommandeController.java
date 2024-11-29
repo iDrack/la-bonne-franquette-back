@@ -6,6 +6,7 @@ import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.services.CommandeService;
+import org.labonnefranquette.data.utils.ControlInputTool;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,10 +14,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
+import org.springframework.validation.annotation.Validated;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/commandes")
+@Validated
 public class CommandeController {
 
     private final SimpMessagingTemplate template;
@@ -43,6 +49,9 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
     @GetMapping(value= "/status/{status}", produces = "application/json")
     public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandesEnCours(@PathVariable String status) {
         try {
+            if (!ControlInputTool.isValidString(status)) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
             StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-","_").toUpperCase());
             List<Commande> commandes = commandeService.findAllCommandeWithStatut(statusCommande);
             List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
@@ -71,8 +80,11 @@ Les commandes ne sont jamais récupéré par leur id
 
     //Utilisé lors de l'envoie du panier dans l'écran de prise de commande
     @PostMapping(produces = "application/json")
-    public ResponseEntity<?> createCommande(@RequestBody CommandeCreateDTO commandeDto) {
+    public ResponseEntity<?> createCommande(@Valid @RequestBody CommandeCreateDTO commandeDto) {
         try  {
+            if (!ControlInputTool.isValidObject(commandeDto, CommandeCreateDTO.class)) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            }
             Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));
             CommandeReadDTO commandeReadDTO = dtoTools.convertToDto(commande, CommandeReadDTO.class);
             this.template.convertAndSend("/socket/commande", commandeReadDTO);
@@ -86,12 +98,18 @@ Les commandes ne sont jamais récupéré par leur id
     //Utilisé lors de la suppression de des commandes dans l'écran de cuisine
     @DeleteMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<Boolean> deleteCommande(@PathVariable Long id) {
+        if (!ControlInputTool.isValidNumber(id)) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }        
         return new ResponseEntity<>(commandeService.deleteCommande(id), HttpStatus.OK);
     }
 
     //Utilisé lors notamment lors de l'envoie de commande dans l'écran de cuisine
     @PutMapping(value = "/{id}", produces = "application/json")
     public ResponseEntity<CommandeReadDTO> updateCommande(@PathVariable long id) {
+        if (!ControlInputTool.isValidNumber(id)) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        } 
         Commande commande = commandeService.advanceStatusCommande(id);
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
     }
