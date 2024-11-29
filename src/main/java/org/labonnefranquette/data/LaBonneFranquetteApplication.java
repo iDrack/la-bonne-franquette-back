@@ -11,5 +11,4 @@ public class LaBonneFranquetteApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LaBonneFranquetteApplication.class, args);
 	}
-
 }
