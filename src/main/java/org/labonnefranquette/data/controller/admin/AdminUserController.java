@@ -2,6 +2,7 @@ package org.labonnefranquette.data.controller.admin;
 
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.services.UserService;
+import org.labonnefranquette.data.utils.ControlInputTool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,12 +20,13 @@ public class AdminUserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> createUser(@RequestBody UserCreateDto userDto) {
-        if (userDto == null)
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de créer un utilisateur");
         try {
+            if (!ControlInputTool.isValidObject(userDto, UserCreateDto.class)) {
+                throw new Exception();
+            }
             userService.createUser(userDto);
             return ResponseEntity.status(HttpStatus.CREATED).body("Création réussi");
-        } catch (IllegalArgumentException e) {
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Impossible de créer un utilisateur");
         }
     }
