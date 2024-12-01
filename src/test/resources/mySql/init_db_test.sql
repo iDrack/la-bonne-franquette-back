@@ -61,19 +61,19 @@ WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 5);
 -- Extra ---
 INSERT INTO ingredient (nom, a_cuire, ingredient_type, prixHT, ingredient_id)
 SELECT 'Extra1', false, 'extra', 100, 1
-WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 1);
+WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 6);
 INSERT INTO ingredient (nom, a_cuire, ingredient_type, prixHT, ingredient_id)
 SELECT 'Extra2', true, 'extra', 200, 2
-WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 2);
+WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 7);
 INSERT INTO ingredient (nom, a_cuire, ingredient_type, prixHT, ingredient_id)
 SELECT 'Extra3', false, 'extra', 150, 3
-WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 3);
+WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 8);
 INSERT INTO ingredient (nom, a_cuire, ingredient_type, prixHT, ingredient_id)
 SELECT 'Extra4', true, 'extra', 250, 4
-WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 4);
+WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 9);
 INSERT INTO ingredient (nom, a_cuire, ingredient_type, prixHT, ingredient_id)
 SELECT 'Extra5', false, 'extra', 300, 5
-WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 5);
+WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 10);
 
 
 -- Categorie ---
