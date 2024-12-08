@@ -23,7 +23,7 @@ public class MenuItem {
     private boolean optional;
 
     @Column(name = "extra_price", length = 10)
-    private Integer extraPrice;
+    private Integer extraPriceHT;
 
     @ManyToOne
     @JoinColumn(name = "menu")
