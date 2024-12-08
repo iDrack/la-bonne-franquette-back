@@ -25,11 +25,6 @@ public class Menu {
     @Min(value = 0, message = "Ce champs ne peut pas être négatif")
     private int prixHT;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "menu_contient_produit",
-            joinColumns = @JoinColumn(name = "menu_id"),
-            inverseJoinColumns = @JoinColumn(name = "produit_id")
-    )
-    private Collection<Produit> produitSet;
+    @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
+    private Collection<MenuItem> menuItemSet;
 }
