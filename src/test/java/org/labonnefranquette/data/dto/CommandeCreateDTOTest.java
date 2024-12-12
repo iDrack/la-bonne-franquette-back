@@ -9,12 +9,15 @@ import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.utils.DtoTools;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ActiveProfiles("test")
 public class CommandeCreateDTOTest {
 
     private Boolean surPlace;

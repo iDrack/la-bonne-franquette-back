@@ -7,13 +7,6 @@ import java.util.Date;
 
 public interface UserService {
 
-    public Boolean createUser(UserCreateDto user);
+    public User createUser(UserCreateDto user);
 
-    public void setLastConnectionByUsername(String username);
-
-    public User findByUsername(String username);
-
-    public Date getLastConnectionByUsername(String username);
-
-    public User checkCredentials(String username, String password);
 }

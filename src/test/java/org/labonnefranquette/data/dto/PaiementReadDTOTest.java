@@ -6,12 +6,14 @@ import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.utils.DtoTools;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ActiveProfiles("test")
 public class PaiementReadDTOTest {
 
     private long id;

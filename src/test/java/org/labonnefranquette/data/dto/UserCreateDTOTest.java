@@ -5,10 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.utils.DtoTools;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ActiveProfiles("test")
 public class UserCreateDTOTest {
 
     private String username;

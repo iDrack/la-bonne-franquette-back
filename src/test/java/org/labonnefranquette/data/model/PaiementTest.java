@@ -3,11 +3,13 @@ package org.labonnefranquette.data.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ActiveProfiles("test")
 public class PaiementTest {
 
     private Paiement paiement;

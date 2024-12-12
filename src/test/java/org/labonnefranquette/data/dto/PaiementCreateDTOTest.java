@@ -6,10 +6,12 @@ import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.utils.DtoTools;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@ActiveProfiles("test")
 public class PaiementCreateDTOTest {
 
     private PaiementTypeCommande type;

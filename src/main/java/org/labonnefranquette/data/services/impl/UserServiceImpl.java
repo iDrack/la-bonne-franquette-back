@@ -9,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -20,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Boolean createUser(UserCreateDto userCreateDto) {
+    public User createUser(UserCreateDto userCreateDto) {
 
         if (!this.dataIsConformed(userCreateDto) || this.userRepository.existsByUsername(userCreateDto.getUsername())) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur");
@@ -33,32 +31,11 @@ public class UserServiceImpl implements UserService {
         user.setRoles(Roles.ROLE_USER);
 
         this.userRepository.save(user);
+        return user;
 
-        return true;
     }
 
-    @Override
-    public User findByUsername(String username) {
-        try {
-            return this.userRepository.findByUsername(username);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @Override
-    public Date getLastConnectionByUsername(String username) {
-        User user = this.findByUsername(username);
-        return user.getLastConnection();
-    }
-
-    public void setLastConnectionByUsername(String username) {
-        User user = this.userRepository.findByUsername(username);
-        user.setLastConnection(new Date());
-        this.userRepository.save(user);
-    }
-
-    private Boolean dataIsConformed(UserCreateDto user) {
+    Boolean dataIsConformed(UserCreateDto user) {
 
         if (user == null) {
             return false;
@@ -68,18 +45,14 @@ public class UserServiceImpl implements UserService {
         }
         return user.getPassword() != null && this.isValidPassword(user.getPassword());
     }
-    private boolean isValidUsername(String username) {
+
+    boolean isValidUsername(String username) {
         User user = this.userRepository.findByUsername(username);
         return user == null;
     }
 
-    private boolean isValidPassword(String password) {
+    boolean isValidPassword(String password) {
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
-    }
-
-    public User checkCredentials(String username, String password) {
-        User user = this.findByUsername(username);
-        return user != null && passwordEncoder.matches(password, user.getPassword()) ? user : null;
     }
 }
 

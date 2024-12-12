@@ -61,3 +61,6 @@ docker-compose.yml
 
 ### VS Code ###
 .vscode/
+
+### App properties ###
+**/src/main/resources/*

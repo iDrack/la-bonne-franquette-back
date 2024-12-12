@@ -1,9 +1,11 @@
 package org.labonnefranquette.data.model.enums;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ActiveProfiles("test")
 public class PaiementTypeCommandeTest {
 
     @Test

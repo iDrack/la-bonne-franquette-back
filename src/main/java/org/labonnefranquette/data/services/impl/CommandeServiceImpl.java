@@ -55,7 +55,7 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public Boolean deleteCommande(long id) {
+    public Boolean deleteCommande(Long id) {
 
         if (commandeRepository.findById(id).isEmpty()) {
             return false;
