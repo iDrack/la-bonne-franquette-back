@@ -64,7 +64,7 @@ jobs:
       - name: Copy Dockerfile into stating repertory
         run: cp Dockerfile staging
       - name: Copy shell script into staging repertory
-      - run: cp runner_la_Franquette.sh staging
+        run: cp runner_la_Franquette.sh staging
       - uses: actions/upload-artifact@v4
         with:
           name: Package
