@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:latest
         env:
           MYSQL_ROOT_PASSWORD: test
           MYSQL_PASSWORD: test
@@ -21,22 +21,6 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=3
-
-    steps:
-      - name: Wait for MySQL to be ready
-        run: |
-          for i in {30..0}; do
-            if docker exec mysql mysql -uroot -ptest -e "SELECT 1" &> /dev/null; then
-              break
-            fi
-            echo 'MySQL is unavailable - sleeping'
-            sleep 1
-          done
-          if [ "$i" = 0 ]; then
-            echo 'MySQL did not become available in time' >&2
-            docker logs mysql
-            exit 1
-          fi
 
   build:
     runs-on: ubuntu-latest
