@@ -10,7 +10,6 @@ jobs:
     services:
       mysql:
         image: mysql:latest
-        name: mysql
         env:
           MYSQL_ROOT_PASSWORD: test
           MYSQL_PASSWORD: test
