@@ -5,7 +5,7 @@ on:
       - release
 
 jobs:
-  start-mysql:
+  build:
     runs-on: ubuntu-latest
     services:
       mysql:
@@ -42,11 +42,6 @@ jobs:
           fi
       - name: Execute init.sql
         run: docker exec -i mysql mysql -uroot -ptest < init.sql
-
-  build:
-    runs-on: ubuntu-latest
-    needs: start-mysql
-    steps:
       - name: Check out repository
         uses: actions/checkout@v4
       - name: Set up JDK 17
