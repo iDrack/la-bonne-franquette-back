@@ -16,7 +16,7 @@ jobs:
           MYSQL_DATABASE: franquette-bdd-test
         ports:
           - 3306:3306
-        options: >-
+        options:
           --health-cmd="mysqladmin ping --silent"
           --health-interval=10s
           --health-timeout=5s
@@ -26,7 +26,7 @@ jobs:
       - name: Wait for MySQL to be ready
         run: |
           for i in {30..0}; do
-            if docker exec mysql mysql -uroot -p test -e "SELECT 1" &> /dev/null; then
+            if docker exec mysql mysql -uroot -ptest -e "SELECT 1" &> /dev/null; then
               break
             fi
             echo 'MySQL is unavailable - sleeping'
