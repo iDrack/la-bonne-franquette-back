@@ -12,7 +12,8 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ROOT_PASSWORD: test
-          MYSQL_DATABASE: franquette-bdd
+          MYSQL_PASSWORD: test
+          MYSQL_DATABASE: franquette-bdd-test
         ports:
           - 3306:3306
         options: >-
@@ -25,7 +26,7 @@ jobs:
       - name: Wait for MySQL to be ready
         run: |
           for i in {30..0}; do
-            if docker exec mysql mysql -uroot -ptest -e "SELECT 1" &> /dev/null; then
+            if docker exec mysql mysql -uroot -p test -e "SELECT 1" &> /dev/null; then
               break
             fi
             echo 'MySQL is unavailable - sleeping'
@@ -33,6 +34,7 @@ jobs:
           done
           if [ "$i" = 0 ]; then
             echo 'MySQL did not become available in time' >&2
+            docker logs mysql
             exit 1
           fi
 
