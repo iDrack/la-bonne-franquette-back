@@ -49,7 +49,7 @@ jobs:
           java-version: 17
           distribution: 'temurin'
       - name: Change data source
-        run: sed -i 's|spring.datasource.url=jdbc:mysql://localhost:33060/franquette-bdd|spring.datasource.url=jdbc:mysql://localhost:3060/franquette-bdd|' src/main/resources/application.properties
+        run: sed -i 's|spring.datasource.url=jdbc:mysql://localhost:33060/franquette-bdd|spring.datasource.url=jdbc:mysql://localhost:3306/franquette-bdd|' src/main/resources/application.properties
       - name: Cache maven dependencies
         uses: actions/cache@v4
         with:
