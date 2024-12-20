@@ -41,8 +41,8 @@ jobs:
           docker logs mysql
           exit 1
           fi
-      - name: Execute init.sql
-        run: docker exec -i mysql mysql -uroot -ptest < init.sql
+      - name: Execute init_db.sql
+        run: docker exec -i mysql mysql -uroot -ptest < src/main/resources/mySql/init_db.sql
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
