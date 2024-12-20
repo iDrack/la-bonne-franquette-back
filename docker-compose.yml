@@ -3,10 +3,24 @@ services:
   db:
     image: mysql:latest
     environment:
-      MYSQL_DATABASE: franquette-bdd
       MYSQL_ROOT_PASSWORD: test
     volumes:
-      - ~/.docker/volumes/franquette/db/data:/var/lib/mysql:rw
-    user: mysql
+      - db_data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 33060:3306
+      - 3306:3306
+  app:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    links:
+      - db:db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/franquette-bdd?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: test
+
+volumes:
+  db_data:

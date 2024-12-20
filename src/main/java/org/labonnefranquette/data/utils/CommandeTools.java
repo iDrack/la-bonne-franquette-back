@@ -58,6 +58,7 @@ public class CommandeTools {
     public short calculNumeroCommande() {
         return incrementeCompteur();
     }
+
     public PaiementTypeCommande calculPaiementTypeCommande(Collection<Paiement> paiementSet) {
         if (paiementSet.isEmpty()) {
             return PaiementTypeCommande.AUCUN;
