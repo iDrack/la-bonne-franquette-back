@@ -1,6 +1,5 @@
 package org.labonnefranquette.data.controller;
 
-import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.labonnefranquette.data.utils.ControlInputTool;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.Map;
 
 @RestController
@@ -41,7 +39,7 @@ public class LoginController {
                 throw new Exception();
             } 
             Map<String, String> token = authService.authenticate(userLoginDto);
-            return token == null 
+            return token == null
                 ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
                 : new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception e) {
@@ -56,7 +54,7 @@ public class LoginController {
                 throw new Exception();
             } 
             authService.logout(tokens.get("accessToken"), tokens.get("refreshToken"));
-            return ResponseEntity.status(HttpStatus.OK).body("Déconnexion réussie.");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"Deconnexion reussie.\"}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur lors de la déconnexion.");
         }
