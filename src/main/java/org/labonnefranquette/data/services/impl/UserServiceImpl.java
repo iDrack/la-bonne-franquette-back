@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserCreateDto userCreateDto) {
 
-        if (!this.dataIsConformed(userCreateDto) || this.userRepository.existsByUsername(userCreateDto.getUsername())) {
+        if (!this.dataIsConformed(userCreateDto) || Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur");
         }
 
