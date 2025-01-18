@@ -22,7 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -68,24 +68,23 @@ public class PaiementServiceImplTest {
     public void getPaiementByIdSuccessfully() {
         when(paiementRepository.findById(anyLong())).thenReturn(Optional.of(paiement));
 
-        Optional<Paiement> result = paiementService.getPaiementById(1L);
+        Paiement result = paiementService.getPaiementById(1L);
 
-        assertTrue(result.isPresent());
-        assertEquals(paiement, result.get());
+        assertEquals(paiement, result);
     }
 
     @Test
     public void getPaiementByIdNotFound() {
         when(paiementRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Optional<Paiement> result = paiementService.getPaiementById(1L);
-
-        assertFalse(result.isPresent());
+        assertThrows(RuntimeException.class, () -> {
+            paiementService.getPaiementById(1L);
+        });
     }
 
     @Test
     public void createPaiementSuccessfully() {
-        when(commandeService.findCommandeById(anyLong())).thenReturn(Optional.of(commande));
+        when(commandeService.findCommandeById(anyLong())).thenReturn(commande);
         when(paiementRepository.save(any(Paiement.class))).thenReturn(paiement);
 
         PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
@@ -94,6 +93,38 @@ public class PaiementServiceImplTest {
         paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
 
         Paiement result = paiementService.createPaiement(1L, paiementCreateDTO);
+        assertEquals(paiement, result);
+    }
+
+    @Test
+    public void createPaiementCommandeNotFound() {
+        when(commandeService.findCommandeById(anyLong())).thenThrow(new RuntimeException("Commande not found"));
+
+        PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
+        paiementCreateDTO.setType(paiement.getType());
+        paiementCreateDTO.setTicketEnvoye(paiement.getTicketEnvoye());
+        paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
+
+        assertThrows(RuntimeException.class, () -> {
+            paiementService.createPaiement(1L, paiementCreateDTO);
+        });
+    }
+
+    @Test
+    public void createPaiementWithNullPaiementSet() {
+        when(commandeService.findCommandeById(anyLong())).thenReturn(commande);
+        when(paiementRepository.save(any(Paiement.class))).thenReturn(paiement);
+
+        commande.setPaiementSet(null);
+
+        PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
+        paiementCreateDTO.setType(paiement.getType());
+        paiementCreateDTO.setTicketEnvoye(paiement.getTicketEnvoye());
+        paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
+
+        Paiement result = paiementService.createPaiement(1L, paiementCreateDTO);
+        assertNotNull(commande.getPaiementSet());
+        assertEquals(1, commande.getPaiementSet().size());
         assertEquals(paiement, result);
     }
 

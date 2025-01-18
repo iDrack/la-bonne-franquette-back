@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PaiementServiceImpl implements PaiementService {
@@ -28,19 +27,13 @@ public class PaiementServiceImpl implements PaiementService {
     }
 
     @Override
-    public Optional<Paiement> getPaiementById(Long id) {
-        return paiementRepository.findById(id);
+    public Paiement getPaiementById(Long id) {
+        return paiementRepository.findById(id).orElseThrow(() -> new RuntimeException("Le Paiement n'existe pas."));
     }
 
     @Override
     public Paiement createPaiement(Long idCommande, PaiementCreateDTO paiementCreateDTO) throws RuntimeException {
-        Commande commande;
-        Optional<Commande> commandeFound = commandeService.findCommandeById(idCommande);
-        if (commandeFound.isPresent()) {
-            commande = commandeFound.get();
-        } else {
-            throw new RuntimeException("Commande n'existe pas.");
-        }
+        Commande commande = commandeService.findCommandeById(idCommande);
         Paiement nouveauPaiement = new Paiement(paiementCreateDTO.getType(), paiementCreateDTO.getTicketEnvoye(), paiementCreateDTO.getPrixTTC(), paiementCreateDTO.getPrixTTC() * commande.getTauxTVA(), commande);
         paiementRepository.save(nouveauPaiement);
         if (commande.getPaiementSet() == null) {
@@ -53,10 +46,6 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public List<Paiement> getPaiementByCommande(Long commandeId) throws RuntimeException {
-        Optional<List<Paiement>> paiementList = paiementRepository.findByCommandeId(commandeId);
-        if (paiementList.isPresent()) {
-            return paiementList.get();
-        }
-        throw new RuntimeException("Aucun paiement n'éxiste pour cette commande.");
+        return paiementRepository.findByCommandeId(commandeId).orElseThrow(() -> new RuntimeException("Aucun paiement n'éxiste pour cette commande."));
     }
 }

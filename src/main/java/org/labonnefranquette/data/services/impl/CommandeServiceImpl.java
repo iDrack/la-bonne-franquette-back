@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CommandeServiceImpl implements CommandeService {
@@ -37,8 +36,8 @@ public class CommandeServiceImpl implements CommandeService {
         return commandeRepository.findAllCommandeListe();
     }
     @Override
-    public Optional<Commande> findCommandeById(long id) {
-        return commandeRepository.findById(id);
+    public Commande findCommandeById(long id) {
+        return commandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Commande n'existe pas."));
     }
 
     @Override
@@ -66,11 +65,7 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Override
     public Commande ajoutPaiement(Commande commande, Paiement paiement) {
-        Optional<Commande> commandeFound = commandeRepository.findById(commande.getId());
-        if (commandeFound.isEmpty()) {
-            return null;
-        }
-        Commande commandeToUpdate = commandeFound.get();
+        Commande commandeToUpdate = commandeRepository.findById(commande.getId()).orElseThrow(() -> new RuntimeException("Commande n'existe pas."));
         commandeToUpdate.getPaiementSet().add(paiement);
         commandeToUpdate.setPaiementType(commandeTools.calculPaiementTypeCommande(commandeToUpdate.getPaiementSet()));
         return commandeRepository.save(commandeToUpdate);
@@ -78,14 +73,12 @@ public class CommandeServiceImpl implements CommandeService {
 
     @Override
     public Commande advanceStatusCommande(Long id) throws RuntimeException {
-        Optional<Commande> commandeFound = commandeRepository.findById(id);
-        if (commandeFound.isEmpty()) {
-            throw new RuntimeException("Commande not found");
+        Commande commande = commandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Commande n'existe pas."));
+
+        if (commande.getStatus().equals(StatusCommande.EN_COURS)) {
+            commande.setStatus(StatusCommande.TERMINEE);
+            return commandeRepository.save(commande);
         }
-        if (commandeFound.get().getStatus().equals(StatusCommande.EN_COURS)) {
-            commandeFound.get().setStatus(StatusCommande.TERMINEE);
-            return commandeRepository.save(commandeFound.get());
-        }
-        return commandeFound.get();
+        return commande;
     }
 }
