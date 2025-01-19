@@ -17,22 +17,10 @@ import java.util.List;
 public class ProduitController {
 
     @Autowired
-    ProduitRepository repo;
+    private GenericServiceImpl<Produit, ProduitRepository, Long> produitService;
 
-    GenericServiceImpl<Produit, ProduitRepository, Long> produitService = new GenericServiceImpl<>(repo);
-
-    //Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Produit>> getAllProduits() {
         return new ResponseEntity<>(produitService.findAll(), HttpStatus.OK);
     }
-
-/*
-Les produits ne sont jamais récupéré par leur id
-    @GetMapping("/{id}")
-    public ResponseEntity<Produit> getProduitById(@PathVariable Long id) {
-        Optional<Produit> resultat = produitservice.findAllById(id);
-        return resultat.map(produit -> new ResponseEntity<>(produit, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-*/
 }

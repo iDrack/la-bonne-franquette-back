@@ -17,22 +17,10 @@ import java.util.List;
 public class IngredientController {
 
     @Autowired
-    IngredientRepository repo;
+    private GenericServiceImpl<Ingredient, IngredientRepository, Long> ingredientService;
 
-    GenericServiceImpl<Ingredient, IngredientRepository, Long> ingredientService = new GenericServiceImpl<>(repo);
-
-    //Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Ingredient>> getAllIngredients() {
         return new ResponseEntity<>(ingredientService.findAll(), HttpStatus.OK);
     }
-
-/*
-Les ingrédients ne sont pas récupérer pas leur id
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> getIngredientById(@PathVariable long id) {
-        Optional<Ingredient> ingredientFound = ingredientService.findAllById(id);
-        return ingredientFound.map(ingredient -> new ResponseEntity<>(ingredient, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }*/
 }

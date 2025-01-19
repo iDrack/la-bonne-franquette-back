@@ -17,21 +17,10 @@ import java.util.List;
 public class MenuController {
 
     @Autowired
-    MenuRepository repo;
+    private GenericServiceImpl<Menu, MenuRepository, Long> menuService;
 
-    GenericServiceImpl<Menu, MenuRepository, Long> menuService = new GenericServiceImpl<>(repo);
-
-    //Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Menu>> getAllMenu() {
         return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
     }
-/*
-Les menus ne sont jamais récupéré par leur id
-    @GetMapping("/{id}")
-    public ResponseEntity<Menu> getMenuById(@PathVariable Long id) {
-        Optional<Menu> resultat = menuService.findAllById(id);
-        return resultat.map(menu -> new ResponseEntity<>(menu, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-*/
 }

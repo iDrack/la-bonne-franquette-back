@@ -17,18 +17,16 @@ import java.util.List;
 public class CategorieController {
 
     @Autowired
-    CategorieRepository repo;
+    private GenericServiceImpl<Categorie, CategorieRepository, Long> categorieService;
 
-    GenericServiceImpl<Categorie, CategorieRepository, Long> categorieService = new GenericServiceImpl<>(repo);
-
-    //Utilisé lors de l'initialisation de l'application
+    // Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Categorie>> getAllCategorie() {
         return new ResponseEntity<>(categorieService.findAll(), HttpStatus.OK);
     }
 
 /*
-Les catégories ne sont jamais appelé par leur id
+Les catégories ne sont jamais appelées par leur id
     @GetMapping("/{id}", produces = "application/json")
     public ResponseEntity<Categorie> getCategorieById(@PathVariable long id) {
         Optional<Categorie> categorieFound = categorieService.findAllById(id);

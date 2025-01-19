@@ -13,24 +13,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/v1/extra")
+@RequestMapping("/api/v1/extra")
 public class ExtraController {
 
     @Autowired
-    ExtraRepository repo;
+    private GenericServiceImpl<Extra, ExtraRepository, Long> extraService;
 
-    GenericServiceImpl<Extra, ExtraRepository, Long> extraService = new GenericServiceImpl<>(repo);
-
-    //Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Extra>> getAllExtra() {
         return new ResponseEntity<>(extraService.findAll(), HttpStatus.OK);
     }
-/*
-Les menus ne sont jamais récupéré par leur id
-    @GetMapping("/{id}")
-    public ResponseEntity<Extra> getExtraById(@PathVariable long id) {
-        Optional<Extra> extraFound = extraService.findAllById(id);
-        return extraFound.map(extra -> new ResponseEntity<>(extra, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }*/
 }
