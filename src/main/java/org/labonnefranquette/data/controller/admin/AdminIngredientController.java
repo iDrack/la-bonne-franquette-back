@@ -1,6 +1,8 @@
 package org.labonnefranquette.data.controller.admin;
 
-import org.labonnefranquette.data.services.impl.IngredientServiceImpl;
+import org.labonnefranquette.data.model.Ingredient;
+import org.labonnefranquette.data.repository.IngredientRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/admin/ingredient")
 public class AdminIngredientController {
 
+
     @Autowired
-    IngredientServiceImpl ingredientService;
+    IngredientRepository repo;
+
+    GenericServiceImpl<Ingredient, IngredientRepository, Long> ingredientService = new GenericServiceImpl<>(repo);
 /*
 La création de nouveaux ingrédients n'est pas encore implémenté dans l'application
     @PostMapping("/create")

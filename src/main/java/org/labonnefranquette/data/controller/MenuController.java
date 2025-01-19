@@ -1,7 +1,8 @@
 package org.labonnefranquette.data.controller;
 
 import org.labonnefranquette.data.model.Menu;
-import org.labonnefranquette.data.services.GenericService;
+import org.labonnefranquette.data.repository.MenuRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,9 @@ import java.util.List;
 public class MenuController {
 
     @Autowired
-    GenericService<Menu, Long> menuService;
+    MenuRepository repo;
+
+    GenericServiceImpl<Menu, MenuRepository, Long> menuService = new GenericServiceImpl<>(repo);
 
     //Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")

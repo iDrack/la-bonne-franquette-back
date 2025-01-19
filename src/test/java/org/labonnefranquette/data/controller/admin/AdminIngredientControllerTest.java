@@ -1,7 +1,9 @@
 package org.labonnefranquette.data.controller.admin;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.services.impl.IngredientServiceImpl;
+import org.labonnefranquette.data.model.Ingredient;
+import org.labonnefranquette.data.repository.IngredientRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -11,8 +13,12 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("test")
 public class AdminIngredientControllerTest {
 
+
     @Mock
-    private IngredientServiceImpl ingredientService;
+    IngredientRepository repo;
+
+    @Mock
+    private GenericServiceImpl<Ingredient, IngredientRepository, Long> ingredientService;
 
     @InjectMocks
     private AdminIngredientController adminIngredientController;
