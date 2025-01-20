@@ -1,7 +1,8 @@
 package org.labonnefranquette.data.controller;
 
 import org.labonnefranquette.data.model.Ingredient;
-import org.labonnefranquette.data.services.impl.IngredientServiceImpl;
+import org.labonnefranquette.data.repository.IngredientRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,20 +17,10 @@ import java.util.List;
 public class IngredientController {
 
     @Autowired
-    IngredientServiceImpl ingredientService;
+    private GenericServiceImpl<Ingredient, IngredientRepository, Long> ingredientService;
 
-    //Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Ingredient>> getAllIngredients() {
         return new ResponseEntity<>(ingredientService.findAll(), HttpStatus.OK);
     }
-
-/*
-Les ingrédients ne sont pas récupérer pas leur id
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Ingredient> getIngredientById(@PathVariable long id) {
-        Optional<Ingredient> ingredientFound = ingredientService.findAllById(id);
-        return ingredientFound.map(ingredient -> new ResponseEntity<>(ingredient, HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }*/
 }

@@ -1,7 +1,5 @@
 package org.labonnefranquette.data.services;
 
-import org.labonnefranquette.data.model.Produit;
-
 import java.util.List;
 import java.util.Optional;
 

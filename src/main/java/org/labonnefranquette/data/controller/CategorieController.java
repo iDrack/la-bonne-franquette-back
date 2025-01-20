@@ -1,7 +1,8 @@
 package org.labonnefranquette.data.controller;
 
 import org.labonnefranquette.data.model.Categorie;
-import org.labonnefranquette.data.services.GenericService;
+import org.labonnefranquette.data.repository.CategorieRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +17,16 @@ import java.util.List;
 public class CategorieController {
 
     @Autowired
-    GenericService<Categorie, Long> categorieService;
+    private GenericServiceImpl<Categorie, CategorieRepository, Long> categorieService;
 
-    //Utilisé lors de l'initialisation de l'application
+    // Utilisé lors de l'initialisation de l'application
     @GetMapping(produces = "application/json")
     public ResponseEntity<List<Categorie>> getAllCategorie() {
         return new ResponseEntity<>(categorieService.findAll(), HttpStatus.OK);
     }
 
 /*
-Les catégories ne sont jamais appelé par leur id
+Les catégories ne sont jamais appelées par leur id
     @GetMapping("/{id}", produces = "application/json")
     public ResponseEntity<Categorie> getCategorieById(@PathVariable long id) {
         Optional<Categorie> categorieFound = categorieService.findAllById(id);
