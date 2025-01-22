@@ -1,17 +1,20 @@
 package org.labonnefranquette.data.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.labonnefranquette.data.model.entity.Article;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.util.Collection;
 
 @Data
 @Entity
 @Table(name = "produit")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +34,7 @@ public class Produit {
             joinColumns = @JoinColumn(name = "produit_id"),
             inverseJoinColumns = @JoinColumn(name = "categorie_id")
     )
+    @With
     private Collection<Categorie> categorieSet;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -39,5 +43,6 @@ public class Produit {
             joinColumns = @JoinColumn(name = "produit_id"),
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
+    @With
     private Collection<Ingredient> ingredientSet;
 }

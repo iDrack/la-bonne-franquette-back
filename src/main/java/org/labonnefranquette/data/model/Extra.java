@@ -5,14 +5,16 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.labonnefranquette.data.model.entity.Article;
-
-import java.util.Collection;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 @Data
 @Entity
 @DiscriminatorValue("extra")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Extra extends Ingredient {
 
     @Column(name = "prixHT", nullable = true)
@@ -23,5 +25,6 @@ public class Extra extends Ingredient {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
     @JsonBackReference(value = "extra-ingredient")
+    @With
     private Ingredient ingredient;
 }
