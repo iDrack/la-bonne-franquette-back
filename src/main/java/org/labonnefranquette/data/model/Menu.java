@@ -1,16 +1,20 @@
 package org.labonnefranquette.data.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.util.Collection;
 
 @Data
 @Entity
 @Table(name = "menu")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +30,6 @@ public class Menu {
     private int prixHT;
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
+    @With
     private Collection<MenuItem> menuItemSet;
 }

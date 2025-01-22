@@ -3,7 +3,10 @@ package org.labonnefranquette.data.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.util.Collection;
 
@@ -14,6 +17,8 @@ import java.util.Collection;
         discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("categorie")
 @Table(name = "categorie")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Categorie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,8 +33,10 @@ public class Categorie {
 
     @ManyToMany(mappedBy = "categorieSet")
     @JsonBackReference(value = "categorie-produit")
+    @With
     private Collection<Produit> produitSet;
 
     @Column(name = "categorie_type", insertable = false, updatable = false)
+    @With
     private String categorieType;
 }

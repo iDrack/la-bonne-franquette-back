@@ -4,14 +4,18 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.util.List;
 
 @Data
 @Entity
 @Table(name = "menu_item")
+@NoArgsConstructor
+@AllArgsConstructor
 public class MenuItem {
 
     @Id
@@ -28,6 +32,7 @@ public class MenuItem {
     @ManyToOne
     @JoinColumn(name = "menu")
     @JsonBackReference
+    @With
     private Menu menu;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -37,5 +42,6 @@ public class MenuItem {
             inverseJoinColumns = @JoinColumn(name = "produit_id")
     )
     @JsonIgnoreProperties({"categorieSet", "ingredientSet"})
+    @With
     private List<Produit> produitSet;
 }

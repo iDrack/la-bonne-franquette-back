@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.With;
 
 import java.util.Set;
 
@@ -15,6 +18,8 @@ import java.util.Set;
         discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("ingredient")
 @Table(name = "ingredient")
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +34,16 @@ public class Ingredient {
 
     @OneToOne(mappedBy = "ingredient")
     @JsonBackReference(value = "ingredient-extra")
+    @With
     private Extra extra;
 
     @ManyToMany(mappedBy = "ingredientSet")
     @JsonBackReference(value = "produit-ingredient")
+    @With
     private Set<Produit> produitSet;
 
     @Column(name = "ingredient_type", insertable = false, updatable = false)
     @JsonIgnore
+    @With
     private String ingredientType;
 }
