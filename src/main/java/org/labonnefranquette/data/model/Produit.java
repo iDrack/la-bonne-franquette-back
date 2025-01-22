@@ -40,9 +40,4 @@ public class Produit {
             inverseJoinColumns = @JoinColumn(name = "ingredient_id")
     )
     private Collection<Ingredient> ingredientSet;
-
-    @ManyToMany(mappedBy = "produitSet", fetch = FetchType.EAGER)
-    @JsonBackReference(value = "menu-produit")
-    private Collection<Menu> menuSet;
-
 }

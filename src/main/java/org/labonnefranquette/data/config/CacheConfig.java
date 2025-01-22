@@ -9,6 +9,6 @@ import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 public class CacheConfig {
     @Bean
     public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("produit", "categorie", "ingredient", "menu", "extra");
+        return new ConcurrentMapCacheManager("produit", "categorie", "ingredient", "menu", "menu_item", "extra");
     }
 }

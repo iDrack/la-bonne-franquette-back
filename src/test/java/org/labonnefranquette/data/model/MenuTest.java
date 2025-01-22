@@ -13,10 +13,22 @@ import static org.junit.jupiter.api.Assertions.*;
 public class MenuTest {
 
     private Menu menu;
+    private MenuItem menuItem1;
+    private MenuItem menuItem2;
 
     @BeforeEach
     public void setUp() {
+
         menu = new Menu();
+        menuItem1 = new MenuItem();
+        menuItem1.setId(1L);
+        menuItem1.setOptional(true);
+        menuItem1.setExtraPriceHT(50);
+
+        menuItem2 = new MenuItem();
+        menuItem2.setId(2L);
+        menuItem2.setOptional(false);
+        menuItem2.setExtraPriceHT(100);
     }
 
     @Test
@@ -44,15 +56,16 @@ public class MenuTest {
     }
 
     @Test
-    public void setProduitSet_setsProduitSetCorrectly() {
-        Produit produit = new Produit();
-        menu.setProduitSet(Arrays.asList(produit));
-        assertTrue(menu.getProduitSet().contains(produit));
+    public void setMenuItemSet_setsMenuItemsCorrectly() {
+        menu.setMenuItemSet(Arrays.asList(menuItem1, menuItem2));
+        assertEquals(2, menu.getMenuItemSet().size());
+        assertTrue(menu.getMenuItemSet().contains(menuItem1));
+        assertTrue(menu.getMenuItemSet().contains(menuItem2));
     }
 
     @Test
-    public void setProduitSet_setsEmptyProduitSet() {
-        menu.setProduitSet(Collections.emptyList());
-        assertTrue(menu.getProduitSet().isEmpty());
+    public void setMenuItemSet_setsEmptyMenuItems() {
+        menu.setMenuItemSet(Collections.emptyList());
+        assertTrue(menu.getMenuItemSet().isEmpty());
     }
 }

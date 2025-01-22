@@ -19,7 +19,7 @@ public class CacheService {
 
     @Autowired
     CachePreloader cachePreloader;
-    @CacheEvict(value = {"categorie", "extra", "ingredient", "menu", "produit"}, allEntries = true)
+    @CacheEvict(value = {"categorie", "extra", "ingredient", "menu", "menu_item", "produit"}, allEntries = true)
     public boolean clear() {
         try {
             cachePreloader.run();
