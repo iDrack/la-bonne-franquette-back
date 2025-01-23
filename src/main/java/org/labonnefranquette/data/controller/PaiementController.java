@@ -1,10 +1,17 @@
 package org.labonnefranquette.data.controller;
 
+import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/paiement")
@@ -14,6 +21,19 @@ public class PaiementController {
     private PaiementService paiementService;
     @Autowired
     private DtoTools dtoTools;
+
+    @GetMapping("/generatePDF/{id}")
+    public ResponseEntity<String> generatePDF(@PathVariable("id") Long id) {
+        try {
+            Paiement paiement = paiementService.getPaiementById(id);
+
+            paiementService.generatePDF(paiement);
+            return new ResponseEntity<>("PDF généré avec succés.", HttpStatus.OK);
+        } catch (IOException e) {
+            System.out.println(e.toString());
+            return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 /*
 TODO: Implémenter la gestion des paiements
 Les endpoints des paiements ne sont pas encore utilisés

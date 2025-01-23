@@ -7,6 +7,8 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.labonnefranquette.data.model.Paiement;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 public class PDFTools {
 
@@ -25,6 +27,10 @@ public class PDFTools {
     public void toPDF(Paiement paiement, String dest) throws IOException {
         // Créer un document PDF
         PDDocument document = new PDDocument();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("hh:mm 'le' dd/MM/yyyy");
+        formatter.setTimeZone(TimeZone.getDefault());
+        String formattedDate = formatter.format(paiement.getDate());
 
         // Ajouter une page au document
         PDPage page = new PDPage();
@@ -46,7 +52,7 @@ public class PDFTools {
         contentStream.newLine();
         contentStream.showText("Identifiant de commande : " + paiement.getCommande().getId());
         contentStream.newLine();
-        contentStream.showText("Date : " + paiement.getDate());
+        contentStream.showText("Date : " + formattedDate);
         contentStream.newLine();
         contentStream.showText("Type de réglement : " + paiement.getType());
         contentStream.newLine();
