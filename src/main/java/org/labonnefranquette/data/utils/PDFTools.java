@@ -7,6 +7,9 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.labonnefranquette.data.model.Paiement;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
 
@@ -24,12 +27,21 @@ public class PDFTools {
         return instance;
     }
 
-    public void toPDF(Paiement paiement, String dest) throws IOException {
+    public Path toPDF(Paiement paiement, String filename) throws IOException {
+        Path pathTmp = Paths.get("tmp");
+        if (!Files.exists(pathTmp)) {
+            Files.createDirectories(pathTmp);
+        }
+        Path pathPdf = Paths.get("tmp/pdf");
+        if (!Files.exists(pathPdf)) {
+            Files.createDirectories(pathPdf);
+        }
+
         // Créer un document PDF
         PDDocument document = new PDDocument();
 
         SimpleDateFormat formatter = new SimpleDateFormat("hh:mm 'le' dd/MM/yyyy");
-        formatter.setTimeZone(TimeZone.getDefault());
+        formatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         String formattedDate = formatter.format(paiement.getDate());
 
         // Ajouter une page au document
@@ -45,9 +57,7 @@ public class PDFTools {
         // Peut être modifier
         contentStream.beginText();
         contentStream.setLeading(14.5f);
-        contentStream.newLineAtOffset(25, 700);
-        contentStream.showText("Facture :");
-        contentStream.newLine();
+        contentStream.newLineAtOffset(100, 700);
         contentStream.showText("Numéro de commande : " + paiement.getCommande().getNumero());
         contentStream.newLine();
         contentStream.showText("Identifiant de commande : " + paiement.getCommande().getId());
@@ -55,6 +65,21 @@ public class PDFTools {
         contentStream.showText("Date : " + formattedDate);
         contentStream.newLine();
         contentStream.showText("Type de réglement : " + paiement.getType());
+        contentStream.newLine();
+
+        if (paiement.getCommande().getArticles() != null) {
+            paiement.getCommande().getArticles().forEach(article -> {
+                try {
+                    String articleName = article.getNom();
+                    String articlePrice = String.format("%.2f€", (article.getPrixHT() * 1.1) / 100);
+                    contentStream.showText("    " + articleName + " : " + articlePrice);
+                    contentStream.newLine();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+        }
+
         contentStream.newLine();
         contentStream.showText("Prix HT : " + paiement.getPrixHT() / 100 + "€");
         contentStream.newLine();
@@ -69,9 +94,10 @@ public class PDFTools {
         contentStream.close();
 
         // Sauvegarder le document PDF
-        document.save(dest);
+        document.save("tmp/pdf/" + filename);
 
         // Fermer le document
         document.close();
+        return Paths.get("tmp/pdf/" + filename);
     }
 }

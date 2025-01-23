@@ -5,15 +5,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -28,7 +30,35 @@ public class PDFToolsTest {
     }
 
     @Test
-    void toPDF_createsPDFWithCorrectContent() throws IOException {
+    void toPDF_createsPDFWithArticlesFormattedCorrectly() throws IOException {
+        Paiement paiement = mock(Paiement.class);
+        Commande commande = mock(Commande.class);
+        Article article = mock(Article.class);
+
+        when(paiement.getCommande()).thenReturn(commande);
+        when(commande.getNumero()).thenReturn((short) 12345);
+        when(commande.getId()).thenReturn(1L);
+        when(paiement.getDate()).thenReturn(new Date());
+        when(paiement.getType()).thenReturn(PaiementTypeCommande.CB);
+        when(paiement.getPrixHT()).thenReturn(10000);
+        when(paiement.getPrixTTC()).thenReturn(11000);
+        when(commande.getPrixHT()).thenReturn(10000);
+        when(commande.getArticles()).thenReturn(List.of(article));
+        when(article.getNom()).thenReturn("Article 1");
+        when(article.getPrixHT()).thenReturn(1000);
+
+
+        pdfTools.toPDF(paiement, "test.pdf");
+
+        PDDocument document = PDDocument.load(new File("tmp/pdf/test.pdf"));
+        assertTrue(document.getNumberOfPages() > 0);
+        document.close();
+
+        Files.delete(Paths.get("tmp/pdf/test.pdf"));
+    }
+
+    @Test
+    void toPDF_handlesNullArticles() throws IOException {
         Paiement paiement = mock(Paiement.class);
         Commande commande = mock(Commande.class);
 
@@ -40,34 +70,39 @@ public class PDFToolsTest {
         when(paiement.getPrixHT()).thenReturn(10000);
         when(paiement.getPrixTTC()).thenReturn(11000);
         when(commande.getPrixHT()).thenReturn(10000);
+        when(commande.getArticles()).thenReturn(null);
 
-        Path tempFile = Files.createTempFile("test", ".pdf");
-        pdfTools.toPDF(paiement, tempFile.toString());
+        pdfTools.toPDF(paiement, "test.pdf");
 
-        PDDocument document = PDDocument.load(new File(tempFile.toString()));
+        PDDocument document = PDDocument.load(new File("tmp/pdf/test.pdf"));
         assertTrue(document.getNumberOfPages() > 0);
         document.close();
 
-        Files.delete(tempFile);
+        Files.delete(Paths.get("tmp/pdf/test.pdf"));
     }
 
     @Test
-    void toPDF_handlesIOException() {
+    void toPDF_handlesEmptyArticlesList() throws IOException {
         Paiement paiement = mock(Paiement.class);
         Commande commande = mock(Commande.class);
 
         when(paiement.getCommande()).thenReturn(commande);
         when(commande.getNumero()).thenReturn((short) 12345);
         when(commande.getId()).thenReturn(1L);
-        when(paiement.getDate()).thenReturn(new Date()); // Assuming getDate returns a LocalDate
+        when(paiement.getDate()).thenReturn(new Date());
         when(paiement.getType()).thenReturn(PaiementTypeCommande.CB);
         when(paiement.getPrixHT()).thenReturn(10000);
         when(paiement.getPrixTTC()).thenReturn(11000);
         when(commande.getPrixHT()).thenReturn(10000);
+        when(commande.getArticles()).thenReturn(Collections.emptyList());
 
-        assertThrows(IOException.class, () -> {
-            pdfTools.toPDF(paiement, "/invalid/path/test.pdf");
-        });
+        pdfTools.toPDF(paiement, "test.pdf");
+
+        PDDocument document = PDDocument.load(new File("tmp/pdf/test.pdf"));
+        assertTrue(document.getNumberOfPages() > 0);
+        document.close();
+
+        Files.delete(Paths.get("tmp/pdf/test.pdf"));
     }
 
     @Test
