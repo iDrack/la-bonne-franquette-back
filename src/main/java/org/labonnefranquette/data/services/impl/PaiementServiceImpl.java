@@ -6,9 +6,12 @@ import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.repository.PaiementRepository;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.services.PaiementService;
+import org.labonnefranquette.data.utils.PDFTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,4 +51,12 @@ public class PaiementServiceImpl implements PaiementService {
     public List<Paiement> getPaiementByCommande(Long commandeId) throws RuntimeException {
         return paiementRepository.findByCommandeId(commandeId).orElseThrow(() -> new RuntimeException("Aucun paiement n'éxiste pour cette commande."));
     }
+
+    @Override
+    public Path generatePDF(Paiement paiement) throws IOException {
+        PDFTools pdfTools = PDFTools.getInstance();
+        return pdfTools.toPDF(paiement, "tmp.pdf");
+    }
+
+
 }
