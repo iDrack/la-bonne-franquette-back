@@ -7,7 +7,6 @@ import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 
-import jakarta.validation.constraints.Min;
 import java.util.Collection;
 import java.util.Date;
 
@@ -26,4 +25,6 @@ public class CommandeReadDTO  {
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;
     private PaiementTypeCommande paiementTypeCommande;
+    private boolean isModified;
+
 }

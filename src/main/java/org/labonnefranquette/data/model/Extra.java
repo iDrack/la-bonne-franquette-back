@@ -10,6 +10,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 
+import java.util.Set;
+
 @Data
 @Entity
 @DiscriminatorValue("extra")
@@ -27,4 +29,9 @@ public class Extra extends Ingredient {
     @JsonBackReference(value = "extra-ingredient")
     @With
     private Ingredient ingredient;
+
+    @ManyToMany(mappedBy = "extraSet")
+    @JsonBackReference(value = "produit-extra")
+    @With
+    private Set<Produit> produitSet;
 }
