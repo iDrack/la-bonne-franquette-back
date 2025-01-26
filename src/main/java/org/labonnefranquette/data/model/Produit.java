@@ -45,4 +45,13 @@ public class Produit {
     )
     @With
     private Collection<Ingredient> ingredientSet;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "produit_contient_extra",
+            joinColumns = @JoinColumn(name = "produit_id"),
+            inverseJoinColumns = @JoinColumn(name = "extra_id")
+    )
+    @With
+    private Collection<Extra> extraSet;
 }
