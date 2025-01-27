@@ -118,7 +118,7 @@ public class CommandeControllerTest {
 
     @Test
     public void createCommandePriceException() {
-        CommandeCreateDTO createDTO = new CommandeCreateDTO(true, new ArrayList<>(), new ArrayList<>(), StatusCommande.EN_COURS, new ArrayList<>(), -1);
+        CommandeCreateDTO createDTO = new CommandeCreateDTO(true, new ArrayList<>(), new ArrayList<>(), StatusCommande.EN_COURS, new ArrayList<>(), -1, false);
         when(dtoTools.convertToEntity(createDTO, Commande.class)).thenThrow(new PriceException("Price error"));
 
         ResponseEntity<?> response = commandeController.createCommande(createDTO);
