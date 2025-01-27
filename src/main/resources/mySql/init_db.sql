@@ -1,3 +1,8 @@
+-- user admin
+
+INSERT INTO users(username, password, roles)
+VALUES ('admin', '$2a$10$KV8cQULcx8Y2VNyf5lpOPuFdvJ4rzNmRFyDvgWDvhth.eVKAddo1y', 'ROLE_ADMIN');
+
 -- Insertion des catégories
 
 INSERT INTO categorie (id, nom, categorie_type)
@@ -276,9 +281,9 @@ VALUES (26, 'Omelette', 400),
 
 -- Association des nouveaux produits avec les nouvelles catégories
 INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
-VALUES (26, 7),
-       (27, 7),
-       (28, 7);
+VALUES (26, 9),
+       (27, 8),
+       (28, 8);
 
 -- Association des nouveaux produits avec les nouveaux ingrédients
 INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
