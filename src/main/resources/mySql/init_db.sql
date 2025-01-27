@@ -1,3 +1,8 @@
+-- user admin
+
+INSERT INTO users(username, password, roles)
+VALUES ('admin', '$2a$10$KV8cQULcx8Y2VNyf5lpOPuFdvJ4rzNmRFyDvgWDvhth.eVKAddo1y', 'ROLE_ADMIN');
+
 -- Insertion des catégories
 
 INSERT INTO categorie (id, nom, categorie_type)
@@ -254,3 +259,59 @@ VALUES ('extra', 'Bacon supplémentaire', 100, TRUE, 10),
        ('extra', 'Avocat supplémentaire', 150, FALSE, 17),
        ('extra', 'Jalapenos supplémentaires', 075, FALSE, 26),
        ('extra', 'Oignons supplémentaires', 025, FALSE, 6);
+
+-- Insertion des nouvelles catégories
+INSERT INTO categorie (id, nom, categorie_type)
+VALUES (7, 'Petit Déjeuner', 'categorie'),
+       (8, 'Brunch', 'categorie');
+
+-- Insertion des nouveaux ingrédients
+INSERT INTO ingredient (id, nom, a_cuire, ingredient_type)
+VALUES (54, 'Œufs', TRUE, 'ingredient'),
+       (55, 'Bacon', TRUE, 'ingredient'),
+       (56, 'Pain complet', TRUE, 'ingredient'),
+       (57, 'Beurre', FALSE, 'ingredient'),
+       (58, 'Confiture', FALSE, 'ingredient');
+
+-- Insertion des nouveaux produits
+INSERT INTO produit (id, nom, prix_ht)
+VALUES (26, 'Omelette', 400),
+       (27, 'Pancakes', 350),
+       (28, 'Toast', 200);
+
+-- Association des nouveaux produits avec les nouvelles catégories
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+VALUES (26, 9),
+       (27, 8),
+       (28, 8);
+
+-- Association des nouveaux produits avec les nouveaux ingrédients
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+VALUES (26, 54),
+       (26, 55),
+       (27, 57),
+       (27, 58),
+       (28, 56),
+       (28, 57);
+
+-- Insertion des nouveaux menus
+INSERT INTO menu (id, nom, prix_ht)
+VALUES (9, 'Menu Petit Déjeuner', 600),
+       (10, 'Menu Brunch', 800);
+
+-- Association des nouveaux menus avec les nouveaux produits
+INSERT INTO menu_contient_produit (menu_id, produit_id)
+VALUES (9, 26),
+       (9, 27),
+       (10, 26),
+       (10, 28);
+
+-- Insertion des nouveaux extras
+INSERT INTO ingredient (ingredient_type, nom, prixht, a_cuire, ingredient_id)
+VALUES ('extra', 'Sirop d\'érable', 50, FALSE, 58),
+       ('extra', 'Fruits frais', 100, FALSE, 59);
+
+-- Association des nouveaux extras avec les nouveaux produits
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+VALUES (27, 58),
+       (27, 59);

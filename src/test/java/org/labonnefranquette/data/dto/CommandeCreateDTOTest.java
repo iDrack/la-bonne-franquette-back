@@ -38,7 +38,7 @@ public class CommandeCreateDTOTest {
         articles = new ArrayList<>();
         prixHT = 100;
         dtoTools = new DtoTools();
-        commandeCreateDTO = new CommandeCreateDTO(surPlace, menus, paiementSet, status, articles, prixHT);
+        commandeCreateDTO = new CommandeCreateDTO(surPlace, menus, paiementSet, status, articles, prixHT, false);
     }
 
     @Test
