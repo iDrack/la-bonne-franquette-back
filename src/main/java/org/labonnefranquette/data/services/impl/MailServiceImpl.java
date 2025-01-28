@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -71,5 +72,6 @@ public class MailServiceImpl implements MailService {
         String filename = String.format("Commande %d_%d.pdf", paiement.getId(), paiement.getCommande().getNumero());
         Path path = pdfTools.toPDF(paiement, filename);
         sendMailWithAttachment(to, "Votre facture du " + formattedDate, "Votre facture du " + formattedDate + " d'un montant de " + paiement.getPrixTTC() / 100 + "€", path.toString(), filename);
+        Files.delete(path);
     }
 }
