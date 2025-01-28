@@ -1,17 +1,18 @@
 package org.labonnefranquette.data.controller;
 
+import jakarta.mail.MessagingException;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.services.MailService;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("api/v1/paiement")
@@ -19,8 +20,12 @@ public class PaiementController {
 
     @Autowired
     private PaiementService paiementService;
+    private static final String EMAIL_REGEX = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$";
     @Autowired
     private DtoTools dtoTools;
+    @Autowired
+    private MailService mailService;
+
 
     @GetMapping("/generatePDF/{id}")
     public ResponseEntity<String> generatePDF(@PathVariable("id") Long id) {
@@ -32,6 +37,24 @@ public class PaiementController {
         } catch (IOException e) {
             System.out.println(e.toString());
             return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/sendReceipt/{id}")
+    public ResponseEntity<String> sendReceipt(@PathVariable("id") Long id, @RequestBody String email) {
+        Pattern pattern = Pattern.compile(EMAIL_REGEX);
+        Matcher matcher = pattern.matcher(email);
+        if (matcher.matches()) {
+            try {
+                Paiement paiement = paiementService.getPaiementById(id);
+                mailService.sendMailReceipt(email, paiement);
+            } catch (IOException | MessagingException e) {
+                System.out.println(e.toString());
+                return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+            return new ResponseEntity<>("Facture envoyée.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("L'e-mail est invalide.", HttpStatus.METHOD_NOT_ALLOWED);
         }
     }
 /*
