@@ -1,7 +1,6 @@
 package org.labonnefranquette.data.controller;
 
 import org.labonnefranquette.data.cache.CacheService;
-import org.labonnefranquette.data.services.MailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +15,6 @@ public class CacheController {
 
     @Autowired
     CacheService cacheService;
-
-    @Autowired
-    MailService mailService;
-
 
     //Utilisé lors de l'initialisation de l'application
     @GetMapping(value = "/version", produces = "application/plain")
