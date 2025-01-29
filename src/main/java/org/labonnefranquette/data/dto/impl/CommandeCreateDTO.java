@@ -21,7 +21,6 @@ public class CommandeCreateDTO  {
     private Collection<Paiement> paiementSet;
     @NotNull
     private StatusCommande status;
-    @NotEmpty
     private Collection<Article> articles;
     @Min(value = 0, message = "Le prix doit etre positif")
     private int prixHT;
