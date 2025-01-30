@@ -1,4 +1,7 @@
--- Produits --- 
+USE
+`franquette-bdd-test`;
+
+-- Produits ---
 INSERT INTO produit (id, nom, prix_ht)
 SELECT 1, 'Produit1', 550
 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 1);

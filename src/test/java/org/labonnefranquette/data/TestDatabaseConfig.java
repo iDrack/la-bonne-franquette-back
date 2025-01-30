@@ -1,7 +1,6 @@
 package org.labonnefranquette.data;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
@@ -14,7 +13,7 @@ import javax.sql.DataSource;
 @Configuration
 public class TestDatabaseConfig {
 
-    @Value("classpath:mySql/init_db_test.sql")
+    @Value("classpath:src/test/resources/mySql/init_db_test.sql")
     private Resource initScript;
 
     @Bean
