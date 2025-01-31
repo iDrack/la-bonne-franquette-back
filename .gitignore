@@ -65,3 +65,4 @@ build/
 
 ### App properties ###
 **/src/main/resources/*
+/ipaddr-QR.png
