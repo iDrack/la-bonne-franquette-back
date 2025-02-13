@@ -3,7 +3,9 @@ package org.labonnefranquette.data.services.impl;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
 import org.labonnefranquette.data.repository.PaiementRepository;
+import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.PDFTools;
@@ -23,6 +25,8 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Autowired
     CommandeService commandeService;
+    @Autowired
+    private PaiementTypeCommandeRepository paiementTypeCommandeRepository;
 
     @Override
     public List<Paiement> getAllPaiement() {
@@ -51,6 +55,12 @@ public class PaiementServiceImpl implements PaiementService {
     public List<Paiement> getPaiementByCommande(Long commandeId) throws RuntimeException {
         return paiementRepository.findByCommandeId(commandeId).orElseThrow(() -> new RuntimeException("Aucun paiement n'éxiste pour cette commande."));
     }
+
+    @Override
+    public List<PaiementTypeCommandeEntity> getAllPaiementType() {
+        return paiementTypeCommandeRepository.findAll();
+    }
+
 
     @Override
     public Path generatePDF(Paiement paiement) throws IOException {
