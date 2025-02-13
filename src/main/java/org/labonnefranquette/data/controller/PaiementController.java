@@ -2,7 +2,7 @@ package org.labonnefranquette.data.controller;
 
 import jakarta.mail.MessagingException;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.services.MailService;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.DtoTools;
@@ -61,8 +61,8 @@ public class PaiementController {
     }
 
     @GetMapping("/types")
-    public ResponseEntity<List<PaiementTypeCommandeEntity>> getAllPaiementsType() {
-        List<PaiementTypeCommandeEntity> paiementTypes = paiementService.getAllPaiementType();
+    public ResponseEntity<List<PaiementTypeCommande>> getAllPaiementsType() {
+        List<PaiementTypeCommande> paiementTypes = paiementService.getAllPaiementType();
         return new ResponseEntity<>(paiementTypes, HttpStatus.FOUND);
     }
 /*

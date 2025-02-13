@@ -4,7 +4,6 @@ import lombok.Data;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 
 import java.util.Collection;
@@ -24,7 +23,7 @@ public class CommandeReadDTO  {
     private Collection<Article> articles;
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;
-    private PaiementTypeCommande paiementTypeCommande;
+    private String paiementTypeCommande;
     private boolean isModified;
 
 }

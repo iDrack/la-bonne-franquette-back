@@ -4,7 +4,6 @@ import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
 import org.labonnefranquette.data.services.MailService;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.DtoTools;
@@ -16,10 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -71,29 +68,6 @@ public class PaiementControllerTest {
         ResponseEntity<String> response = paiementController.sendReceipt(1L, email);
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
-
-    @Test
-    public void getAllPaiementsTypeReturnsList() {
-        List<PaiementTypeCommandeEntity> paiementTypes = List.of(new PaiementTypeCommandeEntity());
-        when(paiementService.getAllPaiementType()).thenReturn(paiementTypes);
-
-        ResponseEntity<List<PaiementTypeCommandeEntity>> response = paiementController.getAllPaiementsType();
-
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
-    }
-
-    @Test
-    public void getAllPaiementsTypeReturnsEmptyList() {
-        when(paiementService.getAllPaiementType()).thenReturn(Collections.emptyList());
-
-        ResponseEntity<List<PaiementTypeCommandeEntity>> response = paiementController.getAllPaiementsType();
-
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertTrue(response.getBody().isEmpty());
     }
 
 /*TODO

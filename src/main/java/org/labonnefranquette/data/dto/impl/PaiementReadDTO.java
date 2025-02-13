@@ -1,7 +1,7 @@
 package org.labonnefranquette.data.dto.impl;
 
 import lombok.Data;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 
 import java.sql.Date;
 

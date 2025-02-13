@@ -4,9 +4,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -22,7 +24,7 @@ public class PaiementCreateDTOTest {
 
     @BeforeEach
     public void setUp() {
-        type = PaiementTypeCommande.CB;
+        type = new PaiementTypeCommande(1L, "AUTRE", true, new ArrayList<>());
         prixPaye = 100;
         ticketEnvoye = true;
         paiementCreateDTO = new PaiementCreateDTO(type, prixPaye, ticketEnvoye);

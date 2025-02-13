@@ -8,7 +8,6 @@ import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.utils.CommandeTools;
@@ -48,7 +47,7 @@ public class CommandeServiceImplTest {
         commande.setDateSaisie(new Date());
         commande.setNbArticle(1);
         commande.setNumero((short) 123);
-        commande.setPaiementType(PaiementTypeCommande.ESP);
+        commande.setPaiementType("ESP");
         commande.setStatus(StatusCommande.EN_COURS);
         commande.setPaiementSet(new ArrayList<Paiement>());
         commande.setArticles(List.of(new Article()));

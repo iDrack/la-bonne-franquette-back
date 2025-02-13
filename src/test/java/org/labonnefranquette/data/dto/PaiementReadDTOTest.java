@@ -4,11 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -31,7 +32,7 @@ public class PaiementReadDTOTest {
         id = 1L;
         commandeId = 2L;
         date = new Date(System.currentTimeMillis());
-        type = PaiementTypeCommande.CB;
+        type = new PaiementTypeCommande(1L, "AUTRE", true, new ArrayList<>());
         ticketEnvoye = true;
         prixHT = 100;
         prixTTC = 110;

@@ -4,15 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.model.entity.Article;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.mockito.Mockito;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,25 +38,47 @@ public class CommandeToolsTest {
         commande.setPrixHT(100);
         assertTrue(commandeTools.isCorrectPrice(commande));
     }
-
     @Test
-    public void calculPaiementTypeCommande_returnsAucunWhenNoPaiement() {
-        assertEquals(PaiementTypeCommande.AUCUN, commandeTools.calculPaiementTypeCommande(Collections.emptyList()));
+    void calculNumeroCommande_incrementsCounterCorrectly() {
+        short firstNumber = commandeTools.calculNumeroCommande();
+        short secondNumber = commandeTools.calculNumeroCommande();
+
+        assertEquals(firstNumber + 1, secondNumber);
     }
 
     @Test
-    public void calculPaiementTypeCommande_returnsSingleTypeWhenOnePaiement() {
+    void calculPaiementTypeCommande_returnsAUCUNWhenNoPayments() {
+        Set<Paiement> paiements = Collections.emptySet();
+
+        assertEquals("AUCUN", commandeTools.calculPaiementTypeCommande(paiements));
+    }
+
+    @Test
+    void calculPaiementTypeCommande_returnsSingleTypeWhenAllPaymentsSame() {
+        PaiementTypeCommande type = new PaiementTypeCommande();
+        type.setName("CREDIT_CARD");
         Paiement paiement = new Paiement();
-        paiement.setType(PaiementTypeCommande.CB);
-        assertEquals(PaiementTypeCommande.CB, commandeTools.calculPaiementTypeCommande(Collections.singletonList(paiement)));
+        paiement.setType(type);
+        Set<Paiement> paiements = new HashSet<>();
+        paiements.add(paiement);
+
+        assertEquals("CREDIT_CARD", commandeTools.calculPaiementTypeCommande(paiements));
     }
 
     @Test
-    public void calculPaiementTypeCommande_returnsMixedWhenMultiplePaiementTypes() {
+    void calculPaiementTypeCommande_returnsMIXEDWhenPaymentsDifferent() {
+        PaiementTypeCommande type1 = new PaiementTypeCommande();
+        type1.setName("CREDIT_CARD");
+        PaiementTypeCommande type2 = new PaiementTypeCommande();
+        type2.setName("CASH");
         Paiement paiement1 = new Paiement();
-        paiement1.setType(PaiementTypeCommande.CB);
+        paiement1.setType(type1);
         Paiement paiement2 = new Paiement();
-        paiement2.setType(PaiementTypeCommande.AUTRE);
-        assertEquals(PaiementTypeCommande.MIXED, commandeTools.calculPaiementTypeCommande(Arrays.asList(paiement1, paiement2)));
+        paiement2.setType(type2);
+        Set<Paiement> paiements = new HashSet<>();
+        paiements.add(paiement1);
+        paiements.add(paiement2);
+
+        assertEquals("MIXED", commandeTools.calculPaiementTypeCommande(paiements));
     }
 }

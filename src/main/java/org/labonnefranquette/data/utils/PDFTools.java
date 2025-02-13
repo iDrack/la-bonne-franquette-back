@@ -64,7 +64,7 @@ public class PDFTools {
         contentStream.newLine();
         contentStream.showText("Date : " + formattedDate);
         contentStream.newLine();
-        contentStream.showText("Type de réglement : " + paiement.getType());
+        contentStream.showText("Type de réglement : " + paiement.getType().getName());
         contentStream.newLine();
 
         if (paiement.getCommande().getArticles() != null) {

@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.utils.JsonConverterTools;
 
@@ -75,7 +74,7 @@ public class Commande {
     private Collection<Paiement> paiementSet;
 
     @Column(name = "paiement_type", nullable = true, length = 5)
-    private PaiementTypeCommande paiementType;
+    private String paiementType;
 
     @Override
     public String toString() {

@@ -1,7 +1,6 @@
 package org.labonnefranquette.data.projection;
 
-import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 
 import java.util.Date;

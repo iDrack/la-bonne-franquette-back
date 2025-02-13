@@ -5,13 +5,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.model.entity.Article;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -39,7 +40,7 @@ public class PDFToolsTest {
         when(commande.getNumero()).thenReturn((short) 12345);
         when(commande.getId()).thenReturn(1L);
         when(paiement.getDate()).thenReturn(new Date());
-        when(paiement.getType()).thenReturn(PaiementTypeCommande.CB);
+        when(paiement.getType()).thenReturn(new PaiementTypeCommande(1L, "CB", true, new ArrayList<>()));
         when(paiement.getPrixHT()).thenReturn(10000);
         when(paiement.getPrixTTC()).thenReturn(11000);
         when(commande.getPrixHT()).thenReturn(10000);
@@ -66,7 +67,7 @@ public class PDFToolsTest {
         when(commande.getNumero()).thenReturn((short) 12345);
         when(commande.getId()).thenReturn(1L);
         when(paiement.getDate()).thenReturn(new Date());
-        when(paiement.getType()).thenReturn(PaiementTypeCommande.CB);
+        when(paiement.getType()).thenReturn(new PaiementTypeCommande(1L, "CB", true, new ArrayList<>()));
         when(paiement.getPrixHT()).thenReturn(10000);
         when(paiement.getPrixTTC()).thenReturn(11000);
         when(commande.getPrixHT()).thenReturn(10000);
@@ -90,7 +91,7 @@ public class PDFToolsTest {
         when(commande.getNumero()).thenReturn((short) 12345);
         when(commande.getId()).thenReturn(1L);
         when(paiement.getDate()).thenReturn(new Date());
-        when(paiement.getType()).thenReturn(PaiementTypeCommande.CB);
+        when(paiement.getType()).thenReturn(new PaiementTypeCommande(1L, "CB", true, new ArrayList<>()));
         when(paiement.getPrixHT()).thenReturn(10000);
         when(paiement.getPrixTTC()).thenReturn(11000);
         when(commande.getPrixHT()).thenReturn(10000);
@@ -115,7 +116,7 @@ public class PDFToolsTest {
         // Créer un objet Paiement
         Paiement paiement = new Paiement();
         paiement.setDate(new Date());
-        paiement.setType(PaiementTypeCommande.CB);
+        paiement.setType(new PaiementTypeCommande(1L, "CB", true, new ArrayList<>()));
         paiement.setTicketEnvoye(true);
         paiement.setPrixHT(10000);
         paiement.setPrixTTC(11000);

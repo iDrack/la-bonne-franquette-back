@@ -2,10 +2,10 @@ package org.labonnefranquette.data.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,10 +13,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PaiementTest {
 
     private Paiement paiement;
-
+    private PaiementTypeCommande paiementType;
     @BeforeEach
     public void setUp() {
+
         paiement = new Paiement();
+        paiementType = new PaiementTypeCommande(1L, "CB", true, new ArrayList<>());
     }
 
     @Test
@@ -33,8 +35,8 @@ public class PaiementTest {
 
     @Test
     public void setType_setsTypeCorrectly() {
-        paiement.setType(PaiementTypeCommande.CB);
-        assertEquals(PaiementTypeCommande.CB, paiement.getType());
+        paiement.setType(paiementType);
+        assertEquals(paiementType, paiement.getType());
     }
 
     @Test

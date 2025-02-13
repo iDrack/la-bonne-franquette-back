@@ -7,7 +7,6 @@ import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.test.context.ActiveProfiles;
@@ -34,7 +33,7 @@ public class CommandeReadDTOTest {
     private Collection<Article> articles;
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;
-    private PaiementTypeCommande paiementTypeCommande;
+    private String paiementTypeCommande;
     private DtoTools dtoTools;
     private Commande commande;
 
@@ -52,7 +51,7 @@ public class CommandeReadDTOTest {
         articles = new ArrayList<>();
         menus = new ArrayList<>();
         paiementSet = new ArrayList<>();
-        paiementTypeCommande = PaiementTypeCommande.CB;
+        paiementTypeCommande = "CB";
         dtoTools = new DtoTools();
         commande = new Commande();
         commande.setId(commandeId);
@@ -66,7 +65,7 @@ public class CommandeReadDTOTest {
         commande.setArticles(articles);
         commande.setMenus(menus);
         commande.setPaiementSet(paiementSet);
-        commande.setPaiementType(paiementTypeCommande);
+        commande.setPaiementType("CB");
     }
 
     @Test

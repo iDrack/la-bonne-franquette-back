@@ -3,7 +3,7 @@ package org.labonnefranquette.data.services.impl;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.repository.PaiementRepository;
 import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
@@ -57,7 +57,7 @@ public class PaiementServiceImpl implements PaiementService {
     }
 
     @Override
-    public List<PaiementTypeCommandeEntity> getAllPaiementType() {
+    public List<PaiementTypeCommande> getAllPaiementType() {
         return paiementTypeCommandeRepository.findAll();
     }
 

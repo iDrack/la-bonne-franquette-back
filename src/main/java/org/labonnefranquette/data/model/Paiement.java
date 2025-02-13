@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 
 import java.util.Date;
 import java.util.Objects;
@@ -27,8 +26,9 @@ public class Paiement {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "type", nullable = false, length = 3)
+    @ManyToOne
     @NotNull(message = "Ce champs ne peut pas être vide")
+    @JoinColumn(name = "type_id", nullable = false)
     private PaiementTypeCommande type;
 
     @Column(name = "ticket_envoye", nullable = false)
@@ -65,7 +65,7 @@ public class Paiement {
         return "Paiement{" +
                 "id=" + id +
                 ", date=" + date +
-                ", type=" + type +
+                ", type=" + type.getName() +
                 ", ticketEnvoye=" + ticketEnvoye +
                 ", prixHT=" + prixHT +
                 ", prixTTC=" + prixTTC +

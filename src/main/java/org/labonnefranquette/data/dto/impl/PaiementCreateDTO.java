@@ -1,13 +1,12 @@
 package org.labonnefranquette.data.dto.impl;
 
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
-
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Min;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 
 @Data
 @AllArgsConstructor

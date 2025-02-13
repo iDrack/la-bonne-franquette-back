@@ -3,7 +3,7 @@ package org.labonnefranquette.data.utils;
 import org.jetbrains.annotations.NotNull;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -59,16 +59,17 @@ public class CommandeTools {
         return incrementeCompteur();
     }
 
-    public PaiementTypeCommande calculPaiementTypeCommande(Collection<Paiement> paiementSet) {
+    public String calculPaiementTypeCommande(Collection<Paiement> paiementSet) {
+
         if (paiementSet.isEmpty()) {
-            return PaiementTypeCommande.AUCUN;
+            return "AUCUN";
         }
         Set<PaiementTypeCommande> typesPaiement = paiementSet.stream()
                 .map(Paiement::getType)
                 .collect(Collectors.toSet());
         if (typesPaiement.size() == 1) {
-            return typesPaiement.iterator().next();
+            return typesPaiement.iterator().next().getName();
         }
-        return PaiementTypeCommande.MIXED;
+        return "MIXED";
     }
 }
