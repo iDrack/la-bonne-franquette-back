@@ -1,6 +1,8 @@
 package org.labonnefranquette.data.controller;
 
 import jakarta.mail.MessagingException;
+import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
+import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.services.MailService;
@@ -65,6 +67,17 @@ public class PaiementController {
         List<PaiementTypeCommande> paiementTypes = paiementService.getAllPaiementType();
         return new ResponseEntity<>(paiementTypes, HttpStatus.FOUND);
     }
+
+    @PostMapping("/{commandeId}")
+    public ResponseEntity<PaiementReadDTO> createNewPaiement(@RequestBody PaiementCreateDTO paiementDTO, @PathVariable Long commandeId) {
+        Paiement retPaiement;
+        try {
+            retPaiement = paiementService.createPaiement(commandeId, paiementDTO);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(dtoTools.convertToDto(retPaiement, PaiementReadDTO.class), HttpStatus.OK);
+    }
 /*
 TODO: Implémenter la gestion des paiements
 Les endpoints des paiements ne sont pas encore utilisés
@@ -80,17 +93,6 @@ Les endpoints des paiements ne sont pas encore utilisés
     public ResponseEntity<PaiementReadDTO> getPaiementById(@PathVariable("id") Long id) {
         Optional<Paiement> paiementOptional = paiementService.getPaiementById(id);
         return paiementOptional.map(paiement -> new ResponseEntity<>(dtoTools.convertToDto(paiement, PaiementReadDTO.class), HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
-    }
-
-    @PostMapping("/{commandeId}")
-    public ResponseEntity<PaiementReadDTO> createNewPaiement(@RequestBody PaiementCreateDTO paiementDTO, @PathVariable Long commandeId) {
-        Paiement retPaiement;
-        try {
-            retPaiement = paiementService.createPaiement(commandeId, paiementDTO);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(dtoTools.convertToDto(retPaiement, PaiementReadDTO.class), HttpStatus.OK);
     }
 
     @GetMapping("/commande/{commandeId}")
