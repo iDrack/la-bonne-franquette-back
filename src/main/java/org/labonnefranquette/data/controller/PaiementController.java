@@ -2,6 +2,7 @@ package org.labonnefranquette.data.controller;
 
 import jakarta.mail.MessagingException;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
 import org.labonnefranquette.data.services.MailService;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.DtoTools;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -56,6 +58,12 @@ public class PaiementController {
         } else {
             return new ResponseEntity<>("L'e-mail est invalide.", HttpStatus.METHOD_NOT_ALLOWED);
         }
+    }
+
+    @GetMapping("/types")
+    public ResponseEntity<List<PaiementTypeCommandeEntity>> getAllPaiementsType() {
+        List<PaiementTypeCommandeEntity> paiementTypes = paiementService.getAllPaiementType();
+        return new ResponseEntity<>(paiementTypes, HttpStatus.FOUND);
     }
 /*
 TODO: Implémenter la gestion des paiements

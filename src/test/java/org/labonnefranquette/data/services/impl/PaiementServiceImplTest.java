@@ -6,18 +6,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
 import org.labonnefranquette.data.model.enums.PaiementTypeCommande;
 import org.labonnefranquette.data.repository.PaiementRepository;
+import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -33,6 +32,9 @@ public class PaiementServiceImplTest {
 
     @Mock
     private CommandeService commandeService;
+
+    @Mock
+    private PaiementTypeCommandeRepository paiementTypeCommandeRepository;
 
     @InjectMocks
     private PaiementServiceImpl paiementService;
@@ -145,5 +147,26 @@ public class PaiementServiceImplTest {
         assertThrows(RuntimeException.class, () -> {
             paiementService.getPaiementByCommande(1L);
         });
+    }
+
+    @Test
+    public void getAllPaiementTypeReturnsList() {
+        List<PaiementTypeCommandeEntity> paiementTypes = List.of(new PaiementTypeCommandeEntity());
+        when(paiementTypeCommandeRepository.findAll()).thenReturn(paiementTypes);
+
+        List<PaiementTypeCommandeEntity> result = paiementService.getAllPaiementType();
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+    }
+
+    @Test
+    public void getAllPaiementTypeReturnsEmptyList() {
+        when(paiementTypeCommandeRepository.findAll()).thenReturn(Collections.emptyList());
+
+        List<PaiementTypeCommandeEntity> result = paiementService.getAllPaiementType();
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
     }
 }

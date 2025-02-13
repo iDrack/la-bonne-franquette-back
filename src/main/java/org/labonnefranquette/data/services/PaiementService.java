@@ -2,6 +2,7 @@ package org.labonnefranquette.data.services;
 
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.entity.PaiementTypeCommandeEntity;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -17,4 +18,6 @@ public interface PaiementService {
     List<Paiement> getPaiementByCommande(Long commandeId) throws RuntimeException;
 
     Path generatePDF(Paiement paiement) throws IOException;
+
+    List<PaiementTypeCommandeEntity> getAllPaiementType();
 }
