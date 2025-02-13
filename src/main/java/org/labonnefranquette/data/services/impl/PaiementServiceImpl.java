@@ -65,7 +65,7 @@ public class PaiementServiceImpl implements PaiementService {
     @Override
     public Path generatePDF(Paiement paiement) throws IOException {
         PDFTools pdfTools = PDFTools.getInstance();
-        return pdfTools.toPDF(paiement, "tmp.pdf");
+        return pdfTools.toPDF(paiement, "tmp.pdf", true);
     }
 
 

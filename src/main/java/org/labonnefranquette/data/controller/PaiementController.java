@@ -43,13 +43,13 @@ public class PaiementController {
     }
 
     @GetMapping("/sendReceipt/{id}")
-    public ResponseEntity<String> sendReceipt(@PathVariable("id") Long id, @RequestBody String email) {
+    public ResponseEntity<String> sendReceipt(@PathVariable("id") Long id, @RequestBody String email, @RequestBody boolean seeDetails) {
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
         if (matcher.matches()) {
             try {
                 Paiement paiement = paiementService.getPaiementById(id);
-                mailService.sendMailReceipt(email, paiement);
+                mailService.sendMailReceipt(email, paiement, seeDetails);
             } catch (IOException | MessagingException e) {
                 System.out.println(e.toString());
                 return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);

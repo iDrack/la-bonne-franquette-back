@@ -27,7 +27,7 @@ public class PDFTools {
         return instance;
     }
 
-    public Path toPDF(Paiement paiement, String filename) throws IOException {
+    public Path toPDF(Paiement paiement, String filename, boolean seeDetails) throws IOException {
         Path pathTmp = Paths.get("tmp");
         if (!Files.exists(pathTmp)) {
             Files.createDirectories(pathTmp);
@@ -67,8 +67,8 @@ public class PDFTools {
         contentStream.showText("Type de réglement : " + paiement.getType().getName());
         contentStream.newLine();
 
-        if (paiement.getCommande().getArticles() != null) {
-            paiement.getCommande().getArticles().forEach(article -> {
+        if (paiement.getArticles() != null && seeDetails) {
+            paiement.getArticles().forEach(article -> {
                 try {
                     String articleName = article.getNom();
                     String articlePrice = String.format("%.2f€", (article.getPrixHT() * 1.1) / 100);

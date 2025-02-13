@@ -49,7 +49,7 @@ public class PDFToolsTest {
         when(article.getPrixHT()).thenReturn(1000);
 
 
-        pdfTools.toPDF(paiement, "test.pdf");
+        pdfTools.toPDF(paiement, "test.pdf", false);
 
         PDDocument document = PDDocument.load(new File("tmp/pdf/test.pdf"));
         assertTrue(document.getNumberOfPages() > 0);
@@ -73,7 +73,7 @@ public class PDFToolsTest {
         when(commande.getPrixHT()).thenReturn(10000);
         when(commande.getArticles()).thenReturn(null);
 
-        pdfTools.toPDF(paiement, "test.pdf");
+        pdfTools.toPDF(paiement, "test.pdf", false);
 
         PDDocument document = PDDocument.load(new File("tmp/pdf/test.pdf"));
         assertTrue(document.getNumberOfPages() > 0);
@@ -97,7 +97,7 @@ public class PDFToolsTest {
         when(commande.getPrixHT()).thenReturn(10000);
         when(commande.getArticles()).thenReturn(Collections.emptyList());
 
-        pdfTools.toPDF(paiement, "test.pdf");
+        pdfTools.toPDF(paiement, "test.pdf", false);
 
         PDDocument document = PDDocument.load(new File("tmp/pdf/test.pdf"));
         assertTrue(document.getNumberOfPages() > 0);
@@ -125,7 +125,7 @@ public class PDFToolsTest {
         // Générer le PDF
         PDFTools pdfTools = PDFTools.getInstance();
         try {
-            pdfTools.toPDF(paiement, "output.pdf");
+            pdfTools.toPDF(paiement, "output.pdf", false);
         } catch (IOException e) {
             e.printStackTrace();
         }
