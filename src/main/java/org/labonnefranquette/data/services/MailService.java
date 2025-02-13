@@ -10,7 +10,7 @@ public interface MailService {
 
     void sendMailWithAttachment(String to, String subject, String body, String attachementPath, String filename) throws MessagingException;
 
-    void sendMailReceipt(String to, Paiement paiement) throws IOException, MessagingException;
+    void sendMailReceipt(String to, Paiement paiement, boolean seeDetails) throws IOException, MessagingException;
 
     void setMailUser(String mailUser);
 }

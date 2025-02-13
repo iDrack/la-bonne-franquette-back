@@ -64,13 +64,13 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendMailReceipt(String to, Paiement paiement) throws IOException, MessagingException {
+    public void sendMailReceipt(String to, Paiement paiement, boolean seeDetails) throws IOException, MessagingException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
         String formattedDate = formatter.format(paiement.getDate());
         PDFTools pdfTools = PDFTools.getInstance();
         String filename = String.format("Commande_%d_%d.pdf", paiement.getId(), paiement.getCommande().getNumero());
-        Path path = pdfTools.toPDF(paiement, filename);
+        Path path = pdfTools.toPDF(paiement, filename, seeDetails);
         sendMailWithAttachment(to, "Votre facture du " + formattedDate, "Votre facture du " + formattedDate + " d'un montant de " + paiement.getPrixTTC() / 100 + "€", path.toString(), filename);
         Files.delete(path);
     }

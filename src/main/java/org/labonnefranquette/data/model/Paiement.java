@@ -8,7 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.labonnefranquette.data.model.entity.Article;
+import org.labonnefranquette.data.utils.JsonConverterTools;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Objects;
 
@@ -50,6 +53,11 @@ public class Paiement {
     @JoinColumn(name = "commande")
     @JsonBackReference
     private Commande commande;
+
+    @Column(name = "articles", nullable = true, length = 1000)
+    @Convert(converter = JsonConverterTools.class)
+    @With
+    private Collection<Article> articles;
 
     public Paiement(PaiementTypeCommande type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {
         this.date = new Date();
