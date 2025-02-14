@@ -65,7 +65,8 @@ public class PaiementController {
     @GetMapping("/types")
     public ResponseEntity<List<PaiementTypeCommande>> getAllPaiementsType() {
         List<PaiementTypeCommande> paiementTypes = paiementService.getAllPaiementType();
-        return new ResponseEntity<>(paiementTypes, HttpStatus.FOUND);
+        if (paiementTypes.isEmpty()) return new ResponseEntity<>(paiementTypes, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(paiementTypes, HttpStatus.OK);
     }
 
     @PostMapping("/{commandeId}")

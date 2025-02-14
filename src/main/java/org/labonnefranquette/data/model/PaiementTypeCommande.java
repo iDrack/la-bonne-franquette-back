@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class PaiementTypeCommande {
     private boolean isEnable;
 
     @OneToMany(mappedBy = "type")
+    @JsonIgnore
     private List<Paiement> paiements;
 }
