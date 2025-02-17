@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.model.Categorie;
 import org.labonnefranquette.data.repository.CategorieRepository;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/categorie")
+@Tag(name = "Categorie Controller", description = "Controller pour les interractions des catégories.")
 public class CategorieController {
 
     @Autowired

@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.labonnefranquette.data.utils.ControlInputTool;
@@ -12,6 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Tag(name = "Login Controller", description = "Controller pour la connecxion des utilisateurs et la réactualisation de leur token d'authentification.")
 public class LoginController {
 
     @Autowired

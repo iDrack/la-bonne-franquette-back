@@ -1,14 +1,15 @@
 package org.labonnefranquette.data.controller.admin;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.model.Categorie;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/admin/categorie")
+@Tag(name = "Admin Categories Controller", description = "Controller pour les interractions des administracteurs sur la création des catégories.")
 public class AdminCategorieController {
 
     @Autowired

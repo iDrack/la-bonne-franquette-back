@@ -1,5 +1,7 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
 import org.labonnefranquette.data.exception.PriceException;
@@ -12,17 +14,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
-
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/commandes")
 @Validated
+@Tag(name = "Commande Controller", description = "Controller pour les interractions des commandes.")
 public class CommandeController {
 
     private final SimpMessagingTemplate template;

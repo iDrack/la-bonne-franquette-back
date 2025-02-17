@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.model.Menu;
 import org.labonnefranquette.data.repository.MenuRepository;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/menu")
+@Tag(name = "Menu Controller", description = "Controller pour les interractions des menus.")
 public class MenuController {
 
     @Autowired

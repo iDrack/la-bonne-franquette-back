@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
@@ -20,6 +21,7 @@ import java.util.regex.Pattern;
 
 @RestController
 @RequestMapping("api/v1/paiement")
+@Tag(name = "Paiement Controller", description = "Controller pour les interractions des paiements.")
 public class PaiementController {
 
     @Autowired

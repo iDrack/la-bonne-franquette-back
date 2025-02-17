@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.cache.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/cache")
+@Tag(name = "Cache Controller", description = "Controller pour les interractions du cache.")
 public class CacheController {
 
     @Autowired

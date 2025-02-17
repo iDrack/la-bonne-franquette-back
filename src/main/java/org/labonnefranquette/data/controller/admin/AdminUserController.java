@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller.admin;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.services.UserService;
 import org.labonnefranquette.data.utils.ControlInputTool;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@Tag(name = "Admin User Controller", description = "Controller pour les interractions des administracteurs sur la création des utilisateurs.")
 public class AdminUserController {
 
     @Autowired
