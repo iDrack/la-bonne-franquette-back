@@ -17,12 +17,16 @@ public class AdminMenuController {
 /*
 La création et la suppression des menus n'est pas encore implémenté
     @PostMapping("/create")
-    public ResponseEntity<Menu> createNewMenu(@RequestBody Menu menu) {
+    public ResponseEntity<Menu> createNewMenu(@RequestBody Menu menu,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         if (menu == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Menu>(menuService.create(menu), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteMenu(@PathVariable Long id) {
+    public ResponseEntity<?> deleteMenu(@PathVariable Long id,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         menuService.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

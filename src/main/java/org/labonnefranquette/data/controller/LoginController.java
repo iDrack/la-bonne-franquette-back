@@ -1,5 +1,8 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.services.impl.AuthServiceImpl;
@@ -20,15 +23,15 @@ public class LoginController {
     private AuthServiceImpl authService;
 
     @PostMapping(value = "/signup", produces = "application/json")
-    public ResponseEntity<Map<String,String>> signup(@RequestBody UserLoginDto userLoginDto) {
+    public ResponseEntity<Map<String, String>> signup(@RequestBody UserLoginDto userLoginDto) {
         try {
             if (!ControlInputTool.isValidObject(userLoginDto, UserLoginDto.class)) {
                 throw new Exception();
-            } 
+            }
             Map<String, String> token = authService.authenticate(userLoginDto);
             return token == null
-                ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
-                : new ResponseEntity<>(token, HttpStatus.OK);
+                    ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
+                    : new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -39,22 +42,22 @@ public class LoginController {
         try {
             if (!ControlInputTool.isValidObject(userLoginDto, UserLoginDto.class)) {
                 throw new Exception();
-            } 
+            }
             Map<String, String> token = authService.authenticate(userLoginDto);
             return token == null
-                ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
-                : new ResponseEntity<>(token, HttpStatus.OK);
+                    ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
+                    : new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
 
-    @PostMapping(value = "/logout", produces =  "application/json")
-    public ResponseEntity<String> logout(@RequestBody Map<String,String> tokens) {
+    @PostMapping(value = "/logout", produces = "application/json")
+    public ResponseEntity<String> logout(@RequestBody Map<String, String> tokens) {
         try {
             if (!ControlInputTool.isValidTokens(tokens)) {
                 throw new Exception();
-            } 
+            }
             authService.logout(tokens.get("accessToken"), tokens.get("refreshToken"));
             return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"Deconnexion reussie.\"}");
         } catch (Exception e) {
@@ -63,11 +66,13 @@ public class LoginController {
     }
 
     @PostMapping(value = "/refresh", produces = "application/json")
-    public ResponseEntity<String> refreshToken(@RequestBody(required = false) Map<String,String> refreshToken) {
+    public ResponseEntity<String> refreshToken(@RequestBody(required = false) Map<String, String> refreshToken,
+                                               @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                               @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         try {
             if (!ControlInputTool.isValidRefreshToken(refreshToken)) {
                 throw new Exception();
-            } 
+            }
             String newAccessToken = authService.refresh(refreshToken.get("refreshToken"));
             return ResponseEntity.ok("{\"accessToken\":\"" + newAccessToken + "\"}");
         } catch (Exception e) {
@@ -76,7 +81,9 @@ public class LoginController {
     }
 
     @GetMapping(value = "/is-connected", produces = "application/json")
-    public ResponseEntity<Boolean> isConnected() {
+    public ResponseEntity<Boolean> isConnected(
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         return ResponseEntity.ok(authService.isConnected());
     }
 }

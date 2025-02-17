@@ -17,12 +17,16 @@ public class AdminCategorieController {
 /*
 La création et la suppression des catégories n'est pas encore implémenté
     @PostMapping("/create")
-    public ResponseEntity<Categorie> createNewCategorie(@RequestBody Categorie categorie) {
+    public ResponseEntity<Categorie> createNewCategorie(@RequestBody Categorie categorie,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         if (categorie == null) return new ResponseEntity(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Categorie>(categorieService.create(categorie), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCategorie(@PathVariable Long id) {
+    public ResponseEntity<?> deleteCategorie(@PathVariable Long id,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         categorieService.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

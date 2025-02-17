@@ -33,7 +33,7 @@ public class ProduitControllerTest {
         Produit produit = new Produit();
         when(produitService.findAll()).thenReturn(Arrays.asList(produit));
 
-        ResponseEntity<List<Produit>> response = produitController.getAllProduits();
+        ResponseEntity<List<Produit>> response = produitController.getAllProduits("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

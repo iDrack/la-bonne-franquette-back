@@ -33,7 +33,7 @@ public class MenuControllerTest {
         Menu menu = new Menu();
         when(menuService.findAll()).thenReturn(Arrays.asList(menu));
 
-        ResponseEntity<List<Menu>> response = menuController.getAllMenu();
+        ResponseEntity<List<Menu>> response = menuController.getAllMenu("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

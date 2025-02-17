@@ -1,5 +1,8 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
@@ -34,7 +37,9 @@ public class PaiementController {
 
 
     @GetMapping("/generatePDF/{id}")
-    public ResponseEntity<String> generatePDF(@PathVariable("id") Long id) {
+    public ResponseEntity<String> generatePDF(@PathVariable("id") Long id,
+                                              @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                              @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         try {
             Paiement paiement = paiementService.getPaiementById(id);
 
@@ -47,7 +52,9 @@ public class PaiementController {
     }
 
     @GetMapping("/sendReceipt/{id}")
-    public ResponseEntity<String> sendReceipt(@PathVariable("id") Long id, @RequestBody String email, @RequestBody boolean seeDetails) {
+    public ResponseEntity<String> sendReceipt(@PathVariable("id") Long id, @RequestBody String email, @RequestBody boolean seeDetails,
+                                              @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                              @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         Pattern pattern = Pattern.compile(EMAIL_REGEX);
         Matcher matcher = pattern.matcher(email);
         if (matcher.matches()) {
@@ -65,14 +72,18 @@ public class PaiementController {
     }
 
     @GetMapping("/types")
-    public ResponseEntity<List<PaiementTypeCommande>> getAllPaiementsType() {
+    public ResponseEntity<List<PaiementTypeCommande>> getAllPaiementsType(
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         List<PaiementTypeCommande> paiementTypes = paiementService.getAllPaiementType();
         if (paiementTypes.isEmpty()) return new ResponseEntity<>(paiementTypes, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(paiementTypes, HttpStatus.OK);
     }
 
     @PostMapping("/{commandeId}")
-    public ResponseEntity<PaiementReadDTO> createNewPaiement(@RequestBody PaiementCreateDTO paiementDTO, @PathVariable Long commandeId) {
+    public ResponseEntity<PaiementReadDTO> createNewPaiement(@RequestBody PaiementCreateDTO paiementDTO, @PathVariable Long commandeId,
+                                                             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         Paiement retPaiement;
         try {
             retPaiement = paiementService.createPaiement(commandeId, paiementDTO);
@@ -86,20 +97,26 @@ TODO: Implémenter la gestion des paiements
 Les endpoints des paiements ne sont pas encore utilisés
 
     @GetMapping
-    public ResponseEntity<List<PaiementReadDTO>> getAllPaiements() {
+    public ResponseEntity<List<PaiementReadDTO>> getAllPaiements(
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         List<Paiement> paiements = paiementService.getAllPaiement();
         List<PaiementReadDTO> resultat = paiements.stream().map(x -> dtoTools.convertToDto(x, PaiementReadDTO.class)).toList();
         return new ResponseEntity<>(resultat, HttpStatus.FOUND);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PaiementReadDTO> getPaiementById(@PathVariable("id") Long id) {
+    public ResponseEntity<PaiementReadDTO> getPaiementById(@PathVariable("id") Long id,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         Optional<Paiement> paiementOptional = paiementService.getPaiementById(id);
         return paiementOptional.map(paiement -> new ResponseEntity<>(dtoTools.convertToDto(paiement, PaiementReadDTO.class), HttpStatus.FOUND)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/commande/{commandeId}")
-    public ResponseEntity<List<PaiementReadDTO>> getPaiementsByCommande(@PathVariable Long commandeId) {
+    public ResponseEntity<List<PaiementReadDTO>> getPaiementsByCommande(@PathVariable Long commandeId,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         List<Paiement> paiements;
         try {
             paiements = paiementService.getPaiementByCommande(commandeId);

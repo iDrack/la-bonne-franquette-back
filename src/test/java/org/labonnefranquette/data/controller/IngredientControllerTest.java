@@ -37,7 +37,7 @@ public class IngredientControllerTest {
         Ingredient ingredient = new Ingredient();
         when(ingredientService.findAll()).thenReturn(Arrays.asList(ingredient));
 
-        ResponseEntity<List<Ingredient>> response = ingredientController.getAllIngredients();
+        ResponseEntity<List<Ingredient>> response = ingredientController.getAllIngredients("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

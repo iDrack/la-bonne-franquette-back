@@ -18,12 +18,16 @@ public class AdminExtraController {
 La gestion des extras n'est pas encore implémenté dans l'application
 
     @PostMapping("/create")
-    public ResponseEntity<Extra> createNewExtra(@RequestBody Extra extra) {
+    public ResponseEntity<Extra> createNewExtra(@RequestBody Extra extra,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         if (extra == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Extra>(extraService.create(extra), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteExtra(@PathVariable Long id) {
+    public ResponseEntity<?> deleteExtra(@PathVariable Long id,
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         extraService.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

@@ -33,7 +33,7 @@ public class CategorieControllerTest {
         Categorie categorie = new Categorie();
         when(categorieService.findAll()).thenReturn(Arrays.asList(categorie));
 
-        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie();
+        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

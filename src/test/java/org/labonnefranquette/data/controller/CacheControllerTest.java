@@ -26,7 +26,7 @@ public class CacheControllerTest {
 
     @Test
     public void getCacheVersionSuccessfully() {
-        ResponseEntity<String> response = cacheController.getCache();
+        ResponseEntity<String> response = cacheController.getCache("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -36,7 +36,7 @@ public class CacheControllerTest {
     public void refreshCacheSuccessfully() {
         when(cacheService.clear()).thenReturn(true);
 
-        ResponseEntity<Boolean> response = cacheController.refreshCache();
+        ResponseEntity<Boolean> response = cacheController.refreshCache("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(true, response.getBody());
@@ -46,7 +46,7 @@ public class CacheControllerTest {
     public void refreshCacheFailure() {
         when(cacheService.clear()).thenReturn(false);
 
-        ResponseEntity<Boolean> response = cacheController.refreshCache();
+        ResponseEntity<Boolean> response = cacheController.refreshCache("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(false, response.getBody());
