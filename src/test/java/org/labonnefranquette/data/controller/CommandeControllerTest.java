@@ -64,7 +64,7 @@ public class CommandeControllerTest {
         when(commandeService.findAllCommandeWithStatut(StatusCommande.EN_COURS)).thenReturn(Arrays.asList(commande));
         when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(commandeReadDTO);
 
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("en-cours");
+        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("en-cours", "");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -73,7 +73,7 @@ public class CommandeControllerTest {
 
     @Test
     public void fetchAllCommandesEnCoursInvalidStatus() {
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("invalid-status");
+        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("invalid-status", "");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertNull(response.getBody());
@@ -121,7 +121,7 @@ public class CommandeControllerTest {
         CommandeCreateDTO createDTO = new CommandeCreateDTO(true, new ArrayList<>(), new ArrayList<>(), StatusCommande.EN_COURS, new ArrayList<>(), -1, false);
         when(dtoTools.convertToEntity(createDTO, Commande.class)).thenThrow(new PriceException("Price error"));
 
-        ResponseEntity<?> response = commandeController.createCommande(createDTO);
+        ResponseEntity<?> response = commandeController.createCommande(createDTO, "");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
         assertEquals("Price error", response.getBody().toString());
@@ -131,7 +131,7 @@ public class CommandeControllerTest {
     public void deleteCommandeSuccessfully() {
         when(commandeService.deleteCommande(1L)).thenReturn(true);
 
-        ResponseEntity<Boolean> response = commandeController.deleteCommande(1L);
+        ResponseEntity<Boolean> response = commandeController.deleteCommande(1L, "");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody());
@@ -144,7 +144,7 @@ public class CommandeControllerTest {
         when(commandeService.advanceStatusCommande(1L)).thenReturn(commande);
         when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(readDTO);
 
-        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(1L);
+        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(1L, "");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

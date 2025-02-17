@@ -42,7 +42,7 @@ public class PaiementControllerTest {
         Paiement paiement = new Paiement();
         when(paiementService.getPaiementById(1L)).thenReturn(paiement);
 
-        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false);
+        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false, "");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals("Facture envoyée.", response.getBody());
@@ -52,7 +52,7 @@ public class PaiementControllerTest {
     public void sendReceiptInvalidEmail() {
         String email = "invalid-email";
 
-        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false);
+        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false, "");
 
         assertEquals(HttpStatus.METHOD_NOT_ALLOWED, response.getStatusCode());
         assertEquals("L'e-mail est invalide.", response.getBody());
@@ -65,7 +65,7 @@ public class PaiementControllerTest {
         when(paiementService.getPaiementById(1L)).thenReturn(paiement);
         doThrow(new MessagingException()).when(mailService).sendMailReceipt(email, paiement, false);
 
-        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false);
+        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false, "");
 
         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
     }

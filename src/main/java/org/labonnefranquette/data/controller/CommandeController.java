@@ -1,5 +1,10 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
 import org.labonnefranquette.data.exception.PriceException;
@@ -12,17 +17,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.*;
-
-import jakarta.validation.Valid;
-
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/commandes")
 @Validated
+@Tag(name = "Commande Controller", description = "Controller pour les interractions des commandes.")
 public class CommandeController {
 
     private final SimpMessagingTemplate template;
@@ -31,6 +34,7 @@ public class CommandeController {
     public CommandeController(SimpMessagingTemplate template) {
         this.template = template;
     }
+
     @Autowired
     private CommandeService commandeService;
     @Autowired
@@ -46,13 +50,15 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
 */
 
     //Utilisé lors d'affichage de l'écran de la cuisine
-    @GetMapping(value= "/status/{status}", produces = "application/json")
-    public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandesEnCours(@PathVariable String status) {
+    @GetMapping(value = "/status/{status}", produces = "application/json")
+    public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandesEnCours(@PathVariable String status,
+                                                                          @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                                          @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         try {
             if (!ControlInputTool.isValidString(status)) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
-            StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-","_").toUpperCase());
+            StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-", "_").toUpperCase());
             List<Commande> commandes = commandeService.findAllCommandeWithStatut(statusCommande);
             List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
             return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
@@ -80,8 +86,10 @@ Les commandes ne sont jamais récupéré par leur id
 
     //Utilisé lors de l'envoie du panier dans l'écran de prise de commande
     @PostMapping(produces = "application/json")
-    public ResponseEntity<?> createCommande(@Valid @RequestBody CommandeCreateDTO commandeDto) {
-        try  {
+    public ResponseEntity<?> createCommande(@Valid @RequestBody CommandeCreateDTO commandeDto,
+                                            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+        try {
             if (!ControlInputTool.isValidObject(commandeDto, CommandeCreateDTO.class)) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
@@ -97,19 +105,23 @@ Les commandes ne sont jamais récupéré par leur id
 
     //Utilisé lors de la suppression de des commandes dans l'écran de cuisine
     @DeleteMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<Boolean> deleteCommande(@PathVariable Long id) {
+    public ResponseEntity<Boolean> deleteCommande(@PathVariable Long id,
+                                                  @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                  @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         if (!ControlInputTool.isValidNumber(id)) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }        
+        }
         return new ResponseEntity<>(commandeService.deleteCommande(id), HttpStatus.OK);
     }
 
     //Utilisé lors notamment lors de l'envoie de commande dans l'écran de cuisine
     @PutMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<CommandeReadDTO> updateCommande(@PathVariable long id) {
+    public ResponseEntity<CommandeReadDTO> updateCommande(@PathVariable long id,
+                                                          @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                          @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         if (!ControlInputTool.isValidNumber(id)) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        } 
+        }
         Commande commande = commandeService.advanceStatusCommande(id);
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
     }

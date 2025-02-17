@@ -33,7 +33,7 @@ public class ExtraControllerTest {
         Extra extra = new Extra();
         when(extraService.findAll()).thenReturn(Arrays.asList(extra));
 
-        ResponseEntity<List<Extra>> response = extraController.getAllExtra();
+        ResponseEntity<List<Extra>> response = extraController.getAllExtra("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
