@@ -4,5 +4,5 @@ import org.labonnefranquette.data.model.Cache;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CacheRepository extends JpaRepository<Cache, Long> {
-    String getFirstById(long id);
+    Cache getFirstById(long id);
 }
