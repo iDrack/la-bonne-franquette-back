@@ -1,8 +1,8 @@
 package org.labonnefranquette.data.services.impl;
 
-import org.labonnefranquette.data.cache.CacheService;
 import org.labonnefranquette.data.model.MenuItem;
 import org.labonnefranquette.data.repository.MenuItemRepository;
+import org.labonnefranquette.data.services.CacheService;
 import org.labonnefranquette.data.services.GenericService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,9 @@ public class MenuItemServiceImpl implements GenericService<MenuItem, Long> {
     @Autowired
     MenuItemRepository menuItemRepository;
 
+    @Autowired
+    private CacheService cacheService;
+
     @Override
     public List<MenuItem> findAll() {
         return menuItemRepository.findAll();
@@ -28,13 +31,13 @@ public class MenuItemServiceImpl implements GenericService<MenuItem, Long> {
 
     @Override
     public MenuItem create(MenuItem newMenuItem) {
-        CacheService.changeCacheVersion();
+        cacheService.updateCacheVersion();
         return menuItemRepository.save(newMenuItem);
     }
 
     @Override
     public void deleteById(Long id) {
-        CacheService.changeCacheVersion();
+        cacheService.updateCacheVersion();
         menuItemRepository.deleteById(id);
     }
 }

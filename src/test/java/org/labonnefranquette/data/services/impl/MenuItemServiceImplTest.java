@@ -2,9 +2,9 @@ package org.labonnefranquette.data.services.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.cache.CacheService;
 import org.labonnefranquette.data.model.MenuItem;
 import org.labonnefranquette.data.repository.MenuItemRepository;
+import org.labonnefranquette.data.services.CacheService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -13,7 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
 public class MenuItemServiceImplTest {
@@ -80,6 +81,6 @@ public class MenuItemServiceImplTest {
 
         menuItemService.deleteById(1L);
         verify(menuItemRepository, times(1)).deleteById(1L);
-        verify(cacheService, times(1)).changeCacheVersion();
+        verify(cacheService, times(1)).updateCacheVersion();
     }
 }

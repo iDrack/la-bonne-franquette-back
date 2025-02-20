@@ -128,3 +128,6 @@ VALUES (1, 1),
        (5, 9),
        (5, 10),
        (5, 11);
+
+INSERT INTO cache (id, version)
+VALUES (1, 1);
