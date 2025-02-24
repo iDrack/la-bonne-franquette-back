@@ -29,6 +29,6 @@ public class IngredientController {
     public ResponseEntity<List<Ingredient>> getAllIngredients(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(ingredientService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(ingredientService.findAll(authToken), HttpStatus.OK);
     }
 }

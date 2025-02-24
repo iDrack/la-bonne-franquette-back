@@ -29,6 +29,6 @@ public class MenuController {
     public ResponseEntity<List<Menu>> getAllMenu(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(menuService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(menuService.findAll(authToken), HttpStatus.OK);
     }
 }

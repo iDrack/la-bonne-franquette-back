@@ -1,6 +1,9 @@
 package org.labonnefranquette.data.security;
 
-import io.jsonwebtoken.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.labonnefranquette.data.security.service.JwtBlacklistService;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +21,7 @@ public class JWTUtil {
         this.secretKey = secretKey;
     }
 
-    public String generateToken(String username, List<String> roles) {
+    public String generateToken(String username, List<String> roles, Long restaurantId) {
         long expirationTime = 20 * 60 * 1000; // 20 minutes
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationTime);
@@ -26,13 +29,13 @@ public class JWTUtil {
         return Jwts.builder()
                 .setSubject(username)
                 .claim("roles", roles)
+                .claim("restaurantId", restaurantId)
                 .setAudience("access")
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(secretKey, SignatureAlgorithm.HS512)
                 .compact();
     }
-
 
     public String generateRefreshToken(String username) {
         long expirationTime = 24 * 60 * 60 * 1000; // 1 jour
@@ -82,5 +85,14 @@ public class JWTUtil {
                 .parseClaimsJws(token)
                 .getBody();
         return claims.get("roles", List.class);
+    }
+
+    public Long extractRestaurantId(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return claims.get("restaurantId", Long.class);
     }
 }

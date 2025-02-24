@@ -1,10 +1,10 @@
 package org.labonnefranquette.data.dto.impl;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
@@ -14,6 +14,7 @@ import java.util.Collection;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class CommandeCreateDTO  {
     @NotNull
     private Boolean surPlace;

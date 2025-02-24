@@ -1,6 +1,7 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import java.util.List;
 @Table(name = "menu_item")
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuItem {
+public class MenuItem implements HasRestaurant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,4 +46,9 @@ public class MenuItem {
     @JsonIgnoreProperties({"categorieSet", "ingredientSet"})
     @With
     private List<Produit> produitSet;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonIgnore
+    private Restaurant restaurant;
 }

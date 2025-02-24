@@ -30,7 +30,7 @@ public class CategorieController {
     public ResponseEntity<List<Categorie>> getAllCategorie(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(categorieService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(categorieService.findAll(authToken), HttpStatus.OK);
     }
 
 /*

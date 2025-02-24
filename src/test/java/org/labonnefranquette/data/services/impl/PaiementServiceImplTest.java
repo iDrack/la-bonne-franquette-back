@@ -8,17 +8,22 @@ import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.repository.PaiementRepository;
+import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
 import org.labonnefranquette.data.services.CommandeService;
+import org.labonnefranquette.data.utils.PDFTools;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,6 +32,9 @@ public class PaiementServiceImplTest {
 
     @Mock
     private PaiementRepository paiementRepository;
+
+    @Mock
+    private PaiementTypeCommandeRepository paiementTypeCommandeRepository;
 
     @Mock
     private CommandeService commandeService;
@@ -145,4 +153,25 @@ public class PaiementServiceImplTest {
         });
     }
 
+    @Test
+    public void getAllPaiementTypeSuccessfully() {
+        PaiementTypeCommande type1 = new PaiementTypeCommande(1L, "CB", true, new ArrayList<>());
+        PaiementTypeCommande type2 = new PaiementTypeCommande(2L, "Cash", true, new ArrayList<>());
+        when(paiementTypeCommandeRepository.findAll()).thenReturn(Arrays.asList(type1, type2));
+
+        List<PaiementTypeCommande> result = paiementService.getAllPaiementType();
+
+        assertEquals(2, result.size());
+        assertEquals(type1, result.get(0));
+        assertEquals(type2, result.get(1));
+    }
+
+    @Test
+    public void generatePDFSuccessfully() throws IOException {
+        PDFTools pdfTools = mock(PDFTools.class);
+        Path expectedPath = Path.of("tmp/pdf/tmp.pdf");
+        Path result = paiementService.generatePDF(paiement);
+
+        assertEquals(expectedPath, result);
+    }
 }

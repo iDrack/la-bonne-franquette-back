@@ -1,8 +1,8 @@
 package org.labonnefranquette.data.security.service;
 
-import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.repository.UserRepository;
+import org.labonnefranquette.data.security.JWTUtil;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -38,6 +38,10 @@ public class CustomUserDetailsService implements UserDetailsService {
                 userEntity.getPassword(),
                 authorities
         );
+    }
+
+    public String generateTokenWithRestaurantId(JWTUtil jwtUtil, User userEntity) {
+        return jwtUtil.generateToken(userEntity.getUsername(), Arrays.asList(userEntity.getRoles().split(",")), userEntity.getRestaurant().getId());
     }
 
 }

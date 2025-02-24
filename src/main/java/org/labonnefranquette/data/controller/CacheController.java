@@ -4,7 +4,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.labonnefranquette.data.cache.CacheService;
+import org.labonnefranquette.data.security.JWTUtil;
+import org.labonnefranquette.data.services.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,20 +22,16 @@ public class CacheController {
     @Autowired
     CacheService cacheService;
 
-    // Utilisé lors de l'initialisation de l'application
-    @GetMapping(value = "/version", produces = "application/plain")
-    public ResponseEntity<String> getCache(
-            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(CacheService.getVersion(), HttpStatus.OK);
-    }
+    @Autowired
+    JWTUtil jwtUtil;
 
-    // Utilisé dans la modale de paramètre
-    @GetMapping(value = "/rafraichir", produces = "application/json")
-    public ResponseEntity<Boolean> refreshCache(
+    // Utilisé lors de l'initialisation de l'application
+    @GetMapping(value = "/version", produces = "application/json")
+    public ResponseEntity<Integer> getCache(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(cacheService.clear(), HttpStatus.OK);
+        Long idRestaurant = jwtUtil.extractRestaurantId(authToken);
+        return new ResponseEntity<>(cacheService.getVersion(idRestaurant), HttpStatus.OK);
     }
 
 }

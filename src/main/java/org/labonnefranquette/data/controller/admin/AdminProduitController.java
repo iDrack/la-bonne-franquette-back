@@ -20,14 +20,14 @@ La gestion de la carte n'est pas gérer par l'application
     @PostMapping("/create")
     public ResponseEntity<Produit> createNewProduit(@RequestBody Produit produit,
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+            @RequestHeader(value = "Auth-Token", required = true) String authToken) {
         if (produit == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<Produit>(produitservice.create(produit), HttpStatus.CREATED);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProduit(@PathVariable Long id,
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+            @RequestHeader(value = "Auth-Token", required = true) String authToken) {
         produitservice.deleteById(id);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }

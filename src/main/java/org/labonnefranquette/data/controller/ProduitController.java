@@ -29,6 +29,6 @@ public class ProduitController {
     public ResponseEntity<List<Produit>> getAllProduits(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(produitService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(produitService.findAll(authToken), HttpStatus.OK);
     }
 }

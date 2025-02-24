@@ -6,6 +6,7 @@ import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.PaiementTypeCommande;
 import org.labonnefranquette.data.repository.PaiementRepository;
 import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
+import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.services.PaiementService;
 import org.labonnefranquette.data.utils.PDFTools;
@@ -27,6 +28,8 @@ public class PaiementServiceImpl implements PaiementService {
     CommandeService commandeService;
     @Autowired
     private PaiementTypeCommandeRepository paiementTypeCommandeRepository;
+    @Autowired
+    private JWTUtil jwtUtil;
 
     @Override
     public List<Paiement> getAllPaiement() {
@@ -40,8 +43,11 @@ public class PaiementServiceImpl implements PaiementService {
 
     @Override
     public Paiement createPaiement(Long idCommande, PaiementCreateDTO paiementCreateDTO) throws RuntimeException {
+
+
         Commande commande = commandeService.findCommandeById(idCommande);
         Paiement nouveauPaiement = new Paiement(paiementCreateDTO.getType(), paiementCreateDTO.getTicketEnvoye(), paiementCreateDTO.getPrixTTC(), paiementCreateDTO.getPrixTTC() * commande.getTauxTVA(), commande);
+        nouveauPaiement.setRestaurant(commande.getRestaurant());
         paiementRepository.save(nouveauPaiement);
         if (commande.getPaiementSet() == null) {
             commande.setPaiementSet(new ArrayList<Paiement>());

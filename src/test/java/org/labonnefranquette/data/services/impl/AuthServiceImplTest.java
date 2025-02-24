@@ -3,10 +3,7 @@ package org.labonnefranquette.data.services.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.dto.impl.UserCreateDto;
-import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.model.User;
-import org.labonnefranquette.data.model.enums.Roles;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.security.service.CustomUserDetailsService;
 import org.labonnefranquette.data.security.service.JwtBlacklistService;
@@ -16,14 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ActiveProfiles;
-
-import java.util.Collections;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -76,7 +69,7 @@ public class AuthServiceImplTest {
         when(jwtUtil.isValidRefreshToken(refreshToken)).thenReturn(true);
         when(jwtUtil.extractUsername(refreshToken)).thenReturn("testUser");
         when(userDetailsService.loadUserByUsername("testUser")).thenReturn(userDetails);
-        when(jwtUtil.generateToken(anyString(), anyList())).thenReturn("newAccessToken");
+        when(jwtUtil.generateToken(anyString(), anyList(), anyLong())).thenReturn("newAccessToken");
         // Act
         String newAccessToken = authService.refresh(refreshToken);
         // Assert

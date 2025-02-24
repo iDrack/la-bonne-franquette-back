@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.labonnefranquette.data.model.enums.Roles;
+import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 
 import java.util.Date;
 
@@ -12,7 +13,7 @@ import java.util.Date;
         @UniqueConstraint(columnNames = {"email"})
 })
 @Data
-public class User {
+public class User implements HasRestaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -33,6 +34,9 @@ public class User {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String roles;
 
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
     public void setRoles(Roles role) {
         if (this.roles == null) {

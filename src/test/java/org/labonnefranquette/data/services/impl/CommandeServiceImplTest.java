@@ -6,111 +6,143 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.entity.Article;
-import org.labonnefranquette.data.model.entity.Selection;
+import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.repository.CommandeRepository;
+import org.labonnefranquette.data.security.JWTUtil;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.labonnefranquette.data.utils.CommandeTools;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test")
-public class CommandeServiceImplTest {
+class CommandeServiceImplTest {
 
     @Mock
     private CommandeRepository commandeRepository;
-
     @Mock
     private CommandeTools commandeTools;
+    @Mock
+    private RestaurantService restaurantService;
+    @Mock
+    private JWTUtil jwtUtil;
 
     @InjectMocks
-    private CommandeServiceImpl commandeService;
+    private CommandeServiceImpl commandeServiceImpl;
 
     private Commande commande;
+    private Restaurant restaurant;
+    private Paiement paiement;
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         commande = new Commande();
-        commande.setId(1L);
-        commande.setDateSaisie(new Date());
-        commande.setNbArticle(1);
-        commande.setNumero((short) 123);
-        commande.setPaiementType("ESP");
-        commande.setStatus(StatusCommande.EN_COURS);
-        commande.setPaiementSet(new ArrayList<Paiement>());
-        commande.setArticles(List.of(new Article()));
-        commande.setMenus(List.of(new Selection()));
+        restaurant = new Restaurant();
+        paiement = new Paiement();
     }
 
     @Test
-    public void findAllCommandeSuccessfully() {
-        when(commandeRepository.findAll()).thenReturn(Arrays.asList(commande));
+    void findAllCommandeWithStatut_ReturnsFilteredCommandes() {
+        when(jwtUtil.extractRestaurantId(anyString())).thenReturn(1L);
+        when(commandeRepository.findAllCommandeWithStatut(any(StatusCommande.class))).thenReturn(Collections.singletonList(commande));
+        commande.setRestaurant(restaurant);
+        restaurant.setId(1L);
 
-        List<Commande> result = commandeService.findAllCommande();
+        var result = commandeServiceImpl.findAllCommandeWithStatut(StatusCommande.EN_COURS, "token");
 
         assertEquals(1, result.size());
-        assertEquals(commande, result.get(0));
     }
 
     @Test
-    public void findCommandeByIdSuccessfully() {
+    void findCommandeById_ReturnsCommande() {
         when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
 
-        Commande result = commandeService.findCommandeById(1L);
+        var result = commandeServiceImpl.findCommandeById(1L);
 
-        assertEquals(commande, result);
+        assertNotNull(result);
     }
 
     @Test
-    public void createCommandeSuccessfully() throws PriceException {
+    void findCommandeById_ThrowsExceptionWhenNotFound() {
+        when(commandeRepository.findById(anyLong())).thenReturn(Optional.empty());
+
+        assertThrows(RuntimeException.class, () -> commandeServiceImpl.findCommandeById(1L));
+    }
+
+    @Test
+    void createCommande_Success() throws PriceException {
+        when(jwtUtil.extractRestaurantId(anyString())).thenReturn(1L);
+        when(restaurantService.findAllById(anyLong())).thenReturn(Optional.of(restaurant));
         when(commandeTools.isCorrectPrice(any(Commande.class))).thenReturn(true);
         when(commandeRepository.save(any(Commande.class))).thenReturn(commande);
 
-        Commande result = commandeService.createCommande(commande);
+        var result = commandeServiceImpl.createCommande(commande, "token");
 
-        assertEquals(commande, result);
+        assertNotNull(result);
     }
 
     @Test
-    public void deleteCommandeSuccessfully() {
-        when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
-        doNothing().when(commandeRepository).deleteById(anyLong());
+    void createCommande_ThrowsPriceException() {
+        when(jwtUtil.extractRestaurantId(anyString())).thenReturn(1L);
+        when(restaurantService.findAllById(anyLong())).thenReturn(Optional.of(restaurant));
+        when(commandeTools.isCorrectPrice(any(Commande.class))).thenReturn(false);
 
-        Boolean result = commandeService.deleteCommande(1L);
+        assertThrows(PriceException.class, () -> commandeServiceImpl.createCommande(commande, "token"));
+    }
+
+    @Test
+    void deleteCommande_ReturnsTrueWhenDeleted() {
+        when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
+
+        var result = commandeServiceImpl.deleteCommande(1L);
 
         assertTrue(result);
     }
 
     @Test
-    public void ajoutPaiementSuccessfully() {
-        Paiement paiement = new Paiement();
-        when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
-        when(commandeRepository.save(any(Commande.class))).thenReturn(commande);
+    void deleteCommande_ReturnsFalseWhenNotFound() {
+        when(commandeRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        Commande result = commandeService.ajoutPaiement(commande, paiement);
+        var result = commandeServiceImpl.deleteCommande(1L);
 
-        assertEquals(commande, result);
+        assertFalse(result);
     }
 
     @Test
-    public void advanceStatusCommandeSuccessfully() {
+    void ajoutPaiement_AddsPaiement() {
         when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
         when(commandeRepository.save(any(Commande.class))).thenReturn(commande);
 
-        Commande result = commandeService.advanceStatusCommande(commande.getId());
+        var result = commandeServiceImpl.ajoutPaiement(commande, paiement);
 
-        assertEquals(commande, result);
+        assertNotNull(result);
+    }
+
+    @Test
+    void advanceStatusCommande_AdvancesStatus() {
+        when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
+        commande.setStatus(StatusCommande.EN_COURS);
+        when(commandeRepository.save(any(Commande.class))).thenReturn(commande);
+
+        var result = commandeServiceImpl.advanceStatusCommande(1L);
+
+        assertEquals(StatusCommande.TERMINEE, result.getStatus());
+    }
+
+    @Test
+    void advanceStatusCommande_DoesNotAdvanceStatusWhenNotEnCours() {
+        when(commandeRepository.findById(anyLong())).thenReturn(Optional.of(commande));
+        commande.setStatus(StatusCommande.TERMINEE);
+
+        var result = commandeServiceImpl.advanceStatusCommande(1L);
+
+        assertEquals(StatusCommande.TERMINEE, result.getStatus());
     }
 }

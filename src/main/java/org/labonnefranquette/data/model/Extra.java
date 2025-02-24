@@ -34,4 +34,5 @@ public class Extra extends Ingredient {
     @JsonBackReference(value = "produit-extra")
     @With
     private Set<Produit> produitSet;
+
 }

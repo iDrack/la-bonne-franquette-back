@@ -3,7 +3,8 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.model.Menu;
-import org.labonnefranquette.data.services.GenericService;
+import org.labonnefranquette.data.repository.MenuRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +25,7 @@ import static org.mockito.Mockito.when;
 public class MenuControllerTest {
 
     @Mock
-    private GenericService<Menu, Long> menuService;
+    private GenericServiceImpl<Menu, MenuRepository, Long> menuService;
 
     @InjectMocks
     private MenuController menuController;
@@ -31,7 +33,7 @@ public class MenuControllerTest {
     @Test
     public void getAllMenuSuccessfully() {
         Menu menu = new Menu();
-        when(menuService.findAll()).thenReturn(Arrays.asList(menu));
+        when(menuService.findAll(anyString())).thenReturn(Arrays.asList(menu));
 
         ResponseEntity<List<Menu>> response = menuController.getAllMenu("");
 
