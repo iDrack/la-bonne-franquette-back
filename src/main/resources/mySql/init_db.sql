@@ -1,6 +1,6 @@
 -- user admin
 
-INSERT INTO restaurants(id, name)
+INSERT INTO restaurant(id, name)
 VALUES (1, 'test');
 
 INSERT INTO users(username, password, roles, restaurant_id)
