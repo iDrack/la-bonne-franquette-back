@@ -26,7 +26,7 @@ public class CacheController {
     JWTUtil jwtUtil;
 
     // Utilisé lors de l'initialisation de l'application
-    @GetMapping(value = "/version", produces = "application/plain")
+    @GetMapping(value = "/version", produces = "application/json")
     public ResponseEntity<Integer> getCache(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {

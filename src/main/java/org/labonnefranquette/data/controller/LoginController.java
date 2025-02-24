@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -39,16 +40,24 @@ public class LoginController {
 
     @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginDto userLoginDto) {
+        System.out.println(userLoginDto);
         try {
             if (!ControlInputTool.isValidObject(userLoginDto, UserLoginDto.class)) {
                 throw new Exception();
             }
             Map<String, String> token = authService.authenticate(userLoginDto);
-            return token == null
-                    ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
-                    : new ResponseEntity<>(token, HttpStatus.OK);
+            if (token == null) {
+                Map<String, String> response = new HashMap<>();
+                response.put("Erreur", "Identifiants de connexions incorrect.");
+                System.out.println("Identifiants de connexions incorrect.");
+                return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            Map<String, String> response = new HashMap<>();
+            response.put("Erreur", e.toString());
+            System.out.println(e);
+            return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
