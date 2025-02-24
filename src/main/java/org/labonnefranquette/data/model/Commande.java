@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
@@ -11,6 +12,7 @@ import lombok.With;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 import org.labonnefranquette.data.utils.JsonConverterTools;
 
 import java.util.Collection;
@@ -21,7 +23,7 @@ import java.util.Date;
 @Table(name = "commande")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Commande {
+public class Commande implements HasRestaurant {
 
     @Column(name = "taux_tva", nullable = false)
     private final int tauxTVA = 10;
@@ -75,6 +77,11 @@ public class Commande {
 
     @Column(name = "paiement_type", nullable = true, length = 5)
     private String paiementType;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonIgnore
+    private Restaurant restaurant;
 
     @Override
     public String toString() {

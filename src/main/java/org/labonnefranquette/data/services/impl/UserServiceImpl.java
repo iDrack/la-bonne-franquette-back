@@ -1,9 +1,11 @@
 package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
+import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.model.enums.Roles;
 import org.labonnefranquette.data.repository.UserRepository;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.labonnefranquette.data.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,10 +18,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RestaurantService restaurantService;
 
     @Override
     public User createUser(UserCreateDto userCreateDto) {
-
+        Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + " - Restaurant introuvable."));
         if (!this.dataIsConformed(userCreateDto) || Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur");
         }
@@ -29,10 +33,16 @@ public class UserServiceImpl implements UserService {
         user.setUsername(userCreateDto.getUsername());
         user.setPassword(userCreateDto.getPassword());
         user.setRoles(Roles.ROLE_USER);
+        user.setRestaurant(restaurant);
 
         this.userRepository.save(user);
         return user;
 
+    }
+
+    @Override
+    public User findUserByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 
     Boolean dataIsConformed(UserCreateDto user) {

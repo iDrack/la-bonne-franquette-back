@@ -59,7 +59,7 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
             StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-", "_").toUpperCase());
-            List<Commande> commandes = commandeService.findAllCommandeWithStatut(statusCommande);
+            List<Commande> commandes = commandeService.findAllCommandeWithStatut(statusCommande, authToken);
             List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
             return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
@@ -93,7 +93,7 @@ Les commandes ne sont jamais récupéré par leur id
             if (!ControlInputTool.isValidObject(commandeDto, CommandeCreateDTO.class)) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
-            Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class));
+            Commande commande = commandeService.createCommande(dtoTools.convertToEntity(commandeDto, Commande.class), authToken);
             CommandeReadDTO commandeReadDTO = dtoTools.convertToDto(commande, CommandeReadDTO.class);
             this.template.convertAndSend("/socket/commande", commandeReadDTO);
             return new ResponseEntity<>(commandeReadDTO, HttpStatus.CREATED);

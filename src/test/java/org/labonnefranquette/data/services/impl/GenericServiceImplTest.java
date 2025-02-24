@@ -2,81 +2,137 @@ package org.labonnefranquette.data.services.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.Categorie;
-import org.labonnefranquette.data.repository.CategorieRepository;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.labonnefranquette.data.model.Restaurant;
+import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.security.JWTUtil;
+import org.labonnefranquette.data.services.CacheService;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class GenericServiceImplTest {
 
     @Mock
-    private CategorieRepository categorieRepository;
+    private CacheService cacheService;
+
+    @Mock
+    private RestaurantService restaurantService;
+
+    @Mock
+    private JpaRepository<HasRestaurant, Long> repository;
+
+    @Mock
+    private JWTUtil jwtUtil;
 
     @InjectMocks
-    private GenericServiceImpl<Categorie, CategorieRepository, Long> categorieService;
+    private GenericServiceImpl<HasRestaurant, JpaRepository<HasRestaurant, Long>, Long> genericService;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        genericService = new GenericServiceImpl<>(repository);
     }
 
     @Test
-    void findAll_shouldReturnAllCategories() {
-        List<Categorie> categories = Collections.singletonList(new Categorie());
-        when(categorieRepository.findAll()).thenReturn(categories);
+    void findAll_returnsAllItems() {
+        List<HasRestaurant> items = List.of(mock(HasRestaurant.class), mock(HasRestaurant.class));
+        when(repository.findAll()).thenReturn(items);
 
-        List<Categorie> result = categorieService.findAll();
+        List<HasRestaurant> result = genericService.findAll();
 
-        assertNotNull(result);
-        assertEquals(1, result.size());
+        assertEquals(items, result);
     }
 
     @Test
-    void findAllById_shouldReturnCategoryWhenIdExists() {
-        Categorie categorie = new Categorie();
-        when(categorieRepository.findById(1L)).thenReturn(Optional.of(categorie));
+    void findAllById_returnsItemWhenFound() {
+        HasRestaurant item = mock(HasRestaurant.class);
+        when(repository.findById(1L)).thenReturn(Optional.of(item));
 
-        Optional<Categorie> result = categorieService.findAllById(1L);
+        Optional<HasRestaurant> result = genericService.findAllById(1L);
 
         assertTrue(result.isPresent());
-        assertEquals(categorie, result.get());
+        assertEquals(item, result.get());
     }
 
     @Test
-    void findAllById_shouldReturnEmptyWhenIdDoesNotExist() {
-        when(categorieRepository.findById(1L)).thenReturn(Optional.empty());
+    void findAllById_returnsEmptyWhenNotFound() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<Categorie> result = categorieService.findAllById(1L);
+        Optional<HasRestaurant> result = genericService.findAllById(1L);
 
         assertFalse(result.isPresent());
     }
 
     @Test
-    void create_shouldSaveAndReturnNewCategory() {
-        Categorie newCategorie = new Categorie();
-        when(categorieRepository.save(newCategorie)).thenReturn(newCategorie);
+    void deleteById_deletesItemAndUpdatesCacheWhenFound() {
+        HasRestaurant item = mock(HasRestaurant.class);
+        when(item.getRestaurant()).thenReturn((Restaurant) mock(HasRestaurant.class));
+        when(item.getRestaurant().getId()).thenReturn(1L);
+        when(repository.findById(1L)).thenReturn(Optional.of(item));
 
-        Categorie result = categorieService.create(newCategorie);
+        genericService.deleteById(1L);
 
-        assertNotNull(result);
-        assertEquals(newCategorie, result);
-        verify(categorieRepository, times(1)).save(newCategorie);
+        verify(cacheService).updateCacheVersion(1L);
+        verify(repository).deleteById(1L);
     }
 
     @Test
-    void deleteById_shouldDeleteCategory() {
-        doNothing().when(categorieRepository).deleteById(1L);
+    void deleteById_doesNothingWhenNotFound() {
+        when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        categorieService.deleteById(1L);
+        genericService.deleteById(1L);
 
-        verify(categorieRepository, times(1)).deleteById(1L);
+        verify(cacheService, never()).updateCacheVersion(anyLong());
+        verify(repository, never()).deleteById(anyLong());
+    }
+
+    @Test
+    void findAll_withToken_returnsFilteredItems() {
+        HasRestaurant item1 = mock(HasRestaurant.class);
+        HasRestaurant item2 = mock(HasRestaurant.class);
+        when(item1.getRestaurant().getId()).thenReturn(1L);
+        when(item2.getRestaurant().getId()).thenReturn(2L);
+        when(repository.findAll()).thenReturn(List.of(item1, item2));
+        when(jwtUtil.extractRestaurantId("token")).thenReturn(1L);
+
+        List<HasRestaurant> result = genericService.findAll("token");
+
+        assertEquals(1, result.size());
+        assertEquals(item1, result.get(0));
+    }
+
+    @Test
+    void create_savesNewItemAndUpdatesCache() {
+        HasRestaurant newItem = mock(HasRestaurant.class);
+        Restaurant restaurant = mock(Restaurant.class);
+        when(jwtUtil.extractRestaurantId("token")).thenReturn(1L);
+        when(restaurantService.findAllById(1L)).thenReturn(Optional.of(restaurant));
+        when(repository.save(newItem)).thenReturn(newItem);
+
+        HasRestaurant result = genericService.create(newItem, "token");
+
+        verify(newItem).setRestaurant(any(Restaurant.class));
+        verify(cacheService).updateCacheVersion(1L);
+        assertEquals(newItem, result);
+    }
+
+    @Test
+    void create_throwsExceptionWhenRestaurantNotFound() {
+        HasRestaurant newItem = mock(HasRestaurant.class);
+        when(jwtUtil.extractRestaurantId("token")).thenReturn(1L);
+        when(restaurantService.findAllById(1L)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> genericService.create(newItem, "token"));
+
+        assertEquals("Impossible de trouver de restaurant : 1", exception.getMessage());
     }
 }

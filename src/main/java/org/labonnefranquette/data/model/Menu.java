@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 
 import java.util.Collection;
 
@@ -15,7 +17,7 @@ import java.util.Collection;
 @Table(name = "menu")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Menu {
+public class Menu implements HasRestaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -32,4 +34,9 @@ public class Menu {
     @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
     @With
     private Collection<MenuItem> menuItemSet;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonIgnore
+    private Restaurant restaurant;
 }

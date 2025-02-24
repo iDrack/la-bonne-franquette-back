@@ -16,7 +16,7 @@ import java.security.Key;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
@@ -27,126 +27,119 @@ public class JWTUtilsTest {
     @InjectMocks
     private JWTUtil jwtUtil;
 
-    private Key secretKey;
-
     @BeforeEach
     public void setup() {
-        secretKey = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS512);
+        Key secretKey = Keys.secretKeyFor(io.jsonwebtoken.SignatureAlgorithm.HS512);
         jwtUtil = new JWTUtil(secretKey);
     }
 
     @Test
     public void generateTokenSuccessfully() {
-        // Arrange
         String username = "testUser";
         List<String> roles = List.of("ROLE_USER");
-        // Act
-        String token = jwtUtil.generateToken(username, roles);
-        // Arrange
+
+        String token = jwtUtil.generateToken(username, roles, 1L);
+
         assertNotNull(token);
     }
 
     @Test
     public void generateRefreshTokenSuccessfully() {
-        // Arrange
         String username = "testUser";
-        // Act
         String token = jwtUtil.generateRefreshToken(username);
-        // Assert
         assertNotNull(token);
     }
 
     @Test
     public void isValidAccessTokenSuccessfully() {
-        // Arrange
-        String token = jwtUtil.generateToken("testUser", List.of("ROLE_USER"));
+        String token = jwtUtil.generateToken("testUser", List.of("ROLE_USER"), 1L);
         try (MockedStatic<JwtBlacklistService> mockedStatic = mockStatic(JwtBlacklistService.class)) {
             mockedStatic.when(() -> JwtBlacklistService.isBlacklisted(token)).thenReturn(false);
-            // Act
             boolean isValid = jwtUtil.isValidAccessToken(token);
-            // Assert
             assertTrue(isValid);
         }
     }
 
     @Test
     public void isValidAccessTokenFail() {
-        // Arrange
-        String token = jwtUtil.generateToken("testUser", List.of("ROLE_USER"));
+        String token = jwtUtil.generateToken("testUser", List.of("ROLE_USER"), 1L);
         try (MockedStatic<JwtBlacklistService> mockedStatic = mockStatic(JwtBlacklistService.class)) {
             mockedStatic.when(() -> JwtBlacklistService.isBlacklisted(token)).thenReturn(true);
-            // Act
             boolean isValid = jwtUtil.isValidAccessToken(token);
-            // Assert
             assertFalse(isValid);
         }
     }
 
     @Test
     public void isValidRefreshTokenSuccessfully() {
-        // Arrange
         String token = jwtUtil.generateRefreshToken("testUser");
         try (MockedStatic<JwtBlacklistService> mockedStatic = mockStatic(JwtBlacklistService.class)) {
             mockedStatic.when(() -> JwtBlacklistService.isBlacklisted(token)).thenReturn(false);
-            // Act
             boolean isValid = jwtUtil.isValidRefreshToken(token);
-            // Assert
             assertTrue(isValid);
         }
     }
 
     @Test
     public void isValidRefreshTokenFail() {
-        // Arrange
         String token = jwtUtil.generateRefreshToken("testUser");
         try (MockedStatic<JwtBlacklistService> mockedStatic = mockStatic(JwtBlacklistService.class)) {
             mockedStatic.when(() -> JwtBlacklistService.isBlacklisted(token)).thenReturn(true);
-            // Act
             boolean isValid = jwtUtil.isValidRefreshToken(token);
-            // Assert
             assertFalse(isValid);
         }
     }
 
     @Test
     public void extractUsernameSuccessfully() {
-        // Arrange
         String username = "testUser";
-        String token = jwtUtil.generateToken(username, List.of("ROLE_USER"));
-
-        // Act
+        String token = jwtUtil.generateToken(username, List.of("ROLE_USER"), 1L);
         String extractedUsername = jwtUtil.extractUsername(token);
-
-        // Assert
         assertEquals(username, extractedUsername);
     }
 
     @Test
     public void extractUsernameFail() {
-        // Arrange
         String token = "invalidToken";
-        // Act & Assert
         assertThrows(JwtException.class, () -> jwtUtil.extractUsername(token));
     }
 
     @Test
     public void extractRolesSuccessfully() {
-        // Arrange
         List<String> roles = List.of("ROLE_USER");
-        String token = jwtUtil.generateToken("testUser", roles);
-
-        // Act
+        String token = jwtUtil.generateToken("testUser", roles, 1L);
         List<String> extractedRoles = jwtUtil.extractRoles(token);
-
-        // Assert
         assertEquals(roles, extractedRoles);
     }
 
     @Test
     public void extractRolesFail() {
-        // Arrange
         String token = "invalidToken";
-        // Act & Assert
         assertThrows(JwtException.class, () -> jwtUtil.extractRoles(token));
+    }
+
+    @Test
+    public void generateTokenWithRestaurantIdSuccessfully() {
+        String username = "testUser";
+        List<String> roles = List.of("ROLE_USER");
+        Long restaurantId = 123L;
+        String token = jwtUtil.generateToken(username, roles, restaurantId);
+        assertNotNull(token);
+    }
+
+    @Test
+    public void extractRestaurantIdSuccessfully() {
+        String username = "testUser";
+        List<String> roles = List.of("ROLE_USER");
+        Long restaurantId = 123L;
+        String token = jwtUtil.generateToken(username, roles, restaurantId);
+        Long extractedRestaurantId = jwtUtil.extractRestaurantId(token);
+        assertEquals(restaurantId, extractedRestaurantId);
+    }
+
+    @Test
+    public void extractRestaurantIdFail() {
+        String token = "invalidToken";
+        assertThrows(JwtException.class, () -> jwtUtil.extractRestaurantId(token));
     }
 }

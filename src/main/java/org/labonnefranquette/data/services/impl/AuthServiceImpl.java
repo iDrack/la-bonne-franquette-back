@@ -3,8 +3,8 @@ package org.labonnefranquette.data.services.impl;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.model.User;
-import org.labonnefranquette.data.security.service.CustomUserDetailsService;
 import org.labonnefranquette.data.security.JWTUtil;
+import org.labonnefranquette.data.security.service.CustomUserDetailsService;
 import org.labonnefranquette.data.security.service.JwtBlacklistService;
 import org.labonnefranquette.data.services.AuthService;
 import org.labonnefranquette.data.services.UserService;
@@ -31,13 +31,15 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserDetailsService userDetailsService;
     private final UserService userService;
     private final DtoTools dtoTools;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public AuthServiceImpl(AuthenticationManager authenticationManager, JWTUtil jwtUtil, CustomUserDetailsService userDetailsService,  UserService userService, DtoTools dtoTools) {
+    public AuthServiceImpl(AuthenticationManager authenticationManager, JWTUtil jwtUtil, CustomUserDetailsService userDetailsService, UserService userService, DtoTools dtoTools, CustomUserDetailsService customUserDetailsService) {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.dtoTools = dtoTools;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @Override
@@ -50,11 +52,13 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword()));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userLoginDto.getUsername());
+       User user = userService.findUserByUsername(userLoginDto.getUsername());
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        String accessToken = jwtUtil.generateToken(userDetails.getUsername(), roles);
+       String accessToken = customUserDetailsService.generateTokenWithRestaurantId(jwtUtil, user);
+       //String accessToken = jwtUtil.generateToken(userDetails.getUsername(), roles);
         String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
         Map<String, String> tokens = new HashMap<>();
@@ -80,7 +84,8 @@ public class AuthServiceImpl implements AuthService {
                 List<String> roles = userDetailsService.loadUserByUsername(username).getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList());
-                return jwtUtil.generateToken(username, roles);
+                User user = userService.findUserByUsername(username);
+                return jwtUtil.generateToken(username, roles, user.getRestaurant().getId());
             }
         } catch (Exception e) {
             return null;

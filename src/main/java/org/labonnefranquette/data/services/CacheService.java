@@ -2,7 +2,7 @@ package org.labonnefranquette.data.services;
 
 public interface CacheService {
 
-    public int getVersion();
+    public int getVersion(Long idRestaurant);
 
-    public void updateCacheVersion();
+    public void updateCacheVersion(Long idRestaurant);
 }

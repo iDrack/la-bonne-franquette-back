@@ -25,45 +25,45 @@ public class CacheServiceImplTest {
     private CacheServiceImpl cacheService;
 
     @Test
-    public void getVersionSuccessfully() {
+    public void getVersionWithValidRestaurantId() {
         Cache cache = new Cache();
         cache.setVersion(1);
-        when(cacheRepository.findById(1L)).thenReturn(Optional.of(cache));
+        when(cacheRepository.getByRestaurantId(1L)).thenReturn(Optional.of(cache));
 
-        int version = cacheService.getVersion();
+        int version = cacheService.getVersion(1L);
 
         assertEquals(1, version);
     }
 
     @Test
-    public void getVersionCacheNotFound() {
-        when(cacheRepository.findById(1L)).thenReturn(Optional.empty());
+    public void getVersionWithInvalidRestaurantId() {
+        when(cacheRepository.getByRestaurantId(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            cacheService.getVersion();
+            cacheService.getVersion(1L);
         });
 
         assertEquals("Impossible de récupérer le cache.", exception.getMessage());
     }
 
     @Test
-    public void updateCacheVersionSuccessfully() {
+    public void updateCacheVersionWithValidRestaurantId() {
         Cache cache = new Cache();
         cache.setVersion(1);
-        when(cacheRepository.findById(1L)).thenReturn(Optional.of(cache));
+        when(cacheRepository.getByRestaurantId(1L)).thenReturn(Optional.of(cache));
 
-        cacheService.updateCacheVersion();
+        cacheService.updateCacheVersion(1L);
 
         verify(cacheRepository).save(cache);
         assertEquals(2, cache.getVersion());
     }
 
     @Test
-    public void updateCacheVersionCacheNotFound() {
-        when(cacheRepository.findById(1L)).thenReturn(Optional.empty());
+    public void updateCacheVersionWithInvalidRestaurantId() {
+        when(cacheRepository.getByRestaurantId(1L)).thenReturn(Optional.empty());
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            cacheService.updateCacheVersion();
+            cacheService.updateCacheVersion(1L);
         });
 
         assertEquals("Impossible de récupérer le cache.", exception.getMessage());

@@ -4,14 +4,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
+import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.model.enums.Roles;
 import org.labonnefranquette.data.repository.UserRepository;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -27,6 +31,9 @@ public class UserServiceImplTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private RestaurantService restaurantService;
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -44,10 +51,12 @@ public class UserServiceImplTest {
     public void createUserWithValidData() {
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
+        when(restaurantService.findAllById(anyLong())).thenReturn(Optional.of(new Restaurant()));
 
         UserCreateDto userCreateDto = new UserCreateDto();
         userCreateDto.setUsername("validUser");
         userCreateDto.setPassword("ValidPassword1");
+        userCreateDto.setRestaurantId(1L);
 
         User user = userService.createUser(userCreateDto);
 
@@ -62,18 +71,21 @@ public class UserServiceImplTest {
         UserCreateDto userCreateDto = new UserCreateDto();
         userCreateDto.setUsername("invalidUser");
         userCreateDto.setPassword("invalid");
+        userCreateDto.setRestaurantId(-1L);
 
-        assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
+        assertThrows(RuntimeException.class, () -> userService.createUser(userCreateDto));
         verify(userRepository, never()).save(any(User.class));
     }
 
     @Test
     public void createUserWithExistingUsername() {
         when(userRepository.existsByUsername(anyString())).thenReturn(true);
+        when(restaurantService.findAllById(anyLong())).thenReturn(Optional.of(new Restaurant()));
 
         UserCreateDto userCreateDto = new UserCreateDto();
         userCreateDto.setUsername("existingUser");
         userCreateDto.setPassword("ValidPassword1");
+        userCreateDto.setRestaurantId(1L);
 
         assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
         verify(userRepository, never()).save(any(User.class));

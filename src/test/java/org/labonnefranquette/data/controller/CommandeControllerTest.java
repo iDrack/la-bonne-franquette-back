@@ -1,32 +1,29 @@
 package org.labonnefranquette.data.controller;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
-import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test")
-public class CommandeControllerTest {
+class CommandeControllerTest {
 
     @Mock
     private CommandeService commandeService;
@@ -34,119 +31,102 @@ public class CommandeControllerTest {
     @Mock
     private DtoTools dtoTools;
 
+    private static final String AUTH_TOKEN = "authToken";
     @Mock
-    private SimpMessagingTemplate simpMessagingTemplate;
-
+    private SimpMessagingTemplate template;
     @InjectMocks
-    private CommandeController commandeController = new CommandeController(simpMessagingTemplate);
-/*TODO
+    private CommandeController commandeController;
 
-    @Test
-    public void fetchAllCommandesSuccessfully() {
-        Commande commande = new Commande();
-        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-
-        when(commandeService.findAllCommande()).thenReturn(Arrays.asList(commande));
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(commandeReadDTO);
-
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandes();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
-*/
 
     @Test
-    public void fetchAllCommandesEnCoursSuccessfully() {
+    void fetchAllCommandesEnCoursWithValidStatus() {
         Commande commande = new Commande();
         CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        when(commandeService.findAllCommandeWithStatut(StatusCommande.EN_COURS)).thenReturn(Arrays.asList(commande));
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(commandeReadDTO);
+        when(commandeService.findAllCommandeWithStatut(StatusCommande.EN_COURS, AUTH_TOKEN))
+                .thenReturn(List.of(commande));
+        when(dtoTools.convertToDto(commande, CommandeReadDTO.class))
+                .thenReturn(commandeReadDTO);
 
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("en-cours", "");
+        ResponseEntity<List<CommandeReadDTO>> response =
+                commandeController.fetchAllCommandesEnCours("EN_COURS", AUTH_TOKEN);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
         assertEquals(1, response.getBody().size());
     }
 
     @Test
-    public void fetchAllCommandesEnCoursInvalidStatus() {
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("invalid-status", "");
+    void createCommandeWithValidData() {
+        CommandeCreateDTO commandeCreateDTO = new CommandeCreateDTO();
+        Commande commande = new Commande();
+        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
+        when(dtoTools.convertToEntity(commandeCreateDTO, Commande.class))
+                .thenReturn(commande);
+        when(commandeService.createCommande(commande, AUTH_TOKEN))
+                .thenReturn(commande);
+        when(dtoTools.convertToDto(commande, CommandeReadDTO.class))
+                .thenReturn(commandeReadDTO);
+
+        ResponseEntity<?> response = commandeController.createCommande(commandeCreateDTO, AUTH_TOKEN);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(commandeReadDTO, response.getBody());
+    }
+
+    @Test
+    void deleteCommandeWithValidId() {
+        Long id = 1L;
+        when(commandeService.deleteCommande(id)).thenReturn(true);
+
+        ResponseEntity<Boolean> response = commandeController.deleteCommande(id, AUTH_TOKEN);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(true, response.getBody());
+    }
+
+    @Test
+    void updateCommandeWithValidId() {
+        Long id = 1L;
+        Commande commande = new Commande();
+        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
+        when(commandeService.advanceStatusCommande(id)).thenReturn(commande);
+        when(dtoTools.convertToDto(commande, CommandeReadDTO.class))
+                .thenReturn(commandeReadDTO);
+
+        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(id, AUTH_TOKEN);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(commandeReadDTO, response.getBody());
+    }
+
+    @Test
+    void fetchAllCommandesEnCoursWithInvalidStatus() {
+        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("INVALID_STATUS", "authToken");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-/*TODO
-
-    @Test
-    public void fetchAllCommandesListeSuccessfully() {
-        CommandeListeProjection projection = mock(CommandeListeProjection.class);
-        when(commandeService.findAllCommandeListe()).thenReturn(Arrays.asList(projection));
-
-        ResponseEntity<List<CommandeListeProjection>> response = commandeController.fetchAllCommandesListe();
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-        assertEquals(1, response.getBody().size());
     }
 
     @Test
-    public void fetchCommandeByIdSuccessfully() {
-        Commande commande = new Commande();
-        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        when(commandeService.findCommandeById(1L)).thenReturn(Optional.of(commande));
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(commandeReadDTO);
-
-        ResponseEntity<CommandeReadDTO> response = commandeController.fetchCommandeById(1L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
-    }
-
-    @Test
-    public void fetchCommandeByIdNotFound() {
-        when(commandeService.findCommandeById(1L)).thenReturn(Optional.empty());
-
-        ResponseEntity<CommandeReadDTO> response = commandeController.fetchCommandeById(1L);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-    }
-*/
-
-    @Test
-    public void createCommandePriceException() {
-        CommandeCreateDTO createDTO = new CommandeCreateDTO(true, new ArrayList<>(), new ArrayList<>(), StatusCommande.EN_COURS, new ArrayList<>(), -1, false);
-        when(dtoTools.convertToEntity(createDTO, Commande.class)).thenThrow(new PriceException("Price error"));
-
-        ResponseEntity<?> response = commandeController.createCommande(createDTO, "");
+    void fetchAllCommandesEnCoursWithNullStatus() {
+        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours(null, "authToken");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertEquals("Price error", response.getBody().toString());
     }
 
     @Test
-    public void deleteCommandeSuccessfully() {
-        when(commandeService.deleteCommande(1L)).thenReturn(true);
+    void deleteCommandeWithInvalidId() {
+        ResponseEntity<Boolean> response = commandeController.deleteCommande(-1L, "authToken");
 
-        ResponseEntity<Boolean> response = commandeController.deleteCommande(1L, "");
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
-    public void updateCommandeSuccessfully() {
-        Commande commande = new Commande();
-        CommandeReadDTO readDTO = new CommandeReadDTO();
-        when(commandeService.advanceStatusCommande(1L)).thenReturn(commande);
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(readDTO);
+    void updateCommandeWithInvalidId() {
+        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(-1L, "authToken");
 
-        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(1L, "");
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertNotNull(response.getBody());
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 }

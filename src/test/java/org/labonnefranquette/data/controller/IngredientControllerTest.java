@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,7 +36,7 @@ public class IngredientControllerTest {
     @Test
     public void getAllIngredientsSuccessfully() {
         Ingredient ingredient = new Ingredient();
-        when(ingredientService.findAll()).thenReturn(Arrays.asList(ingredient));
+        when(ingredientService.findAll(anyString())).thenReturn(Arrays.asList(ingredient));
 
         ResponseEntity<List<Ingredient>> response = ingredientController.getAllIngredients("");
 

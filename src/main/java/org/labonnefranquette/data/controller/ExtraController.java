@@ -29,6 +29,6 @@ public class ExtraController {
     public ResponseEntity<List<Extra>> getAllExtra(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(extraService.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(extraService.findAll(authToken), HttpStatus.OK);
     }
 }

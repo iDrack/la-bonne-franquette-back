@@ -3,12 +3,10 @@ package org.labonnefranquette.data;
 import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 
 import java.util.Objects;
 
 @SpringBootApplication
-@EnableCaching
 public class LaBonneFranquetteApplication {
 
 	public static void main(String[] args) {

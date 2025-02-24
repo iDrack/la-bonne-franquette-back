@@ -3,7 +3,8 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.model.Produit;
-import org.labonnefranquette.data.services.GenericService;
+import org.labonnefranquette.data.repository.ProduitRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +25,7 @@ import static org.mockito.Mockito.when;
 public class ProduitControllerTest {
 
     @Mock
-    private GenericService<Produit, Long> produitService;
+    private GenericServiceImpl<Produit, ProduitRepository, Long> produitService;
 
     @InjectMocks
     private ProduitController produitController;
@@ -31,7 +33,7 @@ public class ProduitControllerTest {
     @Test
     public void getAllProduitsSuccessfully() {
         Produit produit = new Produit();
-        when(produitService.findAll()).thenReturn(Arrays.asList(produit));
+        when(produitService.findAll(anyString())).thenReturn(Arrays.asList(produit));
 
         ResponseEntity<List<Produit>> response = produitController.getAllProduits("");
 

@@ -3,7 +3,8 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.model.Categorie;
-import org.labonnefranquette.data.services.GenericService;
+import org.labonnefranquette.data.repository.CategorieRepository;
+import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,7 +25,7 @@ import static org.mockito.Mockito.when;
 public class CategorieControllerTest {
 
     @Mock
-    private GenericService<Categorie, Long> categorieService;
+    private GenericServiceImpl<Categorie, CategorieRepository, Long> categorieService;
 
     @InjectMocks
     private CategorieController categorieController;
@@ -31,34 +33,35 @@ public class CategorieControllerTest {
     @Test
     public void getAllCategorieSuccessfully() {
         Categorie categorie = new Categorie();
-        when(categorieService.findAll()).thenReturn(Arrays.asList(categorie));
+        when(categorieService.findAll(anyString())).thenReturn(Arrays.asList(categorie));
 
-        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie("");
+        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie("test");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertEquals(1, response.getBody().size());
     }
-/*TODO
 
     @Test
-    public void getCategorieByIdSuccessfully() {
-        Categorie categorie = new Categorie();
-        when(categorieService.findAllById(1L)).thenReturn(Optional.of(categorie));
+    public void getAllCategorieWithEmptyList() {
+        when(categorieService.findAll(anyString())).thenReturn(Arrays.asList());
 
-        ResponseEntity<Categorie> response = categorieController.getCategorieById(1L);
+        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie("test");
 
-        assertEquals(HttpStatus.FOUND, response.getStatusCode());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
+        assertEquals(0, response.getBody().size());
     }
 
     @Test
-    public void getCategorieByIdNotFound() {
-        when(categorieService.findAllById(1L)).thenReturn(Optional.empty());
+    public void getAllCategorieWithNullAuthToken() {
+        Categorie categorie = new Categorie();
+        when(categorieService.findAll(null)).thenReturn(Arrays.asList(categorie));
 
-        ResponseEntity<Categorie> response = categorieController.getCategorieById(1L);
+        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie(null);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals(null, response.getBody());
-    }*/
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals(1, response.getBody().size());
+    }
 }

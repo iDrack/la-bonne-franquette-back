@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 
 import java.util.Set;
 
@@ -20,7 +21,7 @@ import java.util.Set;
 @Table(name = "ingredient")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ingredient {
+public class Ingredient implements HasRestaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -46,4 +47,9 @@ public class Ingredient {
     @JsonIgnore
     @With
     private String ingredientType;
+
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JsonIgnore
+    private Restaurant restaurant;
 }

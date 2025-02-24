@@ -13,13 +13,13 @@ public class CacheServiceImpl implements CacheService {
     CacheRepository cacheRepository;
 
     @Override
-    public int getVersion() {
-        return cacheRepository.findById(1L).orElseThrow(() -> new RuntimeException("Impossible de récupérer le cache.")).getVersion();
+    public int getVersion(Long idRestaurant) {
+        return cacheRepository.getByRestaurantId(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de récupérer le cache.")).getVersion();
     }
 
     @Override
-    public void updateCacheVersion() {
-        Cache cache = cacheRepository.findById(1L).orElseThrow(() -> new RuntimeException("Impossible de récupérer le cache."));
+    public void updateCacheVersion(Long idRestaurant) {
+        Cache cache = cacheRepository.getByRestaurantId(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de récupérer le cache."));
         cache.setVersion(cache.getVersion() + 1);
         cacheRepository.save(cache);
     }
