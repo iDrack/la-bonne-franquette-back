@@ -1,6 +1,7 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ public class PaiementTypeCommande implements HasRestaurant {
 
     @Column(name = "is_enable", nullable = false)
     @NotNull(message = "La valeur de is_enable ne peut pas être null.")
+    @JsonProperty("isEnable")
     private boolean isEnable;
 
     @OneToMany(mappedBy = "type")
