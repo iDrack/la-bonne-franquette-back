@@ -3,7 +3,6 @@ package org.labonnefranquette.data.services.impl;
 
 import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 import org.labonnefranquette.data.security.JWTUtil;
-import org.labonnefranquette.data.services.CacheService;
 import org.labonnefranquette.data.services.GenericService;
 import org.labonnefranquette.data.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import java.util.Optional;
 
 public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository<T, ID>, ID> implements GenericService<T, ID> {
 
-    @Autowired
-    private CacheService cacheService;
 
     @Autowired
     private RestaurantService restaurantService;
@@ -46,7 +43,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
         if (itemFound.isPresent()) {
             T item = itemFound.get();
             Long restaurantId = item.getRestaurant().getId();
-            cacheService.updateCacheVersion(restaurantId);
+            restaurantService.updateCacheVersion(restaurantId);
             repository.deleteById(id);
         }
     }
@@ -61,7 +58,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     public T create(T newT, String token) {
         Long idRestaurant = jwtUtil.extractRestaurantId(token);
         newT.setRestaurant(restaurantService.findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver de restaurant : " + idRestaurant)));
-        cacheService.updateCacheVersion(idRestaurant);
+        restaurantService.updateCacheVersion(idRestaurant);
         return repository.save(newT);
     }
 

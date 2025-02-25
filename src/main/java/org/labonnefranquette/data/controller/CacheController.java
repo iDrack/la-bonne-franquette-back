@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.labonnefranquette.data.security.JWTUtil;
-import org.labonnefranquette.data.services.CacheService;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CacheController {
 
     @Autowired
-    CacheService cacheService;
+    RestaurantService restaurantService;
 
     @Autowired
     JWTUtil jwtUtil;
@@ -31,7 +31,7 @@ public class CacheController {
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         Long idRestaurant = jwtUtil.extractRestaurantId(authToken);
-        return new ResponseEntity<>(cacheService.getVersion(idRestaurant), HttpStatus.OK);
+        return new ResponseEntity<>(restaurantService.getVersion(idRestaurant), HttpStatus.OK);
     }
 
 }

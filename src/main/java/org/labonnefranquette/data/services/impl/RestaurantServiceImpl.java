@@ -18,4 +18,18 @@ public class RestaurantServiceImpl implements RestaurantService {
     public Optional<Restaurant> findAllById(Long id) {
         return repository.findById(id);
     }
+
+    @Override
+    public int getVersion(Long idRestaurant) {
+        return findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant)).getVersionCarte();
+    }
+
+    @Override
+    public void updateCacheVersion(Long idRestaurant) {
+        Restaurant restaurant = findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant));
+        restaurant.updateVersionCarte();
+        repository.save(restaurant);
+    }
+
+
 }

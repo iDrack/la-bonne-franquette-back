@@ -1,7 +1,7 @@
 -- user admin
 
-INSERT INTO restaurant(id, name)
-VALUES (1, 'test');
+INSERT INTO restaurant(id, name, version_carte)
+VALUES (1, 'test', 1);
 
 INSERT INTO users(username, password, roles, restaurant_id)
 VALUES ('admin', '$2a$10$KV8cQULcx8Y2VNyf5lpOPuFdvJ4rzNmRFyDvgWDvhth.eVKAddo1y', 'ROLE_ADMIN', 1);
@@ -139,6 +139,3 @@ VALUES (1, 'CARTE BANCAIRE', true, 1),
        (2, 'CHEQUE', true, 1),
        (3, 'ESPECE', true, 1),
        (4, 'TICKET RESTAURANT', true, 1);
-
-INSERT INTO cache (id, version, restaurant_id)
-VALUES (1, 1, 1);

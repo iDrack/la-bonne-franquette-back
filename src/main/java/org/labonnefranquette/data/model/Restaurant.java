@@ -52,8 +52,16 @@ public class Restaurant {
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SousCategorie> sousCategories;
+    ;
 
-    @OneToOne(mappedBy = "restaurant")
-    private Cache cache;
+    @Column(name = "version_carte", nullable = false)
+    private int versionCarte;
 
+    public Restaurant() {
+        this.versionCarte = 1;
+    }
+
+    public void updateVersionCarte() {
+        this.versionCarte++;
+    }
 }

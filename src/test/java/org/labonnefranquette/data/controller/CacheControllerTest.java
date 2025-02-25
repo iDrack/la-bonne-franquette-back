@@ -3,7 +3,7 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.security.JWTUtil;
-import org.labonnefranquette.data.services.CacheService;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 public class CacheControllerTest {
 
     @Mock
-    private CacheService cacheService;
+    private RestaurantService restaurantService;
 
     @Mock
     private JWTUtil jwtUtil;
@@ -30,7 +30,7 @@ public class CacheControllerTest {
 
     @Test
     public void getCacheVersionSuccessfully() {
-        when(cacheService.getVersion(null)).thenReturn(1);
+        when(restaurantService.getVersion(null)).thenReturn(1);
 
         ResponseEntity<Integer> response = cacheController.getCache(null);
 
@@ -41,7 +41,7 @@ public class CacheControllerTest {
     @Test
     public void getCacheVersionWithAuthToken() {
         when(jwtUtil.extractRestaurantId("valid-token")).thenReturn(1L);
-        when(cacheService.getVersion(1L)).thenReturn(1);
+        when(restaurantService.getVersion(1L)).thenReturn(1);
 
         ResponseEntity<Integer> response = cacheController.getCache("valid-token");
 
@@ -52,7 +52,7 @@ public class CacheControllerTest {
     @Test
     public void getCacheVersionWithInvalidAuthToken() {
         when(jwtUtil.extractRestaurantId("invalid-token")).thenReturn(null);
-        when(cacheService.getVersion(null)).thenReturn(1);
+        when(restaurantService.getVersion(null)).thenReturn(1);
 
         ResponseEntity<Integer> response = cacheController.getCache("invalid-token");
 
@@ -62,7 +62,7 @@ public class CacheControllerTest {
 
     @Test
     public void getCacheVersionServiceThrowsException() {
-        when(cacheService.getVersion(null)).thenThrow(new RuntimeException("Service error"));
+        when(restaurantService.getVersion(null)).thenThrow(new RuntimeException("Service error"));
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             cacheController.getCache(null);

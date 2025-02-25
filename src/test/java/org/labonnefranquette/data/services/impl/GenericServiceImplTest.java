@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 import org.labonnefranquette.data.security.JWTUtil;
-import org.labonnefranquette.data.services.CacheService;
 import org.labonnefranquette.data.services.RestaurantService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -22,8 +21,6 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class GenericServiceImplTest {
 
-    @Mock
-    private CacheService cacheService;
 
     @Mock
     private RestaurantService restaurantService;
@@ -81,7 +78,7 @@ class GenericServiceImplTest {
 
         genericService.deleteById(1L);
 
-        verify(cacheService).updateCacheVersion(1L);
+        verify(restaurantService).updateCacheVersion(1L);
         verify(repository).deleteById(1L);
     }
 
@@ -91,7 +88,7 @@ class GenericServiceImplTest {
 
         genericService.deleteById(1L);
 
-        verify(cacheService, never()).updateCacheVersion(anyLong());
+        verify(restaurantService, never()).updateCacheVersion(anyLong());
         verify(repository, never()).deleteById(anyLong());
     }
 
@@ -121,7 +118,7 @@ class GenericServiceImplTest {
         HasRestaurant result = genericService.create(newItem, "token");
 
         verify(newItem).setRestaurant(any(Restaurant.class));
-        verify(cacheService).updateCacheVersion(1L);
+        verify(restaurantService).updateCacheVersion(1L);
         assertEquals(newItem, result);
     }
 

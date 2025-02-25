@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/admin/categorie")
 @Tag(name = "Admin Categories Controller", description = "Controller pour les interractions des administracteurs sur la création des catégories.")
 public class AdminCategorieController {
-    //TODO: Ajouter le auth-token lors de la création pour récupérer le restauant lors de la création
     @Autowired
     GenericService<Categorie, Long> categorieService;
 /*
