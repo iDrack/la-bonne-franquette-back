@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -29,6 +30,8 @@ public class CommandeServiceImpl implements CommandeService {
     private RestaurantService restaurantService;
     @Autowired
     private JWTUtil jwtUtil;
+    @Autowired
+    private CommandeService commandeService;
 
     @Override
     public List<Commande> findAllCommandeWithStatut(StatusCommande status, String token) {
@@ -37,8 +40,8 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
-    public Commande findCommandeById(long id) {
-        return commandeRepository.findById(id).orElseThrow(() -> new RuntimeException("Commande n'existe pas."));
+    public Commande findCommandeById(long id) throws NullPointerException {
+        return commandeRepository.findById(id).orElseThrow(() -> new NullPointerException("Commande n'existe pas."));
     }
 
     @Override
@@ -49,7 +52,9 @@ public class CommandeServiceImpl implements CommandeService {
 
         commande.setRestaurant(restaurant);
         commande.setDateSaisie(new Date());
-        commande.setNbArticle(commande.getArticles().size() + commande.getMenus().size());
+        int nbArticles = (commande.getArticles() == null ? 0 : commande.getArticles().size());
+        int nbMenus = (commande.getMenus() == null ? 0 : commande.getMenus().size());
+        commande.setNbArticle(nbArticles + nbMenus);
         if (!commandeTools.isCorrectPrice(commande)) {
             throw new PriceException("Le prix saisie est incorrect");
         }
@@ -70,6 +75,9 @@ public class CommandeServiceImpl implements CommandeService {
     @Override
     public Commande ajoutPaiement(Commande commande, Paiement paiement) {
         Commande commandeToUpdate = commandeRepository.findById(commande.getId()).orElseThrow(() -> new RuntimeException("Commande n'existe pas."));
+        if (commandeToUpdate.getPaiementSet() == null || commandeToUpdate.getPaiementSet().isEmpty()) {
+            commandeToUpdate.setPaiementSet(new ArrayList<>());
+        }
         commandeToUpdate.getPaiementSet().add(paiement);
         commandeToUpdate.setPaiementType(commandeTools.calculPaiementTypeCommande(commandeToUpdate.getPaiementSet()));
         return commandeRepository.save(commandeToUpdate);
@@ -84,5 +92,18 @@ public class CommandeServiceImpl implements CommandeService {
             return commandeRepository.save(commande);
         }
         return commande;
+    }
+
+    @Override
+    public Commande updateCommande(Long id, Commande updatedCommande) {
+        try {
+            Commande commande = findCommandeById(id);
+            updatedCommande.setId(id);
+            commandeRepository.save(updatedCommande);
+            return commande;
+        } catch (NullPointerException e) {
+            System.out.println(e);
+            return null;
+        }
     }
 }

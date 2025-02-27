@@ -129,4 +129,42 @@ class CommandeControllerTest {
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
+
+    @Test
+    void patchCommandeWithValidData() {
+        Long id = 1L;
+        CommandeCreateDTO commandeCreateDTO = new CommandeCreateDTO();
+        Commande commande = new Commande();
+        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
+        when(dtoTools.convertToEntity(commandeCreateDTO, Commande.class)).thenReturn(commande);
+        when(commandeService.updateCommande(id, commande)).thenReturn(commande);
+        when(dtoTools.convertToDto(commande, CommandeReadDTO.class)).thenReturn(commandeReadDTO);
+
+        ResponseEntity<CommandeReadDTO> response = commandeController.patchCommande(id, commandeCreateDTO, AUTH_TOKEN);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(commandeReadDTO, response.getBody());
+    }
+
+    @Test
+    void patchCommandeWithNullData() {
+        Long id = 1L;
+
+        ResponseEntity<CommandeReadDTO> response = commandeController.patchCommande(id, null, AUTH_TOKEN);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    }
+
+    @Test
+    void patchCommandeWithInvalidId() {
+        Long id = -1L;
+        CommandeCreateDTO commandeCreateDTO = new CommandeCreateDTO();
+        Commande commande = new Commande();
+        when(dtoTools.convertToEntity(commandeCreateDTO, Commande.class)).thenReturn(commande);
+        when(commandeService.updateCommande(id, commande)).thenReturn(null);
+
+        ResponseEntity<CommandeReadDTO> response = commandeController.patchCommande(id, commandeCreateDTO, AUTH_TOKEN);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
 }

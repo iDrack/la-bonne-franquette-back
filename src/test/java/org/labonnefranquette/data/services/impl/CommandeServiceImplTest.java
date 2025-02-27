@@ -145,4 +145,39 @@ class CommandeServiceImplTest {
 
         assertEquals(StatusCommande.TERMINEE, result.getStatus());
     }
+
+    @Test
+    void updateCommandeWithValidId() {
+        Long id = 1L;
+        Commande updatedCommande = new Commande();
+        Commande existingCommande = new Commande();
+        when(commandeRepository.findById(id)).thenReturn(Optional.of(existingCommande));
+        when(commandeRepository.save(updatedCommande)).thenReturn(updatedCommande);
+
+        var result = commandeServiceImpl.updateCommande(id, updatedCommande);
+
+        assertNotNull(result);
+        assertEquals(id, updatedCommande.getId());
+    }
+
+    @Test
+    void updateCommandeWithInvalidId() {
+        Long id = 1L;
+        Commande updatedCommande = new Commande();
+        when(commandeRepository.findById(id)).thenReturn(Optional.empty());
+
+        var result = commandeServiceImpl.updateCommande(id, updatedCommande);
+
+        assertNull(result);
+    }
+
+    @Test
+    void updateCommandeWithNullUpdatedCommande() {
+        Long id = 1L;
+        when(commandeRepository.findById(id)).thenReturn(Optional.of(new Commande()));
+
+        var result = commandeServiceImpl.updateCommande(id, null);
+
+        assertNull(result);
+    }
 }

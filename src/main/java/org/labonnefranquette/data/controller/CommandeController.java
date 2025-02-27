@@ -75,14 +75,20 @@ Les commandes sont récupérées par un websocket
     }
 */
 
-/*
-Les commandes ne sont jamais récupéré par leur id
     @GetMapping("/{id}")
-    public ResponseEntity<CommandeReadDTO> fetchCommandeById(@PathVariable  Long id) {
-        Optional<Commande> commande = commandeService.findCommandeById(id);
-        return commande.map(value -> new ResponseEntity<>(dtoTools.convertToDto(value, CommandeReadDTO.class), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.NOT_FOUND));
+    public ResponseEntity<CommandeReadDTO> fetchCommandeById(@PathVariable Long id,
+                                                             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                             @RequestHeader(value = "Auth-Token") String authToken) {
+        Commande commande = null;
+        try {
+            commande = commandeService.findCommandeById(id);
+        } catch (NullPointerException e) {
+            System.out.println(e);
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
     }
-*/
 
     //Utilisé lors de l'envoie du panier dans l'écran de prise de commande
     @PostMapping(produces = "application/json")
@@ -123,6 +129,19 @@ Les commandes ne sont jamais récupéré par leur id
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         Commande commande = commandeService.advanceStatusCommande(id);
+        return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/{id}", produces = "application/json")
+    public ResponseEntity<CommandeReadDTO> patchCommande(@PathVariable long id, @RequestBody CommandeCreateDTO commandeDto,
+                                                         @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                         @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+        if (commandeDto == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        Commande commande = dtoTools.convertToEntity(commandeDto, Commande.class);
+        commande = commandeService.updateCommande(id, commande);
+        if (commande == null) {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
     }
 }
