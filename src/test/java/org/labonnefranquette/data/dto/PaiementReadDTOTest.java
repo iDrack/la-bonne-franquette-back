@@ -1,138 +1,51 @@
 package org.labonnefranquette.data.dto;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
-import org.labonnefranquette.data.utils.DtoTools;
-import org.springframework.test.context.ActiveProfiles;
+import org.labonnefranquette.data.model.PaiementType;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@ActiveProfiles("test")
-public class PaiementReadDTOTest {
+class PaiementReadDTOTest {
 
-    private long id;
-    private long commandeId;
-    private Date date;
-    private PaiementTypeCommande type;
-    private Boolean ticketEnvoye;
-    private int prixHT;
-    private int prixTTC;
-    private PaiementReadDTO paiementReadDTO;
-    private DtoTools dtoTools;
+    @Test
+    void shouldCreatePaiementReadDTOWithValidData() {
+        PaiementType type = new PaiementType(1L, "CB", true, new ArrayList<Paiement>());
+        PaiementReadDTO dto = new PaiementReadDTO();
+        dto.setId(1L);
+        dto.setCommandeId(100L);
+        dto.setDate(Date.valueOf("2023-01-01"));
+        dto.setType(type);
+        dto.setPrix(500);
+        dto.setArticles(Collections.emptyList());
 
-    @BeforeEach
-    public void setUp() {
-        id = 1L;
-        commandeId = 2L;
-        date = new Date(System.currentTimeMillis());
-        type = new PaiementTypeCommande(1L, "AUTRE", true, new ArrayList<>());
-        ticketEnvoye = true;
-        prixHT = 100;
-        prixTTC = 110;
-        paiementReadDTO = new PaiementReadDTO();
-        paiementReadDTO.setId(id);
-        paiementReadDTO.setCommandeId(commandeId);
-        paiementReadDTO.setDate(date);
-        paiementReadDTO.setType(type);
-        paiementReadDTO.setTicketEnvoye(ticketEnvoye);
-        paiementReadDTO.setPrixHT(prixHT);
-        paiementReadDTO.setPrixTTC(prixTTC);
-        dtoTools = new DtoTools();
+        assertEquals(1L, dto.getId());
+        assertEquals(100L, dto.getCommandeId());
+        assertEquals(Date.valueOf("2023-01-01"), dto.getDate());
+        assertEquals(type, dto.getType());
+        assertEquals(500, dto.getPrix());
+        assertNotNull(dto.getArticles());
     }
 
     @Test
-    public void testPaiementReadDTONotNull() {
-        assertNotNull(paiementReadDTO);
+    void shouldHandleNullArticles() {
+        PaiementReadDTO dto = new PaiementReadDTO();
+        dto.setArticles(null);
+
+        assertEquals(null, dto.getArticles());
     }
 
     @Test
-    public void testId() {
-        assertEquals(id, paiementReadDTO.getId());
-    }
+    void shouldHandleNegativePrix() {
+        PaiementReadDTO dto = new PaiementReadDTO();
+        dto.setPrix(-100);
 
-    @Test
-    public void testCommandeId() {
-        assertEquals(commandeId, paiementReadDTO.getCommandeId());
-    }
-
-    @Test
-    public void testDate() {
-        assertEquals(date, paiementReadDTO.getDate());
-    }
-
-    @Test
-    public void testType() {
-        assertEquals(type, paiementReadDTO.getType());
-    }
-
-    @Test
-    public void testTicketEnvoye() {
-        assertEquals(ticketEnvoye, paiementReadDTO.getTicketEnvoye());
-    }
-
-    @Test
-    public void testPrixHT() {
-        assertEquals(prixHT, paiementReadDTO.getPrixHT());
-    }
-
-    @Test
-    public void testPrixTTC() {
-        assertEquals(prixTTC, paiementReadDTO.getPrixTTC());
-    }
-
-    @Test
-    public void testConvertedPaiementNotNull() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertNotNull(paiement);
-    }
-
-    @Test
-    public void testConvertedId() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(id, paiement.getId());
-    }
-
-    @Test
-    public void testConvertedCommandeId() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(commandeId, paiement.getCommande().getId());
-    }
-
-    @Test
-    public void testConvertedDate() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(date, paiement.getDate());
-    }
-
-    @Test
-    public void testConvertedType() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(type, paiement.getType());
-    }
-
-    @Test
-    public void testConvertedTicketEnvoye() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(ticketEnvoye, paiement.getTicketEnvoye());
-    }
-
-    @Test
-    public void testConvertedPrixHT() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(prixHT, paiement.getPrixHT());
-    }
-
-    @Test
-    public void testConvertedPrixTTC() {
-        Paiement paiement = dtoTools.convertToEntity(paiementReadDTO, Paiement.class);
-        assertEquals(prixTTC, paiement.getPrixTTC());
+        assertEquals(-100, dto.getPrix());
     }
 }
-

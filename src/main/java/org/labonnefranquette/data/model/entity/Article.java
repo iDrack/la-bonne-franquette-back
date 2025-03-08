@@ -13,7 +13,7 @@ public class Article {
 
     private String nom;
     private Integer quantite;
-    private int prixHT;
+    private int prixTTC;
     private Collection<Ingredient> ingredients;
     private Collection<Extra> extraSet;
     private boolean isModified;

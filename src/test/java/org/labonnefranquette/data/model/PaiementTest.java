@@ -2,10 +2,12 @@ package org.labonnefranquette.data.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.labonnefranquette.data.model.entity.Article;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,49 +15,49 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PaiementTest {
 
     private Paiement paiement;
-    private PaiementTypeCommande paiementType;
+    private PaiementType paiementType;
+    private Commande commande;
+    private Collection<Article> articles;
+
     @BeforeEach
     public void setUp() {
-
-        paiement = new Paiement();
-        paiementType = new PaiementTypeCommande(1L, "CB", true, new ArrayList<>());
+        paiementType = new PaiementType(1L, "CB", true, new ArrayList<>());
+        commande = new Commande();
+        articles = new ArrayList<>();
+        paiement = new Paiement(paiementType, 100, commande, articles);
     }
 
     @Test
-    public void setPrixHT_setsPrixHTCorrectly() {
-        paiement.setPrixHT(100);
-        assertEquals(100, paiement.getPrixHT());
+    public void testSetPrix() {
+        paiement.setPrix(200);
+        assertEquals(200, paiement.getPrix());
     }
 
     @Test
-    public void setPrixTTC_setsPrixTTCCorrectly() {
-        paiement.setPrixTTC(110);
-        assertEquals(110, paiement.getPrixTTC());
+    public void testSetType() {
+        PaiementType newType = new PaiementType(2L, "Cash", true, new ArrayList<>());
+        paiement.setType(newType);
+        assertEquals(newType, paiement.getType());
     }
 
     @Test
-    public void setType_setsTypeCorrectly() {
-        paiement.setType(paiementType);
-        assertEquals(paiementType, paiement.getType());
-    }
-
-    @Test
-    public void setTicketEnvoye_setsTicketEnvoyeCorrectly() {
-        paiement.setTicketEnvoye(true);
-        assertEquals(true, paiement.getTicketEnvoye());
-    }
-
-    @Test
-    public void setDate_setsDateCorrectly() {
+    public void testSetDate() {
         Date date = new Date(System.currentTimeMillis());
         paiement.setDate(date);
         assertEquals(date, paiement.getDate());
     }
 
     @Test
-    public void setCommande_setsCommandeCorrectly() {
-        Commande commande = new Commande();
-        paiement.setCommande(commande);
-        assertEquals(commande, paiement.getCommande());
+    public void testSetCommande() {
+        Commande newCommande = new Commande();
+        paiement.setCommande(newCommande);
+        assertEquals(newCommande, paiement.getCommande());
+    }
+
+    @Test
+    public void testSetArticles() {
+        Collection<Article> newArticles = new ArrayList<>();
+        paiement.setArticles(newArticles);
+        assertEquals(newArticles, paiement.getArticles());
     }
 }

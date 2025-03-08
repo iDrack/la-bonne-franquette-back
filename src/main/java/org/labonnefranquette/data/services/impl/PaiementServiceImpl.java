@@ -1,11 +1,10 @@
 package org.labonnefranquette.data.services.impl;
 
-import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementType;
 import org.labonnefranquette.data.repository.PaiementRepository;
-import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
+import org.labonnefranquette.data.repository.PaiementTypeRepository;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.services.PaiementService;
@@ -27,7 +26,9 @@ public class PaiementServiceImpl implements PaiementService {
     @Autowired
     CommandeService commandeService;
     @Autowired
-    private PaiementTypeCommandeRepository paiementTypeCommandeRepository;
+    RestaurantServiceImpl restaurantService;
+    @Autowired
+    private PaiementTypeRepository paiementTypeRepository;
     @Autowired
     private JWTUtil jwtUtil;
 
@@ -42,19 +43,18 @@ public class PaiementServiceImpl implements PaiementService {
     }
 
     @Override
-    public Paiement createPaiement(Long idCommande, PaiementCreateDTO paiementCreateDTO) throws RuntimeException {
-
-
+    public Paiement createPaiement(Long idCommande, Paiement paiement) throws RuntimeException {
         Commande commande = commandeService.findCommandeById(idCommande);
-        Paiement nouveauPaiement = new Paiement(paiementCreateDTO.getType(), paiementCreateDTO.getTicketEnvoye(), paiementCreateDTO.getPrixTTC(), paiementCreateDTO.getPrixTTC() * commande.getTauxTVA(), commande);
-        nouveauPaiement.setRestaurant(commande.getRestaurant());
-        paiementRepository.save(nouveauPaiement);
+        paiement.setCommande(commande);
+        //Paiement nouveauPaiement = new Paiement( paiementTypeRepository.findByName(paiementCreateDTO.getType()), paiementCreateDTO.getPrix(), commande);
+        paiement.setRestaurant(commande.getRestaurant());
+        paiementRepository.save(paiement);
         if (commande.getPaiementSet() == null) {
             commande.setPaiementSet(new ArrayList<Paiement>());
         }
-        commande.getPaiementSet().add(nouveauPaiement);
-        commandeService.ajoutPaiement(commande, nouveauPaiement);
-        return nouveauPaiement;
+        commande.getPaiementSet().add(paiement);
+        commandeService.ajoutPaiement(commande, paiement);
+        return paiement;
     }
 
     @Override
@@ -63,8 +63,8 @@ public class PaiementServiceImpl implements PaiementService {
     }
 
     @Override
-    public List<PaiementTypeCommande> getAllPaiementType() {
-        return paiementTypeCommandeRepository.findAll();
+    public List<PaiementType> getAllPaiementType() {
+        return paiementTypeRepository.findAll();
     }
 
 

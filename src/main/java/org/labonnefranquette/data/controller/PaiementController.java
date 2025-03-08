@@ -5,12 +5,14 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
+import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementType;
 import org.labonnefranquette.data.services.MailService;
 import org.labonnefranquette.data.services.PaiementService;
+import org.labonnefranquette.data.utils.ControlInputTool;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -71,11 +73,15 @@ public class PaiementController {
         }
     }
 
+    /*
+    Ajouter une route pour envoyer les mail des paiement avec email, montant, (string) type de paiement, liste d'article, seeDetails
+     */
+
     @GetMapping("/types")
-    public ResponseEntity<List<PaiementTypeCommande>> getAllPaiementsType(
+    public ResponseEntity<List<PaiementType>> getAllPaiementsType(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        List<PaiementTypeCommande> paiementTypes = paiementService.getAllPaiementType();
+        List<PaiementType> paiementTypes = paiementService.getAllPaiementType();
         if (paiementTypes.isEmpty()) return new ResponseEntity<>(paiementTypes, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(paiementTypes, HttpStatus.OK);
     }
@@ -85,8 +91,11 @@ public class PaiementController {
                                                              @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
                                                              @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         Paiement retPaiement;
+        if (!ControlInputTool.isValidObject(paiementDTO, CommandeCreateDTO.class)) {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
         try {
-            retPaiement = paiementService.createPaiement(commandeId, paiementDTO);
+            retPaiement = paiementService.createPaiement(commandeId, dtoTools.convertToEntity(paiementDTO, Paiement.class));
         } catch (RuntimeException e) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }

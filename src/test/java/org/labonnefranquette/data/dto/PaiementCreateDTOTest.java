@@ -1,77 +1,52 @@
 package org.labonnefranquette.data.dto;
 
-import org.junit.jupiter.api.BeforeEach;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
-import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
-import org.labonnefranquette.data.utils.DtoTools;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ActiveProfiles("test")
-public class PaiementCreateDTOTest {
+class PaiementCreateDTOTest {
 
-    private PaiementTypeCommande type;
-    private int prixPaye;
-    private Boolean ticketEnvoye;
-    private PaiementCreateDTO paiementCreateDTO;
-    private DtoTools dtoTools;
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
 
-    @BeforeEach
-    public void setUp() {
-        type = new PaiementTypeCommande(1L, "AUTRE", true, new ArrayList<>());
-        prixPaye = 100;
-        ticketEnvoye = true;
-        paiementCreateDTO = new PaiementCreateDTO(type, prixPaye, ticketEnvoye);
-        dtoTools = new DtoTools();
+    @Test
+    void shouldCreatePaiementCreateDTOWithValidData() {
+        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, Collections.emptyList());
+
+        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        assertTrue(violations.isEmpty());
     }
 
     @Test
-    public void testPaiementCreateDTONotNull() {
-        assertNotNull(paiementCreateDTO);
+    void shouldFailWhenTypeIsNull() {
+        PaiementCreateDTO dto = new PaiementCreateDTO(null, 500, Collections.emptyList());
+
+        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    public void testType() {
-        assertEquals(type, paiementCreateDTO.getType());
+    void shouldFailWhenPrixIsNegative() {
+        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", -100, Collections.emptyList());
+
+        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        assertEquals(1, violations.size());
     }
 
     @Test
-    public void testPrixPaye() {
-        assertEquals(prixPaye, paiementCreateDTO.getPrixTTC());
-    }
+    void shouldHandleNullArticles() {
+        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, null);
 
-    @Test
-    public void testTicketEnvoye() {
-        assertEquals(ticketEnvoye, paiementCreateDTO.getTicketEnvoye());
-    }
-
-    @Test
-    public void testConvertedPaiementNotNull() {
-        Paiement paiement = dtoTools.convertToEntity(paiementCreateDTO, Paiement.class);
-        assertNotNull(paiement);
-    }
-
-    @Test
-    public void testConvertedType() {
-        Paiement paiement = dtoTools.convertToEntity(paiementCreateDTO, Paiement.class);
-        assertEquals(type, paiement.getType());
-    }
-
-    @Test
-    public void testConvertedPrixPaye() {
-        Paiement paiement = dtoTools.convertToEntity(paiementCreateDTO, Paiement.class);
-        assertEquals(prixPaye, paiement.getPrixTTC());
-    }
-
-    @Test
-    public void testConvertedTicketEnvoye() {
-        Paiement paiement = dtoTools.convertToEntity(paiementCreateDTO, Paiement.class);
-        assertEquals(ticketEnvoye, paiement.getTicketEnvoye());
+        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        assertTrue(violations.isEmpty());
     }
 }

@@ -1,9 +1,7 @@
 package org.labonnefranquette.data.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +10,8 @@ import lombok.With;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.StatusCommande;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.HasPrice;
+import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 import org.labonnefranquette.data.utils.JsonConverterTools;
 
 import java.util.Collection;
@@ -23,10 +22,7 @@ import java.util.Date;
 @Table(name = "commande")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Commande implements HasRestaurant {
-
-    @Column(name = "taux_tva", nullable = false)
-    private final int tauxTVA = 10;
+public class Commande extends HasRestaurantAbs implements HasPrice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,11 +51,6 @@ public class Commande implements HasRestaurant {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private int nbArticle;
 
-    @Column(name = "prix_ht", nullable = false)
-    @NotNull(message = "Ce champs ne peut pas être vide")
-    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
-    private int prixHT;
-
     @Column(name = "articles", nullable = true, length = 1000)
     @Convert(converter = JsonConverterTools.class)
     @With
@@ -78,15 +69,12 @@ public class Commande implements HasRestaurant {
     @Column(name = "paiement_type", nullable = true, length = 5)
     private String paiementType;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
+    @Column(name = "prix_ttc", nullable = false)
+    private int prixTTC;
 
     @Override
     public String toString() {
         return "Commande{" +
-                "tauxTVA=" + tauxTVA +
                 ", id=" + id +
                 ", numero=" + numero +
                 ", dateSaisie=" + dateSaisie +
@@ -94,7 +82,7 @@ public class Commande implements HasRestaurant {
                 ", status=" + status +
                 ", surPlace=" + surPlace +
                 ", nbArticle=" + nbArticle +
-                ", prixHT=" + prixHT +
+                ", prixTTC=" + prixTTC +
                 ", articles=" + articles +
                 ", menus=" + menus +
                 ", paiementType=" + paiementType +

@@ -23,12 +23,12 @@ public class MenuTest {
         menuItem1 = new MenuItem();
         menuItem1.setId(1L);
         menuItem1.setOptional(true);
-        menuItem1.setExtraPriceHT(50);
+        menuItem1.setPrixHT(50);
 
         menuItem2 = new MenuItem();
         menuItem2.setId(2L);
         menuItem2.setOptional(false);
-        menuItem2.setExtraPriceHT(100);
+        menuItem2.setPrixHT(100);
     }
 
     @Test

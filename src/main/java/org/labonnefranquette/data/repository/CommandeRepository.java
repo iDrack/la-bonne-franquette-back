@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface CommandeRepository extends JpaRepository<Commande, Long> {
 
-    @Query(value = "SELECT c.numero as numero, c.dateSaisie as dateSaisie, c.nbArticle as nbArticle, c.prixHT as prixHT, c.status as status, c.paiementType as paiementType FROM Commande c")
+    @Query(value = "SELECT c.numero as numero, c.dateSaisie as dateSaisie, c.nbArticle as nbArticle, c.prixTTC as prixTTC, c.status as status, c.paiementType as paiementType FROM Commande c")
     List<CommandeListeProjection> findAllCommandeListe();
 
     @Query(value = "SELECT c FROM Commande c WHERE c.status = :status")

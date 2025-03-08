@@ -2,7 +2,6 @@ package org.labonnefranquette.data.repository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.Menu;
 import org.labonnefranquette.data.model.MenuItem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -31,12 +30,12 @@ public class MenuItemRepositoryTest {
     public void setup() {
         menuItem1 = new MenuItem();
         menuItem1.setOptional(true);
-        menuItem1.setExtraPriceHT(50);
+        menuItem1.setPrixHT(50);
         entityManager.persistAndFlush(menuItem1);
 
         menuItem2 = new MenuItem();
         menuItem2.setOptional(false);
-        menuItem2.setExtraPriceHT(100);
+        menuItem2.setPrixHT(100);
         entityManager.persistAndFlush(menuItem2);
     }
 

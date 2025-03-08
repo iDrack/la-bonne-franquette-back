@@ -30,8 +30,6 @@ public class CommandeServiceImpl implements CommandeService {
     private RestaurantService restaurantService;
     @Autowired
     private JWTUtil jwtUtil;
-    @Autowired
-    private CommandeService commandeService;
 
     @Override
     public List<Commande> findAllCommandeWithStatut(StatusCommande status, String token) {

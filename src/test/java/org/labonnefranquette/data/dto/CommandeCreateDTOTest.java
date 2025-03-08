@@ -72,8 +72,8 @@ public class CommandeCreateDTOTest {
     }
 
     @Test
-    public void testPrixHT() {
-        assertEquals(prixHT, commandeCreateDTO.getPrixHT());
+    public void testPrixTTC() {
+        assertEquals(prixHT, commandeCreateDTO.getPrixTTC());
     }
 
     @Test
@@ -113,8 +113,8 @@ public class CommandeCreateDTOTest {
     }
 
     @Test
-    public void testConvertedPrixHT() {
+    public void testConvertedPrixTTC() {
         Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
-        assertEquals(prixHT, commande.getPrixHT());
+        assertEquals(prixHT, commande.getPrixTTC());
     }
 }

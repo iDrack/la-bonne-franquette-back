@@ -7,7 +7,8 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.Arrays;
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ActiveProfiles("test")
 public class MenuItemTest {
@@ -47,14 +48,14 @@ public class MenuItemTest {
 
     @Test
     public void setPrixHT_setsPrixHTCorrectly() {
-        menuItem.setExtraPriceHT(100);
-        assertEquals(100, menuItem.getExtraPriceHT());
+        menuItem.setPrixHT(100);
+        assertEquals(100, menuItem.getPrixHT());
     }
 
     @Test
     public void setPrixHT_setsNegativePrixHT() {
-        menuItem.setExtraPriceHT(-100);
-        assertEquals(-100, menuItem.getExtraPriceHT());
+        menuItem.setPrixHT(-100);
+        assertEquals(-100, menuItem.getPrixHT());
     }
 
     @Test

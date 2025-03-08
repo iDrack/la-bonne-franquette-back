@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementType;
 import org.labonnefranquette.data.model.entity.Article;
 import org.mockito.Mockito;
 import org.springframework.test.context.ActiveProfiles;
@@ -31,11 +31,11 @@ public class CommandeToolsTest {
         Article mockArticle = Mockito.mock(Article.class);
 
         Mockito.when(mockArticle.getQuantite()).thenReturn(1);
-        Mockito.when(mockArticle.getPrixHT()).thenReturn(100);
+        Mockito.when(mockArticle.getPrixTTC()).thenReturn(100);
 
         commande.setArticles(new ArrayList<>(List.of(mockArticle)));
 
-        commande.setPrixHT(100);
+        commande.setPrixTTC(100);
         assertTrue(commandeTools.isCorrectPrice(commande));
     }
     @Test
@@ -55,7 +55,7 @@ public class CommandeToolsTest {
 
     @Test
     void calculPaiementTypeCommande_returnsSingleTypeWhenAllPaymentsSame() {
-        PaiementTypeCommande type = new PaiementTypeCommande();
+        PaiementType type = new PaiementType();
         type.setName("CREDIT_CARD");
         Paiement paiement = new Paiement();
         paiement.setType(type);
@@ -67,9 +67,9 @@ public class CommandeToolsTest {
 
     @Test
     void calculPaiementTypeCommande_returnsMIXEDWhenPaymentsDifferent() {
-        PaiementTypeCommande type1 = new PaiementTypeCommande();
+        PaiementType type1 = new PaiementType();
         type1.setName("CREDIT_CARD");
-        PaiementTypeCommande type2 = new PaiementTypeCommande();
+        PaiementType type2 = new PaiementType();
         type2.setName("CASH");
         Paiement paiement1 = new Paiement();
         paiement1.setType(type1);

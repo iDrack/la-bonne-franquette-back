@@ -71,7 +71,7 @@ public class MailServiceImpl implements MailService {
         PDFTools pdfTools = PDFTools.getInstance();
         String filename = String.format("Commande_%d_%d.pdf", paiement.getId(), paiement.getCommande().getNumero());
         Path path = pdfTools.toPDF(paiement, filename, seeDetails);
-        sendMailWithAttachment(to, "Votre facture du " + formattedDate, "Votre facture du " + formattedDate + " d'un montant de " + paiement.getPrixTTC() / 100 + "€", path.toString(), filename);
+        sendMailWithAttachment(to, "Votre facture du " + formattedDate + ".", "Votre facture du " + formattedDate + ".", path.toString(), filename);
         Files.delete(path);
     }
 }

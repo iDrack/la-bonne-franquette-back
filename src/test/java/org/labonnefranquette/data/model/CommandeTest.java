@@ -61,9 +61,9 @@ public class CommandeTest {
     }
 
     @Test
-    public void setPrixHT_setsPrixHTCorrectly() {
-        commande.setPrixHT(100);
-        assertEquals(100, commande.getPrixHT());
+    public void setPrixTTC_setsPrixTTCCorrectly() {
+        commande.setPrixTTC(100);
+        assertEquals(100, commande.getPrixTTC());
     }
 
     @Test

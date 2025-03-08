@@ -12,6 +12,6 @@ public class Selection {
     private String nom;
     private List<Article> articles;
     private Integer quantite;
-    private int prixHT;
+    private int prixTTC;
     private boolean isModified;
 }

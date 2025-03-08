@@ -39,17 +39,4 @@ public class IngredientTest {
         ingredient.setACuire(false);
         assertFalse(ingredient.isACuire());
     }
-
-    @Test
-    public void setExtra_setsExtraCorrectly() {
-        Extra extra = new Extra();
-        ingredient.setExtra(extra);
-        assertEquals(extra, ingredient.getExtra());
-    }
-
-    @Test
-    public void setExtra_setsNullExtra() {
-        ingredient.setExtra(null);
-        assertNull(ingredient.getExtra());
-    }
 }

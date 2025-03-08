@@ -18,8 +18,7 @@ public class CommandeReadDTO  {
     private StatusCommande status;
     private Boolean surPlace;
     private int nbArticle;
-    private int prixHT;
-    private int tauxTVA = 10; 
+    private int prixTTC;
     private Collection<Article> articles;
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;

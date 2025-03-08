@@ -47,14 +47,14 @@ public class ArticleTest {
 
     @Test
     public void setPrixHT_setsPrixHTCorrectly() {
-        article.setPrixHT(100);
-        assertEquals(100, article.getPrixHT());
+        article.setPrixTTC(100);
+        assertEquals(100, article.getPrixTTC());
     }
 
     @Test
     public void setPrixHT_setsNegativePrixHT() {
-        article.setPrixHT(-100);
-        assertEquals(-100, article.getPrixHT());
+        article.setPrixTTC(-100);
+        assertEquals(-100, article.getPrixTTC());
     }
 
     @Test

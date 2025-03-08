@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +16,12 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaiementTypeCommande implements HasRestaurant {
+public class PaiementType extends HasRestaurantAbs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     @NotNull(message = "Le nom est obligatoire.")
     private String name;
 
@@ -34,15 +34,20 @@ public class PaiementTypeCommande implements HasRestaurant {
     @JsonIgnore
     private List<Paiement> paiements;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
-
-    public PaiementTypeCommande(long id, String name, boolean isEnable, ArrayList<Paiement> paiements) {
+    public PaiementType(long id, String name, boolean isEnable, ArrayList<Paiement> paiements) {
         this.id = id;
         this.name = name;
         this.isEnable = isEnable;
         this.paiements = paiements;
+    }
+
+    @JsonProperty("isEnable")
+    public boolean getIsEnable() {
+        return isEnable;
+    }
+
+    @JsonProperty("isEnable")
+    public void setIsEnable(boolean isEnable) {
+        this.isEnable = isEnable;
     }
 }

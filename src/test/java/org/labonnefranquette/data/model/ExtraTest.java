@@ -4,8 +4,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ActiveProfiles("test")
 public class ExtraTest {
@@ -14,25 +16,20 @@ public class ExtraTest {
 
     @BeforeEach
     public void setUp() {
-        extra = new Extra();
+        Set<Produit> produitSet = new HashSet<>();
+        extra = new Extra(1L, "Extra Cheese", produitSet);
     }
 
     @Test
-    public void setPrixHT_setsPrixHTCorrectly() {
-        extra.setPrixHT(100);
-        assertEquals(100, extra.getPrixHT());
+    public void testSetNom() {
+        extra.setNom("Extra Bacon");
+        assertEquals("Extra Bacon", extra.getNom());
     }
 
     @Test
-    public void setIngredient_setsIngredientCorrectly() {
-        Ingredient ingredient = new Ingredient();
-        extra.setIngredient(ingredient);
-        assertEquals(ingredient, extra.getIngredient());
-    }
-
-    @Test
-    public void setIngredient_setsNullIngredient() {
-        extra.setIngredient(null);
-        assertNull(extra.getIngredient());
+    public void testSetProduitSet() {
+        Set<Produit> newProduitSet = new HashSet<>();
+        extra.setProduitSet(newProduitSet);
+        assertEquals(newProduitSet, extra.getProduitSet());
     }
 }

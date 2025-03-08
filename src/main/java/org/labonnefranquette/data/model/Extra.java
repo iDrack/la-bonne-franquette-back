@@ -3,32 +3,29 @@ package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
+import org.labonnefranquette.data.model.interfaces.RestaurantItemAbs;
 
 import java.util.Set;
 
 @Data
 @Entity
-@DiscriminatorValue("extra")
+@Table(name = "extra")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Extra extends Ingredient {
+public class Extra extends RestaurantItemAbs {
+    //TODO dégager la relation ingrédient - extra, faire une table extra
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
-    @Column(name = "prixHT", nullable = true)
+    @Column(name = "nom", nullable = false, length = 50)
     @NotNull(message = "Ce champs ne peut pas être vide")
-    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
-    private int prixHT;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "ingredient_id", referencedColumnName = "id")
-    @JsonBackReference(value = "extra-ingredient")
-    @With
-    private Ingredient ingredient;
+    private String nom;
 
     @ManyToMany(mappedBy = "extraSet")
     @JsonBackReference(value = "produit-extra")

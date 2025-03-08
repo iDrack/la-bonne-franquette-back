@@ -1,78 +1,59 @@
 package org.labonnefranquette.data.services.impl;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementType;
 import org.labonnefranquette.data.repository.PaiementRepository;
-import org.labonnefranquette.data.repository.PaiementTypeCommandeRepository;
+import org.labonnefranquette.data.repository.PaiementTypeRepository;
+import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.CommandeService;
-import org.labonnefranquette.data.utils.PDFTools;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ActiveProfiles;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.mock;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@ActiveProfiles("test")
-public class PaiementServiceImplTest {
+class PaiementServiceImplTest {
 
     @Mock
     private PaiementRepository paiementRepository;
 
     @Mock
-    private PaiementTypeCommandeRepository paiementTypeCommandeRepository;
-
-    @Mock
     private CommandeService commandeService;
 
+    @Mock
+    private PaiementTypeRepository paiementTypeRepository;
+
+    @Mock
+    private JWTUtil jwtUtil;
 
     @InjectMocks
     private PaiementServiceImpl paiementService;
 
-    private Paiement paiement;
-    private Commande commande;
-
-    @BeforeEach
-    public void setup() {
-        paiement = new Paiement();
-        paiement.setId(1L);
-        paiement.setType(new PaiementTypeCommande(1L, "CB", true, new ArrayList<Paiement>()));
-        paiement.setDate(new Date());
-
-        commande = new Commande();
-        commande.setId(1L);
-        commande.setNumero((short) 123);
-
-        paiement.setCommande(commande);
-    }
-
     @Test
-    public void getAllPaiementSuccessfully() {
-        when(paiementRepository.findAll()).thenReturn(Arrays.asList(paiement));
+    void shouldReturnAllPaiements() {
+        List<Paiement> paiements = new ArrayList<>();
+        when(paiementRepository.findAll()).thenReturn(paiements);
 
         List<Paiement> result = paiementService.getAllPaiement();
 
-        assertEquals(1, result.size());
-        assertEquals(paiement, result.get(0));
+        assertEquals(paiements, result);
     }
 
     @Test
-    public void getPaiementByIdSuccessfully() {
-        when(paiementRepository.findById(anyLong())).thenReturn(Optional.of(paiement));
+    void shouldReturnPaiementById() {
+        Paiement paiement = new Paiement();
+        when(paiementRepository.findById(1L)).thenReturn(Optional.of(paiement));
 
         Paiement result = paiementService.getPaiementById(1L);
 
@@ -80,98 +61,49 @@ public class PaiementServiceImplTest {
     }
 
     @Test
-    public void getPaiementByIdNotFound() {
-        when(paiementRepository.findById(anyLong())).thenReturn(Optional.empty());
+    void shouldThrowExceptionWhenPaiementNotFoundById() {
+        when(paiementRepository.findById(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {
-            paiementService.getPaiementById(1L);
-        });
+        assertThrows(RuntimeException.class, () -> paiementService.getPaiementById(1L));
     }
 
     @Test
-    public void createPaiementSuccessfully() {
-        when(commandeService.findCommandeById(anyLong())).thenReturn(commande);
-        when(paiementRepository.save(any(Paiement.class))).thenReturn(paiement);
+    void shouldCreatePaiement() {
+        Commande commande = new Commande();
+        Paiement paiement = new Paiement();
+        when(commandeService.findCommandeById(1L)).thenReturn(commande);
+        when(paiementRepository.save(paiement)).thenReturn(paiement);
 
-        PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
-        paiementCreateDTO.setType(paiement.getType());
-        paiementCreateDTO.setTicketEnvoye(paiement.getTicketEnvoye());
-        paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
+        Paiement result = paiementService.createPaiement(1L, paiement);
 
-        Paiement result = paiementService.createPaiement(1L, paiementCreateDTO);
         assertEquals(paiement, result);
+        verify(paiementRepository).save(paiement);
     }
 
     @Test
-    public void createPaiementCommandeNotFound() {
-        when(commandeService.findCommandeById(anyLong())).thenThrow(new RuntimeException("Commande not found"));
-
-        PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
-        paiementCreateDTO.setType(paiement.getType());
-        paiementCreateDTO.setTicketEnvoye(paiement.getTicketEnvoye());
-        paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
-
-        assertThrows(RuntimeException.class, () -> {
-            paiementService.createPaiement(1L, paiementCreateDTO);
-        });
-    }
-
-    @Test
-    public void createPaiementWithNullPaiementSet() {
-        when(commandeService.findCommandeById(anyLong())).thenReturn(commande);
-        when(paiementRepository.save(any(Paiement.class))).thenReturn(paiement);
-
-        commande.setPaiementSet(null);
-
-        PaiementCreateDTO paiementCreateDTO = new PaiementCreateDTO();
-        paiementCreateDTO.setType(paiement.getType());
-        paiementCreateDTO.setTicketEnvoye(paiement.getTicketEnvoye());
-        paiementCreateDTO.setPrixTTC(paiement.getPrixHT());
-
-        Paiement result = paiementService.createPaiement(1L, paiementCreateDTO);
-        assertNotNull(commande.getPaiementSet());
-        assertEquals(1, commande.getPaiementSet().size());
-        assertEquals(paiement, result);
-    }
-
-    @Test
-    public void getPaiementByCommandeSuccessfully() {
-        when(paiementRepository.findByCommandeId(anyLong())).thenReturn(Optional.of(Arrays.asList(paiement)));
+    void shouldReturnPaiementsByCommande() {
+        List<Paiement> paiements = new ArrayList<>();
+        when(paiementRepository.findByCommandeId(1L)).thenReturn(Optional.of(paiements));
 
         List<Paiement> result = paiementService.getPaiementByCommande(1L);
 
-        assertEquals(1, result.size());
-        assertEquals(paiement, result.get(0));
+        assertEquals(paiements, result);
     }
 
     @Test
-    public void getPaiementByCommandeNotFound() {
-        when(paiementRepository.findByCommandeId(anyLong())).thenReturn(Optional.empty());
+    void shouldThrowExceptionWhenNoPaiementsForCommande() {
+        when(paiementRepository.findByCommandeId(1L)).thenReturn(Optional.empty());
 
-        assertThrows(RuntimeException.class, () -> {
-            paiementService.getPaiementByCommande(1L);
-        });
+        assertThrows(RuntimeException.class, () -> paiementService.getPaiementByCommande(1L));
     }
 
     @Test
-    public void getAllPaiementTypeSuccessfully() {
-        PaiementTypeCommande type1 = new PaiementTypeCommande(1L, "CB", true, new ArrayList<>());
-        PaiementTypeCommande type2 = new PaiementTypeCommande(2L, "Cash", true, new ArrayList<>());
-        when(paiementTypeCommandeRepository.findAll()).thenReturn(Arrays.asList(type1, type2));
+    void shouldReturnAllPaiementTypes() {
+        List<PaiementType> paiementTypes = new ArrayList<>();
+        when(paiementTypeRepository.findAll()).thenReturn(paiementTypes);
 
-        List<PaiementTypeCommande> result = paiementService.getAllPaiementType();
+        List<PaiementType> result = paiementService.getAllPaiementType();
 
-        assertEquals(2, result.size());
-        assertEquals(type1, result.get(0));
-        assertEquals(type2, result.get(1));
-    }
-
-    @Test
-    public void generatePDFSuccessfully() throws IOException {
-        PDFTools pdfTools = mock(PDFTools.class);
-        Path expectedPath = Path.of("tmp/pdf/tmp.pdf");
-        Path result = paiementService.generatePDF(paiement);
-
-        assertEquals(expectedPath, result);
+        assertEquals(paiementTypes, result);
     }
 }

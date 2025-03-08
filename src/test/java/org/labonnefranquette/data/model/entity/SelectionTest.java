@@ -45,14 +45,14 @@ public class SelectionTest {
 
     @Test
     public void setPrixHT_setsPrixHTCorrectly() {
-        selection.setPrixHT(100);
-        assertEquals(100, selection.getPrixHT());
+        selection.setPrixTTC(100);
+        assertEquals(100, selection.getPrixTTC());
     }
 
     @Test
     public void setPrixHT_setsNegativePrixHT() {
-        selection.setPrixHT(-100);
-        assertEquals(-100, selection.getPrixHT());
+        selection.setPrixTTC(-100);
+        assertEquals(-100, selection.getPrixTTC());
     }
 
     @Test

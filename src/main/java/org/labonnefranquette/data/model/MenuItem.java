@@ -1,7 +1,6 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.RestaurantItemAbs;
 
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
 @Table(name = "menu_item")
 @NoArgsConstructor
 @AllArgsConstructor
-public class MenuItem implements HasRestaurant {
+public class MenuItem extends RestaurantItemAbs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +26,6 @@ public class MenuItem implements HasRestaurant {
     @Column(name = "optional", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide")
     private boolean optional;
-
-    @Column(name = "extra_price", length = 10)
-    private Integer extraPriceHT;
 
     @ManyToOne
     @JoinColumn(name = "menu")
@@ -46,9 +42,4 @@ public class MenuItem implements HasRestaurant {
     @JsonIgnoreProperties({"categorieSet", "ingredientSet"})
     @With
     private List<Produit> produitSet;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
 }

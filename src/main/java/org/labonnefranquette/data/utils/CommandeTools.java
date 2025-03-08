@@ -3,7 +3,7 @@ package org.labonnefranquette.data.utils;
 import org.jetbrains.annotations.NotNull;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementTypeCommande;
+import org.labonnefranquette.data.model.PaiementType;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
@@ -39,21 +39,21 @@ public class CommandeTools {
         int articlesPrice = 0;
         if (commande.getArticles() != null) {
             articlesPrice = commande.getArticles().stream()
-                    .mapToInt(article -> article.getQuantite() * article.getPrixHT())
+                    .mapToInt(article -> article.getQuantite() * article.getPrixTTC())
                     .sum();
         }
 
         int menusPrice = 0;
         if (commande.getMenus() != null) {
             menusPrice = commande.getMenus().stream()
-                    .mapToInt(menu -> menu.getQuantite() * menu.getPrixHT())
+                    .mapToInt(menu -> menu.getQuantite() * menu.getPrixTTC())
                     .sum();
         }
 
 
         int correctPrice = articlesPrice + menusPrice;
 
-        return correctPrice == commande.getPrixHT();
+        return correctPrice == commande.getPrixTTC();
     }
     public short calculNumeroCommande() {
         return incrementeCompteur();
@@ -64,7 +64,7 @@ public class CommandeTools {
         if (paiementSet.isEmpty()) {
             return "AUCUN";
         }
-        Set<PaiementTypeCommande> typesPaiement = paiementSet.stream()
+        Set<PaiementType> typesPaiement = paiementSet.stream()
                 .map(Paiement::getType)
                 .collect(Collectors.toSet());
         if (typesPaiement.size() == 1) {

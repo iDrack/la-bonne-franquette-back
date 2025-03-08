@@ -8,20 +8,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 
 import java.util.Set;
 
 @Data
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "ingredient_type",
-        discriminatorType = DiscriminatorType.STRING)
-@DiscriminatorValue("ingredient")
 @Table(name = "ingredient")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ingredient implements HasRestaurant {
+public class Ingredient extends HasRestaurantAbs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -33,11 +29,6 @@ public class Ingredient implements HasRestaurant {
     @Column(name = "a_cuire", nullable = false, columnDefinition = "boolean default false")
     private boolean aCuire;
 
-    @OneToOne(mappedBy = "ingredient")
-    @JsonBackReference(value = "ingredient-extra")
-    @With
-    private Extra extra;
-
     @ManyToMany(mappedBy = "ingredientSet")
     @JsonBackReference(value = "produit-ingredient")
     @With
@@ -47,9 +38,4 @@ public class Ingredient implements HasRestaurant {
     @JsonIgnore
     @With
     private String ingredientType;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
 }

@@ -28,8 +28,7 @@ public class CommandeReadDTOTest {
     private StatusCommande status;
     private Boolean surPlace;
     private int nbArticle;
-    private int prixHT;
-    private int tauxTVA;
+    private int prixTTC;
     private Collection<Article> articles;
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;
@@ -46,8 +45,7 @@ public class CommandeReadDTOTest {
         status = StatusCommande.EN_COURS;
         surPlace = true;
         nbArticle = 5;
-        prixHT = 100;
-        tauxTVA = 10;
+        prixTTC = 100;
         articles = new ArrayList<>();
         menus = new ArrayList<>();
         paiementSet = new ArrayList<>();
@@ -61,7 +59,7 @@ public class CommandeReadDTOTest {
         commande.setStatus(status);
         commande.setSurPlace(surPlace);
         commande.setNbArticle(nbArticle);
-        commande.setPrixHT(prixHT);
+        commande.setPrixTTC(prixTTC);
         commande.setArticles(articles);
         commande.setMenus(menus);
         commande.setPaiementSet(paiementSet);
@@ -126,15 +124,8 @@ public class CommandeReadDTOTest {
     @Test
     public void testPrixHT() {
         CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        commandeReadDTO.setPrixHT(prixHT);
-        assertEquals(prixHT, commandeReadDTO.getPrixHT());
-    }
-
-    @Test
-    public void testTauxTVA() {
-        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        commandeReadDTO.setTauxTVA(tauxTVA);
-        assertEquals(tauxTVA, commandeReadDTO.getTauxTVA());
+        commandeReadDTO.setPrixTTC(prixTTC);
+        assertEquals(prixTTC, commandeReadDTO.getPrixTTC());
     }
 
     @Test
@@ -211,18 +202,6 @@ public class CommandeReadDTOTest {
     public void testConvertedNbArticle() {
         CommandeReadDTO commandeReadDTO = dtoTools.convertToDto(commande, CommandeReadDTO.class);
         assertEquals(commande.getNbArticle(), commandeReadDTO.getNbArticle());
-    }
-
-    @Test
-    public void testConvertedPrixHT() {
-        CommandeReadDTO commandeReadDTO = dtoTools.convertToDto(commande, CommandeReadDTO.class);
-        assertEquals(commande.getPrixHT(), commandeReadDTO.getPrixHT());
-    }
-
-    @Test
-    public void testConvertedTauxTVA() {
-        CommandeReadDTO commandeReadDTO = dtoTools.convertToDto(commande, CommandeReadDTO.class);
-        assertEquals(commande.getTauxTVA(), commandeReadDTO.getTauxTVA());
     }
 
     @Test

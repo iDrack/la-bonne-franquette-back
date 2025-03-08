@@ -20,6 +20,13 @@ public class Restaurant {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String name;
 
+    @Column(name = "version_carte", nullable = false)
+    private int versionCarte;
+
+    @Column(name = "tva_enable", nullable = false)
+    @NotNull(message = "Ce champs ne peut pas être vide.")
+    private Boolean isTVAEnable;
+
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<User> employees;
 
@@ -45,17 +52,13 @@ public class Restaurant {
     private List<Paiement> paiements;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaiementTypeCommande> paiementTypeCommandes;
+    private List<PaiementType> paiementTypes;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Produit> produits;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SousCategorie> sousCategories;
-    ;
-
-    @Column(name = "version_carte", nullable = false)
-    private int versionCarte;
 
     public Restaurant() {
         this.versionCarte = 1;

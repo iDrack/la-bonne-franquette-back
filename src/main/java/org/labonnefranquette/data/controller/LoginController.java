@@ -40,7 +40,6 @@ public class LoginController {
 
     @PostMapping(value = "/login", produces = "application/json")
     public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginDto userLoginDto) {
-        System.out.println(userLoginDto);
         try {
             if (!ControlInputTool.isValidObject(userLoginDto, UserLoginDto.class)) {
                 throw new Exception();

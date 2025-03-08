@@ -1,7 +1,6 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import org.labonnefranquette.data.model.entity.Article;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 import org.labonnefranquette.data.utils.JsonConverterTools;
 
 import java.util.Collection;
@@ -22,7 +21,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "paiement")
-public class Paiement implements HasRestaurant {
+public class Paiement extends HasRestaurantAbs {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,22 +33,12 @@ public class Paiement implements HasRestaurant {
     @ManyToOne
     @NotNull(message = "Ce champs ne peut pas être vide")
     @JoinColumn(name = "type_id", nullable = false)
-    private PaiementTypeCommande type;
-
-    @Column(name = "ticket_envoye", nullable = false)
-    @NotNull(message = "Ce champs ne peut pas être vide")
-    @With
-    private Boolean ticketEnvoye;
+    private PaiementType type;
 
     @Column(name = "prix_ht", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide")
     @Min(value = 0, message = "Ce champs ne peut pas être négatif")
-    private int prixHT;
-
-    @Column(name = "prix_ttc", nullable = false)
-    @NotNull(message = "Ce champs ne peut pas être vide")
-    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
-    private int prixTTC;
+    private int prix;
 
     @ManyToOne
     @JoinColumn(name = "commande")
@@ -61,19 +50,15 @@ public class Paiement implements HasRestaurant {
     @With
     private Collection<Article> articles;
 
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
-
-    public Paiement(PaiementTypeCommande type, Boolean ticketEnvoye, int prixHT, int prixTTC, Commande commande) {
+    public Paiement(PaiementType type, int prix, Commande commande, Collection<Article> articles) {
         this.date = new Date();
         this.type = type;
-        this.ticketEnvoye = ticketEnvoye;
-        this.prixHT = prixHT;
-        this.prixTTC = prixTTC;
+        this.prix = prix;
         this.commande = commande;
+        this.articles = articles;
+        this.setRestaurant(commande.getRestaurant());
     }
+
 
     @Override
     public String toString() {
@@ -81,9 +66,7 @@ public class Paiement implements HasRestaurant {
                 "id=" + id +
                 ", date=" + date +
                 ", type=" + type.getName() +
-                ", ticketEnvoye=" + ticketEnvoye +
-                ", prixHT=" + prixHT +
-                ", prixTTC=" + prixTTC +
+                ", prixHT=" + prix +
                 '}';
     }
 
@@ -92,11 +75,11 @@ public class Paiement implements HasRestaurant {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Paiement paiement = (Paiement) o;
-        return prixHT == paiement.prixHT && prixTTC == paiement.prixTTC && type == paiement.type && Objects.equals(ticketEnvoye, paiement.ticketEnvoye) && Objects.equals(commande, paiement.commande);
+        return prix == paiement.prix && type == paiement.type && Objects.equals(commande, paiement.commande);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, ticketEnvoye, prixHT, prixTTC, commande);
+        return Objects.hash(type, prix, commande);
     }
 }

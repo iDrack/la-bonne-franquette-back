@@ -1,14 +1,12 @@
 package org.labonnefranquette.data.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.RestaurantItemAbs;
 
 import java.util.Collection;
 
@@ -17,18 +15,13 @@ import java.util.Collection;
 @Table(name = "produit")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Produit implements HasRestaurant {
+public class Produit extends RestaurantItemAbs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "nom", nullable = false, length = 50)
     private String nom;
-
-    @Column(name = "prix_ht", nullable = false, length = 10)
-    @NotNull(message = "Ce champs ne peut pas être vide")
-    @Min(value = 0, message = "Ce champs ne peut pas être négatif")
-    private int prixHT;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -48,6 +41,7 @@ public class Produit implements HasRestaurant {
     @With
     private Collection<Ingredient> ingredientSet;
 
+    @JsonManagedReference(value = "produit-extra")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "produit_contient_extra",
@@ -56,9 +50,4 @@ public class Produit implements HasRestaurant {
     )
     @With
     private Collection<Extra> extraSet;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
 }

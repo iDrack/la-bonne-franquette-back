@@ -71,7 +71,7 @@ public class PDFTools {
             paiement.getArticles().forEach(article -> {
                 try {
                     String articleName = article.getNom();
-                    String articlePrice = String.format("%.2f€", (article.getPrixHT() * 1.1) / 100);
+                    String articlePrice = String.format("%.2f€", (article.getPrixTTC() * 1.1) / 100);
                     contentStream.showText("    " + articleName + " : " + articlePrice);
                     contentStream.newLine();
                 } catch (IOException e) {
@@ -81,11 +81,7 @@ public class PDFTools {
         }
 
         contentStream.newLine();
-        contentStream.showText("Prix HT : " + paiement.getPrixHT() / 100 + "€");
-        contentStream.newLine();
-        contentStream.showText("Prix TTC : " + paiement.getPrixTTC() / 100 + "€");
-        contentStream.newLine();
-        contentStream.showText("Prix Total de la commande : " + (paiement.getCommande().getPrixHT() * 1.1) / 100 + "€");
+        contentStream.showText("Prix HT : " + String.format("%.2f", paiement.getPrix() / 100.0) + "€");
         contentStream.newLine();
         contentStream.showText("Taux de TVA : 10%");
         contentStream.endText();

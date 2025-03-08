@@ -1,14 +1,13 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 
 import java.util.Collection;
 
@@ -21,7 +20,7 @@ import java.util.Collection;
 @Table(name = "categorie")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Categorie implements HasRestaurant {
+public class Categorie extends HasRestaurantAbs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -41,9 +40,4 @@ public class Categorie implements HasRestaurant {
     @Column(name = "categorie_type", insertable = false, updatable = false)
     @With
     private String categorieType;
-
-    @ManyToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
-    @JsonIgnore
-    private Restaurant restaurant;
 }
