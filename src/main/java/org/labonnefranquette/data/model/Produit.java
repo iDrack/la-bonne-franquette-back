@@ -1,6 +1,6 @@
 package org.labonnefranquette.data.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -41,7 +41,6 @@ public class Produit extends RestaurantItemAbs {
     @With
     private Collection<Ingredient> ingredientSet;
 
-    @JsonManagedReference(value = "produit-extra")
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "produit_contient_extra",

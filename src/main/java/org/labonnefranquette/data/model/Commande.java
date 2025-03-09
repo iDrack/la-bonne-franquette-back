@@ -66,7 +66,7 @@ public class Commande extends HasRestaurantAbs implements HasPrice {
     @With
     private Collection<Paiement> paiementSet;
 
-    @Column(name = "paiement_type", nullable = true, length = 5)
+    @Column(name = "paiement_type", nullable = true, length = 50)
     private String paiementType;
 
     @Column(name = "prix_ttc", nullable = false)

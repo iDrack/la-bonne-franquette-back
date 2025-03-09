@@ -2,6 +2,7 @@ package org.labonnefranquette.data.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -28,7 +29,7 @@ public class Extra extends RestaurantItemAbs {
     private String nom;
 
     @ManyToMany(mappedBy = "extraSet")
-    @JsonBackReference(value = "produit-extra")
+    @JsonIgnore
     @With
     private Set<Produit> produitSet;
 

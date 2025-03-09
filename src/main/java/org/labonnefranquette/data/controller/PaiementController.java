@@ -91,13 +91,13 @@ public class PaiementController {
                                                              @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
                                                              @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         Paiement retPaiement;
-        if (!ControlInputTool.isValidObject(paiementDTO, CommandeCreateDTO.class)) {
+        if (!ControlInputTool.isValidObject(paiementDTO, PaiementCreateDTO.class)) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         try {
             retPaiement = paiementService.createPaiement(commandeId, dtoTools.convertToEntity(paiementDTO, Paiement.class));
         } catch (RuntimeException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(dtoTools.convertToDto(retPaiement, PaiementReadDTO.class), HttpStatus.OK);
     }

@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
 import org.labonnefranquette.data.model.entity.Article;
+import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 import org.labonnefranquette.data.utils.JsonConverterTools;
 
@@ -28,12 +29,11 @@ public class Paiement extends HasRestaurantAbs {
     private long id;
 
     @Column(name = "date", nullable = false)
-    private Date date;
+    private Date date = new Date();
 
-    @ManyToOne
     @NotNull(message = "Ce champs ne peut pas être vide")
-    @JoinColumn(name = "type_id", nullable = false)
-    private PaiementType type;
+    @Column(name = "type", nullable = false, length = 50)
+    private String type;
 
     @Column(name = "prix_ht", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide")
@@ -45,17 +45,22 @@ public class Paiement extends HasRestaurantAbs {
     @JsonBackReference
     private Commande commande;
 
-    @Column(name = "articles", nullable = true, length = 1000)
+    @Column(name = "articles", nullable = true, length = 5000)
     @Convert(converter = JsonConverterTools.class)
     @With
     private Collection<Article> articles;
 
-    public Paiement(PaiementType type, int prix, Commande commande, Collection<Article> articles) {
-        this.date = new Date();
+    @Column(name = "selections", nullable = true, length = 5000)
+    @Convert(converter = JsonConverterTools.class)
+    @With
+    private Collection<Selection> selections;
+
+    public Paiement(String type, int prix, Commande commande, Collection<Article> articles, Collection<Selection> selections) {
         this.type = type;
         this.prix = prix;
         this.commande = commande;
         this.articles = articles;
+        this.selections = selections;
         this.setRestaurant(commande.getRestaurant());
     }
 
@@ -65,7 +70,7 @@ public class Paiement extends HasRestaurantAbs {
         return "Paiement{" +
                 "id=" + id +
                 ", date=" + date +
-                ", type=" + type.getName() +
+                ", type=" + type +
                 ", prixHT=" + prix +
                 '}';
     }

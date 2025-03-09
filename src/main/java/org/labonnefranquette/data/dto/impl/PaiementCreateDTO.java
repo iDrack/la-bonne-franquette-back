@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.labonnefranquette.data.model.entity.Article;
+import org.labonnefranquette.data.model.entity.Selection;
 
 import java.util.Collection;
 
@@ -17,4 +18,5 @@ public class PaiementCreateDTO  {
     @Min(value = 0, message = "Prix HT doit être positif")
     private int prix;
     private Collection<Article> articles;
+    private Collection<Selection> selections;
 }

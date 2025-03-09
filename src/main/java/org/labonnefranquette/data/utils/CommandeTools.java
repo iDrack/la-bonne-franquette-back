@@ -64,11 +64,11 @@ public class CommandeTools {
         if (paiementSet.isEmpty()) {
             return "AUCUN";
         }
-        Set<PaiementType> typesPaiement = paiementSet.stream()
+        Set<String> typesPaiement = paiementSet.stream()
                 .map(Paiement::getType)
                 .collect(Collectors.toSet());
         if (typesPaiement.size() == 1) {
-            return typesPaiement.iterator().next().getName();
+            return typesPaiement.iterator().next();
         }
         return "MIXED";
     }
