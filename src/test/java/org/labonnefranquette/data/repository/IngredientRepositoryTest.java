@@ -41,7 +41,6 @@ public class IngredientRepositoryTest {
     public void findById_returnsCorrectIngredient() {
         Ingredient ingredientTest = new Ingredient();
         ingredientTest.setNom("test");
-        ingredientTest.setACuire(false);
         entityManager.persistAndFlush(ingredientTest);
         Optional<Ingredient> ingredient = ingredientRepository.findById(ingredientTest.getId());
         assertThat(ingredient.isPresent()).isTrue();

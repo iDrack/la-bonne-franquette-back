@@ -28,15 +28,4 @@ public class IngredientTest {
         assertNull(ingredient.getNom());
     }
 
-    @Test
-    public void setACuire_setsACuireCorrectly() {
-        ingredient.setACuire(true);
-        assertTrue(ingredient.isACuire());
-    }
-
-    @Test
-    public void setACuire_setsACuireToFalse() {
-        ingredient.setACuire(false);
-        assertFalse(ingredient.isACuire());
-    }
 }

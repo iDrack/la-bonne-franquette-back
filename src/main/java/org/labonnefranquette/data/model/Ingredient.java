@@ -26,9 +26,6 @@ public class Ingredient extends HasRestaurantAbs {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String nom;
 
-    @Column(name = "a_cuire", nullable = false, columnDefinition = "boolean default false")
-    private boolean aCuire;
-
     @ManyToMany(mappedBy = "ingredientSet")
     @JsonBackReference(value = "produit-ingredient")
     @With
