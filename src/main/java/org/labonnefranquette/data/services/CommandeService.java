@@ -5,6 +5,7 @@ import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CommandeService {
 
@@ -16,5 +17,5 @@ public interface CommandeService {
     Commande ajoutPaiement(Commande commande, Paiement paiement);
     Commande advanceStatusCommande(Long id) throws RuntimeException;
 
-    Commande updateCommande(Long id, Commande commande);
+    Commande patchCommande(Long id, Map<String, Object> updates);
 }

@@ -22,6 +22,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -134,16 +135,14 @@ Les commandes sont récupérées par un websocket
         return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/{id}", produces = "application/json")
-    public ResponseEntity<CommandeReadDTO> patchCommande(@PathVariable long id, @RequestBody CommandeCreateDTO commandeDto,
+    @PatchMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
+    public ResponseEntity<CommandeReadDTO> patchCommande(@PathVariable long id, @RequestBody Map<String, Object> updates,
                                                          @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
                                                          @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        if (commandeDto == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        Commande commande = dtoTools.convertToEntity(commandeDto, Commande.class);
-        commande = commandeService.updateCommande(id, commande);
-        if (commande == null) {
+        Commande updatedCommande = commandeService.patchCommande(id, updates);
+        if (updatedCommande == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(dtoTools.convertToDto(commande, CommandeReadDTO.class), HttpStatus.OK);
+        return new ResponseEntity<>(dtoTools.convertToDto(updatedCommande, CommandeReadDTO.class), HttpStatus.OK);
     }
 }
