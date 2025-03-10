@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
+import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.labonnefranquette.data.utils.ControlInputTool;
+import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,21 +27,20 @@ public class LoginController {
 
     @Autowired
     private AuthServiceImpl authService;
+    @Autowired
+    private DtoTools dtoTools;
 
     @PutMapping(value = "/signup", produces = "application/json")
-    public ResponseEntity<Map<String, String>> signup(@RequestBody UserCreateDto userCreateDto) {
+    public ResponseEntity<UserLoginDto> signup(@RequestBody UserCreateDto userCreateDto) {
         try {
             if (!ControlInputTool.isValidObject(userCreateDto, UserCreateDto.class)) {
                 throw new Exception("Les informations de connexions sont invalides.");
             }
-            Map<String, String> token = authService.signup(userCreateDto);
-
-            if (token == null) {
-                token = new HashMap<>();
-                token.put("Erreur", "Informations de connexion invalides.");
-                return new ResponseEntity<>(token, HttpStatus.BAD_REQUEST);
+            User user = authService.signup(userCreateDto);
+            if (user == null) {
+                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             } else {
-                return new ResponseEntity<>(token, HttpStatus.OK);
+                return new ResponseEntity<>(dtoTools.convertToDto(user, UserLoginDto.class), HttpStatus.OK);
             }
         } catch (Exception e) {
             log.error("Erreur de création de compte: ", e);

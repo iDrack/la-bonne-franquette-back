@@ -2,6 +2,7 @@ package org.labonnefranquette.data.services;
 
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
+import org.labonnefranquette.data.model.User;
 
 import java.util.Map;
 
@@ -27,9 +28,9 @@ public interface AuthService {
     /**
      * Inscris un utilisateur.
      * @param userCreateDto
-     * @return Le nouveau token JWT généré
+     * @return Le nouvel USer créé.
      */
-    public Map<String, String> signup(UserCreateDto userCreateDto);
+    public User signup(UserCreateDto userCreateDto);
 
     /**
      * Déconnecte un utilisateur.

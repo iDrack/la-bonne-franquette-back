@@ -1,10 +1,13 @@
 package org.labonnefranquette.data.dto.impl;
 
-import lombok.Data;
-
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserLoginDto  {
     @NotBlank(message = "Le username est requis")
     private String username;

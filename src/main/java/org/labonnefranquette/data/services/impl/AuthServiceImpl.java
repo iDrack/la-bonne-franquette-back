@@ -43,21 +43,21 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Map<String, String> signup(UserCreateDto userCreateDto) {
-        User userEntity = userService.createUser(userCreateDto);
-        return authenticate(dtoTools.convertToDto(userEntity, UserLoginDto.class));
+    public User signup(UserCreateDto userCreateDto) {
+        return userService.createUser(userCreateDto);
     }
-   @Override
-   public Map<String, String> authenticate(UserLoginDto userLoginDto) {
+
+    @Override
+    public Map<String, String> authenticate(UserLoginDto userLoginDto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword()));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userLoginDto.getUsername());
-       User user = userService.findUserByUsername(userLoginDto.getUsername());
+        User user = userService.findUserByUsername(userLoginDto.getUsername());
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-       String accessToken = customUserDetailsService.generateTokenWithRestaurantId(jwtUtil, user);
+        String accessToken = customUserDetailsService.generateTokenWithRestaurantId(jwtUtil, user);
         String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
         Map<String, String> tokens = new HashMap<>();
@@ -67,7 +67,7 @@ public class AuthServiceImpl implements AuthService {
         return tokens;
     }
 
-   @Override
+    @Override
     public void logout(String accessToken, String refreshToken) {
         JwtBlacklistService.addToBlacklist(accessToken);
         JwtBlacklistService.addToBlacklist(refreshToken);
@@ -75,8 +75,8 @@ public class AuthServiceImpl implements AuthService {
         SecurityContextHolder.clearContext();
     }
 
-   @Override
-   public String refresh(String refreshToken) {
+    @Override
+    public String refresh(String refreshToken) {
         try {
             if (jwtUtil.isValidRefreshToken(refreshToken)) {
                 String username = jwtUtil.extractUsername(refreshToken);
@@ -92,9 +92,9 @@ public class AuthServiceImpl implements AuthService {
         return null;
     }
 
-   @Override
+    @Override
     public boolean isConnected() {
-       Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-       return authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
-   }
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken);
+    }
 }

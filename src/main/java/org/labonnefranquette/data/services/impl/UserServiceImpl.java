@@ -52,15 +52,12 @@ public class UserServiceImpl implements UserService {
     Boolean dataIsConformed(UserCreateDto user) {
 
         if (user == null) {
-            System.out.println("Pas d'utilisateur.");
             return false;
         }
         if (user.getUsername() == null || !isValidUsername(user.getUsername())) {
-            System.out.println("Mauvais nom d'utilisateur.");
             return false;
         }
-        if (user.getPassword() != null && this.isValidPassword(user.getPassword())) {
-            System.out.println("Mauvais mot de passe");
+        if (user.getPassword() != null && !this.isValidPassword(user.getPassword())) {
             return false;
         }
         return true;
