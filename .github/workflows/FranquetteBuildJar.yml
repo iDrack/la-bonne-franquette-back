@@ -25,6 +25,12 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Setup mail login in .env
+        run: echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" > .env
+      - name: Setup mail password in .env
+        run: echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" > .env
+      - name: Setup server port in .env
+        run: echo "PORT=${{ secrets.PORT }}" > .env
       - name: List running containers
         run: docker ps
       - name: Wait for MySQL to be ready

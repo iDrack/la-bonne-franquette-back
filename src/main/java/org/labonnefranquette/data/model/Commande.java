@@ -61,7 +61,7 @@ public class Commande extends HasRestaurantAbs implements HasPrice {
     @With
     private Collection<Selection> menus;
 
-    @OneToMany(mappedBy = "commande")
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     @With
     private Collection<Paiement> paiementSet;
