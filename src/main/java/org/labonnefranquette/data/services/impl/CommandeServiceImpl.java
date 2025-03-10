@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.services.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
@@ -19,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class CommandeServiceImpl implements CommandeService {
 
@@ -100,7 +102,7 @@ public class CommandeServiceImpl implements CommandeService {
             commandeRepository.save(updatedCommande);
             return commande;
         } catch (NullPointerException e) {
-            System.out.println(e);
+            log.error("Erreur: ", e);
             return null;
         }
     }

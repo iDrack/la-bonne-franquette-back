@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserCreateDto userCreateDto) {
-        System.out.println(userCreateDto);
         Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + " - Restaurant introuvable."));
         if (!this.dataIsConformed(userCreateDto)) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: Informations de connexions incorrectes.");
@@ -50,7 +49,6 @@ public class UserServiceImpl implements UserService {
     }
 
     Boolean dataIsConformed(UserCreateDto user) {
-
         if (user == null) {
             return false;
         }
@@ -65,7 +63,6 @@ public class UserServiceImpl implements UserService {
 
     boolean isValidUsername(String username) {
         User user = this.userRepository.findByUsername(username);
-        System.out.println("user : " + user);
         return user == null;
     }
 

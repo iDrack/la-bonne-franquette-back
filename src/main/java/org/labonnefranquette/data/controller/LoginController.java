@@ -40,7 +40,7 @@ public class LoginController {
             if (user == null) {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             } else {
-                return new ResponseEntity<>(dtoTools.convertToDto(user, UserLoginDto.class), HttpStatus.OK);
+                return new ResponseEntity<>(dtoTools.convertToDto(user, UserLoginDto.class), HttpStatus.CREATED);
             }
         } catch (Exception e) {
             log.error("Erreur de création de compte: ", e);
@@ -65,7 +65,7 @@ public class LoginController {
         } catch (Exception e) {
             Map<String, String> response = new HashMap<>();
             response.put("Erreur", e.toString());
-            System.out.println(e);
+            log.error("Erreur: ", e);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }

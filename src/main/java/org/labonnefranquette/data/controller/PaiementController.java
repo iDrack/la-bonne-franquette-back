@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.mail.MessagingException;
-import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
 import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
 import org.labonnefranquette.data.model.Paiement;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Slf4j
 @RestController
 @RequestMapping("api/v1/paiement")
 @Tag(name = "Paiement Controller", description = "Controller pour les interractions des paiements.")
@@ -48,7 +49,7 @@ public class PaiementController {
             paiementService.generatePDF(paiement);
             return new ResponseEntity<>("PDF généré avec succés.", HttpStatus.OK);
         } catch (IOException e) {
-            System.out.println(e.toString());
+            log.error("Erreur: ", e);
             return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -64,7 +65,7 @@ public class PaiementController {
                 Paiement paiement = paiementService.getPaiementById(id);
                 mailService.sendMailReceipt(email, paiement, seeDetails);
             } catch (IOException | MessagingException e) {
-                System.out.println(e.toString());
+                log.error("Erreur: ", e);
                 return new ResponseEntity<>(e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
             }
             return new ResponseEntity<>("Facture envoyée.", HttpStatus.OK);

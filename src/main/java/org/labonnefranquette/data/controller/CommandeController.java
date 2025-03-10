@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
 import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
 import org.labonnefranquette.data.exception.PriceException;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/commandes")
 @Validated
@@ -83,7 +85,7 @@ Les commandes sont récupérées par un websocket
         try {
             commande = commandeService.findCommandeById(id);
         } catch (NullPointerException e) {
-            System.out.println(e);
+            log.error("Erreur: ", e);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
 
