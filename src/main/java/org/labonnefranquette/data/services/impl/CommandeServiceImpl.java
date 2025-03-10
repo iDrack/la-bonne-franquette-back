@@ -99,6 +99,7 @@ public class CommandeServiceImpl implements CommandeService {
         try {
             Commande commande = findCommandeById(id);
             updatedCommande.setId(id);
+            updatedCommande.setDateSaisie(new Date());
             commandeRepository.save(updatedCommande);
             return commande;
         } catch (NullPointerException e) {
