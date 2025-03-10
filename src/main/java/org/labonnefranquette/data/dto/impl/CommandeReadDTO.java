@@ -23,6 +23,6 @@ public class CommandeReadDTO  {
     private Collection<Selection> menus;
     private Collection<Paiement> paiementSet;
     private String paiementTypeCommande;
-    private boolean isModified;
+    private boolean paye;
 
 }

@@ -23,9 +23,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserCreateDto userCreateDto) {
+        System.out.println(userCreateDto);
         Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + " - Restaurant introuvable."));
-        if (!this.dataIsConformed(userCreateDto) || Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
-            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur");
+        if (!this.dataIsConformed(userCreateDto)) {
+            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: Informations de connexions incorrectes.");
+        }
+        if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
+            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur éxiste déjà.");
         }
 
         userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
@@ -48,16 +52,23 @@ public class UserServiceImpl implements UserService {
     Boolean dataIsConformed(UserCreateDto user) {
 
         if (user == null) {
+            System.out.println("Pas d'utilisateur.");
             return false;
         }
         if (user.getUsername() == null || !isValidUsername(user.getUsername())) {
+            System.out.println("Mauvais nom d'utilisateur.");
             return false;
         }
-        return user.getPassword() != null && this.isValidPassword(user.getPassword());
+        if (user.getPassword() != null && this.isValidPassword(user.getPassword())) {
+            System.out.println("Mauvais mot de passe");
+            return false;
+        }
+        return true;
     }
 
     boolean isValidUsername(String username) {
         User user = this.userRepository.findByUsername(username);
+        System.out.println("user : " + user);
         return user == null;
     }
 

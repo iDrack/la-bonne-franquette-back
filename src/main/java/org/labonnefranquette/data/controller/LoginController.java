@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
+import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.services.impl.AuthServiceImpl;
 import org.labonnefranquette.data.utils.ControlInputTool;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/v1/auth")
 @Tag(name = "Login Controller", description = "Controller pour la connecxion des utilisateurs et la réactualisation de leur token d'authentification.")
@@ -23,17 +26,23 @@ public class LoginController {
     @Autowired
     private AuthServiceImpl authService;
 
-    @PostMapping(value = "/signup", produces = "application/json")
-    public ResponseEntity<Map<String, String>> signup(@RequestBody UserLoginDto userLoginDto) {
+    @PutMapping(value = "/signup", produces = "application/json")
+    public ResponseEntity<Map<String, String>> signup(@RequestBody UserCreateDto userCreateDto) {
         try {
-            if (!ControlInputTool.isValidObject(userLoginDto, UserLoginDto.class)) {
-                throw new Exception();
+            if (!ControlInputTool.isValidObject(userCreateDto, UserCreateDto.class)) {
+                throw new Exception("Les informations de connexions sont invalides.");
             }
-            Map<String, String> token = authService.authenticate(userLoginDto);
-            return token == null
-                    ? new ResponseEntity<>(null, HttpStatus.BAD_REQUEST)
-                    : new ResponseEntity<>(token, HttpStatus.OK);
+            Map<String, String> token = authService.signup(userCreateDto);
+
+            if (token == null) {
+                token = new HashMap<>();
+                token.put("Erreur", "Informations de connexion invalides.");
+                return new ResponseEntity<>(token, HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(token, HttpStatus.OK);
+            }
         } catch (Exception e) {
+            log.error("Erreur de création de compte: ", e);
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }

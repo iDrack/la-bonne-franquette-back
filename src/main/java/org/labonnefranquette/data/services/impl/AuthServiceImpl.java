@@ -58,7 +58,6 @@ public class AuthServiceImpl implements AuthService {
                 .collect(Collectors.toList());
 
        String accessToken = customUserDetailsService.generateTokenWithRestaurantId(jwtUtil, user);
-       //String accessToken = jwtUtil.generateToken(userDetails.getUsername(), roles);
         String refreshToken = jwtUtil.generateRefreshToken(userDetails.getUsername());
 
         Map<String, String> tokens = new HashMap<>();

@@ -72,6 +72,9 @@ public class Commande extends HasRestaurantAbs implements HasPrice {
     @Column(name = "prix_ttc", nullable = false)
     private int prixTTC;
 
+    @Column(name = "paye", nullable = false)
+    private boolean paye = false;
+
     @Override
     public String toString() {
         return "Commande{" +

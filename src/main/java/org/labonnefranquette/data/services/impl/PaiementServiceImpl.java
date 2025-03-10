@@ -3,6 +3,7 @@ package org.labonnefranquette.data.services.impl;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.PaiementType;
+import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.repository.PaiementRepository;
 import org.labonnefranquette.data.repository.PaiementTypeRepository;
 import org.labonnefranquette.data.security.JWTUtil;
@@ -31,6 +32,8 @@ public class PaiementServiceImpl implements PaiementService {
     private PaiementTypeRepository paiementTypeRepository;
     @Autowired
     private JWTUtil jwtUtil;
+    @Autowired
+    private CommandeRepository commandeRepository;
 
     @Override
     public List<Paiement> getAllPaiement() {
@@ -54,6 +57,14 @@ public class PaiementServiceImpl implements PaiementService {
         }
         commande.getPaiementSet().add(paiement);
         commandeService.ajoutPaiement(commande, paiement);
+        int prixPaye = 0;
+        for (Paiement currentPaiement : commande.getPaiementSet()) {
+            prixPaye += currentPaiement.getPrix();
+        }
+        if (commande.getPrixTTC() == prixPaye) {
+            commande.setPaye(true);
+        }
+        commandeRepository.save(commande);
         return paiement;
     }
 
