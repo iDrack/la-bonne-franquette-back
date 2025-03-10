@@ -5,14 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementType;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +35,7 @@ public class PaiementRepositoryTest {
         commande.setStatus(StatusCommande.EN_COURS);
         entityManager.persistAndFlush(commande);
         Paiement paiement = new Paiement();
-        paiement.setType(new PaiementType(1L, "CB", true, new ArrayList<>()));
+        paiement.setType("CB");
         paiement.setCommande(commande);
         paiement.setDate(new Date());
         entityManager.persistAndFlush(paiement);
@@ -52,7 +50,7 @@ public class PaiementRepositoryTest {
         entityManager.persistAndFlush(commande);
         Paiement paiementTest = new Paiement();
         paiementTest.setCommande(commande);
-        paiementTest.setType(new PaiementType(1L, "AUTRE", true, new ArrayList<>()));
+        paiementTest.setType("AUTRE");
         paiementTest.setDate(new Date());
         entityManager.persistAndFlush(paiementTest);
         Optional<List<Paiement>> paiements = paiementRepository.findByCommandeId(paiementTest.getCommande().getId());

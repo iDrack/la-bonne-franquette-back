@@ -4,7 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementType;
 import org.labonnefranquette.data.model.entity.Article;
 import org.mockito.Mockito;
 import org.springframework.test.context.ActiveProfiles;
@@ -55,10 +54,8 @@ public class CommandeToolsTest {
 
     @Test
     void calculPaiementTypeCommande_returnsSingleTypeWhenAllPaymentsSame() {
-        PaiementType type = new PaiementType();
-        type.setName("CREDIT_CARD");
         Paiement paiement = new Paiement();
-        paiement.setType(type);
+        paiement.setType("CREDIT_CARD");
         Set<Paiement> paiements = new HashSet<>();
         paiements.add(paiement);
 
@@ -67,14 +64,10 @@ public class CommandeToolsTest {
 
     @Test
     void calculPaiementTypeCommande_returnsMIXEDWhenPaymentsDifferent() {
-        PaiementType type1 = new PaiementType();
-        type1.setName("CREDIT_CARD");
-        PaiementType type2 = new PaiementType();
-        type2.setName("CASH");
         Paiement paiement1 = new Paiement();
-        paiement1.setType(type1);
+        paiement1.setType("CREDIT_CARD");
         Paiement paiement2 = new Paiement();
-        paiement2.setType(type2);
+        paiement2.setType("CASH");
         Set<Paiement> paiements = new HashSet<>();
         paiements.add(paiement1);
         paiements.add(paiement2);

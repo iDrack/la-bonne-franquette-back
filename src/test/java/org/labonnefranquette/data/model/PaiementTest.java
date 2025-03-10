@@ -3,6 +3,7 @@ package org.labonnefranquette.data.model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.entity.Article;
+import org.labonnefranquette.data.model.entity.Selection;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.sql.Date;
@@ -18,13 +19,14 @@ public class PaiementTest {
     private PaiementType paiementType;
     private Commande commande;
     private Collection<Article> articles;
+    private Collection<Selection> selections;
 
     @BeforeEach
     public void setUp() {
-        paiementType = new PaiementType(1L, "CB", true, new ArrayList<>());
         commande = new Commande();
         articles = new ArrayList<>();
-        paiement = new Paiement(paiementType, 100, commande, articles);
+        selections = new ArrayList<>();
+        paiement = new Paiement("CB", 100, commande, articles, selections);
     }
 
     @Test
@@ -35,9 +37,8 @@ public class PaiementTest {
 
     @Test
     public void testSetType() {
-        PaiementType newType = new PaiementType(2L, "Cash", true, new ArrayList<>());
-        paiement.setType(newType);
-        assertEquals(newType, paiement.getType());
+        paiement.setType("Cash");
+        assertEquals("Cash", paiement.getType());
     }
 
     @Test

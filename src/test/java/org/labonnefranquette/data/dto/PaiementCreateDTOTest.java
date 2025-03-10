@@ -20,7 +20,7 @@ class PaiementCreateDTOTest {
 
     @Test
     void shouldCreatePaiementCreateDTOWithValidData() {
-        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, Collections.emptyList());
+        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, Collections.emptyList(), Collections.emptyList());
 
         Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
@@ -28,7 +28,7 @@ class PaiementCreateDTOTest {
 
     @Test
     void shouldFailWhenTypeIsNull() {
-        PaiementCreateDTO dto = new PaiementCreateDTO(null, 500, Collections.emptyList());
+        PaiementCreateDTO dto = new PaiementCreateDTO(null, 500, Collections.emptyList(), Collections.emptyList());
 
         Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size());
@@ -36,7 +36,7 @@ class PaiementCreateDTOTest {
 
     @Test
     void shouldFailWhenPrixIsNegative() {
-        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", -100, Collections.emptyList());
+        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", -100, Collections.emptyList(), Collections.emptyList());
 
         Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size());
@@ -44,7 +44,7 @@ class PaiementCreateDTOTest {
 
     @Test
     void shouldHandleNullArticles() {
-        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, null);
+        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, null, Collections.emptyList());
 
         Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
