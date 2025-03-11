@@ -32,8 +32,6 @@ jobs:
           echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" >> .env
           echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> .env
           echo "PORT=${{ secrets.PORT }}" >> .env
-      - name: Check .env file
-        run: cat .env
       - name: List running containers
         run: docker ps
       - name: Wait for MySQL to be ready
