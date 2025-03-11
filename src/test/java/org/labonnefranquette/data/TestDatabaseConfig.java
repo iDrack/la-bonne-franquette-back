@@ -13,7 +13,7 @@ import javax.sql.DataSource;
 @Configuration
 public class TestDatabaseConfig {
 
-    @Value("classpath:src/test/resources/mySql/init_db_test.sql")
+    @Value("src/test/resources/mySql/init_db_test.sql")
     private Resource initScript;
 
     @Bean
