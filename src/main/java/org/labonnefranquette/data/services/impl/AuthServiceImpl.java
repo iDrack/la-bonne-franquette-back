@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.services.impl;
 
+import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserLoginDto;
 import org.labonnefranquette.data.model.User;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -87,6 +89,7 @@ public class AuthServiceImpl implements AuthService {
                 return jwtUtil.generateToken(username, roles, user.getRestaurant().getId());
             }
         } catch (Exception e) {
+            log.error("Erreur: ", e);
             return null;
         }
         return null;

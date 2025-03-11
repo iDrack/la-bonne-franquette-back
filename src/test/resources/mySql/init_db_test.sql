@@ -1,470 +1,451 @@
-CREATE
-DATABASE IF NOT EXISTS `franquette-bdd-test`;
-USE
-`franquette-bdd-test`;
+-- user admin
 
--- Création de la table restaurant
-CREATE TABLE IF NOT EXISTS restaurant
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    name
-    VARCHAR
-(
-    100
-) NOT NULL,
-    version_carte INT NOT NULL DEFAULT 1,
-    tva_enable BOOLEAN NOT NULL
-    );
+INSERT INTO restaurant(id, name, version_carte, tva_enable)
+SELECT 1,
+       'test',
+       1,
+       true WHERE NOT EXISTS(SELECT 1 FROM restaurant WHERE id = 1);
 
--- Création de la table produit
-CREATE TABLE IF NOT EXISTS produit
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    nom
-    VARCHAR
-(
-    50
-) NOT NULL,
-    prix_ht DECIMAL
-(
-    10,
-    2
-) NOT NULL,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
+INSERT INTO users(username, password, roles, restaurant_id)
+SELECT 'admin',
+       '$2a$10$KV8cQULcx8Y2VNyf5lpOPuFdvJ4rzNmRFyDvgWDvhth.eVKAddo1y',
+       'ROLE_ADMIN',
+       1 WHERE NOT EXISTS(SELECT 1 FROM restaurant WHERE id = 1);
 
--- Création de la table menu
-CREATE TABLE IF NOT EXISTS menu
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    nom
-    VARCHAR
-(
-    50
-) NOT NULL,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table ingredient
-CREATE TABLE IF NOT EXISTS ingredient
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    nom
-    VARCHAR
-(
-    50
-) NOT NULL,
-    a_cuire BOOLEAN NOT NULL,
-    ingredient_type VARCHAR
-(
-    255
-) NOT NULL,
-    prixHT DECIMAL
-(
-    10,
-    2
-),
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table categorie
-CREATE TABLE IF NOT EXISTS categorie
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    nom
-    VARCHAR
-(
-    50
-) NOT NULL,
-    categorie_type VARCHAR
-(
-    255
-) NOT NULL,
-    categorie_id INT,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table sous_categorie
-CREATE TABLE IF NOT EXISTS sous_categorie
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    nom
-    VARCHAR
-(
-    50
-) NOT NULL,
-    categorie_id INT,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    categorie_id
-) REFERENCES categorie
-(
-    id
-),
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table extra
-CREATE TABLE IF NOT EXISTS extra
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    nom
-    VARCHAR
-(
-    50
-) NOT NULL,
-    prix_ht DECIMAL
-(
-    10,
-    2
-) NOT NULL,
-    prix_ttc DECIMAL
-(
-    10,
-    2
-) DEFAULT 0,
-    taux_tva VARCHAR
-(
-    255
-) NOT NULL,
-    ingredient_id INT,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    ingredient_id
-) REFERENCES ingredient
-(
-    id
-),
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table paiement_type
-CREATE TABLE IF NOT EXISTS paiement_type
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    name
-    VARCHAR
-(
-    50
-) NOT NULL,
-    is_enable BOOLEAN NOT NULL,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table paiement
-CREATE TABLE IF NOT EXISTS paiement
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    date
-    DATE
-    NOT
-    NULL,
-    type_id
-    INT
-    NOT
-    NULL,
-    ticket_envoye
-    BOOLEAN
-    NOT
-    NULL,
-    prix_ht
-    DECIMAL
-(
-    10,
-    2
-) NOT NULL,
-    prix_ttc DECIMAL
-(
-    10,
-    2
-) NOT NULL,
-    commande_id INT,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    type_id
-) REFERENCES paiement_type
-(
-    id
-),
-    FOREIGN KEY
-(
-    commande_id
-) REFERENCES commande
-(
-    id
-),
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table commande
-CREATE TABLE IF NOT EXISTS commande
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    numero
-    SMALLINT
-    NOT
-    NULL,
-    date_saisie
-    DATE
-    NOT
-    NULL,
-    date_livraison
-    DATE,
-    status
-    VARCHAR
-(
-    50
-) NOT NULL,
-    sur_place BOOLEAN NOT NULL,
-    nb_article INT NOT NULL,
-    prix_ht DECIMAL
-(
-    10,
-    2
-) NOT NULL,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Création de la table user
-CREATE TABLE IF NOT EXISTS users
-(
-    id
-    INT
-    PRIMARY
-    KEY
-    AUTO_INCREMENT,
-    username
-    VARCHAR
-(
-    100
-) NOT NULL,
-    password VARCHAR
-(
-    255
-) NOT NULL,
-    last_connection DATE,
-    roles VARCHAR
-(
-    100
-) NOT NULL,
-    restaurant_id INT NOT NULL,
-    FOREIGN KEY
-(
-    restaurant_id
-) REFERENCES restaurant
-(
-    id
-)
-    );
-
--- Insertion des données
--- Restaurants
-INSERT INTO restaurant (id, name, version_carte, tva_enable)
-VALUES (1, 'Restaurant1', 1, true);
-
--- Produits
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (1, 'Produit1', 550, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (2, 'Produit2', 750, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (3, 'Produit3', 600, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (4, 'Produit4', 600, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (5, 'Produit5', 500, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (6, 'Produit6', 550, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (7, 'Produit7', 550, 1);
-INSERT INTO produit (id, nom, prix_ht, restaurant_id)
-VALUES (8, 'Produit8', 500, 1);
-
--- Menus
-INSERT INTO menu (id, nom, restaurant_id)
-VALUES (1, 'Menu1', 1);
-INSERT INTO menu (id, nom, restaurant_id)
-VALUES (2, 'Menu2', 1);
-INSERT INTO menu (id, nom, restaurant_id)
-VALUES (3, 'Menu3', 1);
-INSERT INTO menu (id, nom, restaurant_id)
-VALUES (4, 'Menu4', 1);
-INSERT INTO menu (id, nom, restaurant_id)
-VALUES (5, 'Menu5', 1);
-
--- Ingrédients
-INSERT INTO ingredient (id, nom, a_cuire, ingredient_type, prixHT, restaurant_id)
-VALUES (1, 'Ingredient1', false, 'ingredient', NULL, 1);
-INSERT INTO ingredient (id, nom, a_cuire, ingredient_type, prixHT, restaurant_id)
-VALUES (2, 'Ingredient2', true, 'ingredient', NULL, 1);
-INSERT INTO ingredient (id, nom, a_cuire, ingredient_type, prixHT, restaurant_id)
-VALUES (3, 'Ingredient3', false, 'ingredient', NULL, 1);
-INSERT INTO ingredient (id, nom, a_cuire, ingredient_type, prixHT, restaurant_id)
-VALUES (4, 'Ingredient4', true, 'ingredient', NULL, 1);
-INSERT INTO ingredient (id, nom, a_cuire, ingredient_type, prixHT, restaurant_id)
-VALUES (5, 'Ingredient5', false, 'ingredient', NULL, 1);
-
--- Extras
-INSERT INTO extra (id, nom, prix_ht, prix_ttc, taux_tva, ingredient_id, restaurant_id)
-VALUES (6, 'Extra1', 100, 0, 'AUCUN', 1, 1);
-INSERT INTO extra (id, nom, prix_ht, prix_ttc, taux_tva, ingredient_id, restaurant_id)
-VALUES (7, 'Extra2', 200, 0, 'AUCUN', 2, 1);
-INSERT INTO extra (id, nom, prix_ht, prix_ttc, taux_tva, ingredient_id, restaurant_id)
-VALUES (8, 'Extra3', 150, 0, 'AUCUN', 3, 1);
-INSERT INTO extra (id, nom, prix_ht, prix_ttc, taux_tva, ingredient_id, restaurant_id)
-VALUES (9, 'Extra4', 250, 0, 'AUCUN', 4, 1);
-INSERT INTO extra (id, nom, prix_ht, prix_ttc, taux_tva, ingredient_id, restaurant_id)
-VALUES (10, 'Extra5', 300, 0, 'AUCUN', 5, 1);
-
--- Catégories
+-- Insertion des catégories
 INSERT INTO categorie (id, nom, categorie_type, restaurant_id)
-VALUES (1, 'Categorie1', 'categorie', 1);
+SELECT 1,
+       'Burgers',
+       'categorie',
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 1);
 INSERT INTO categorie (id, nom, categorie_type, restaurant_id)
-VALUES (2, 'Categorie2', 'categorie', 1);
+SELECT 2,
+       'Salades',
+       'categorie',
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 2);
 INSERT INTO categorie (id, nom, categorie_type, restaurant_id)
-VALUES (3, 'Categorie3', 'categorie', 1);
+SELECT 3,
+       'Boissons',
+       'categorie',
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 3);
 INSERT INTO categorie (id, nom, categorie_type, restaurant_id)
-VALUES (4, 'Categorie4', 'categorie', 1);
+SELECT 4,
+       'Desserts',
+       'categorie',
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 4);
 INSERT INTO categorie (id, nom, categorie_type, restaurant_id)
-VALUES (5, 'Categorie5', 'categorie', 1);
+SELECT 5,
+       'Wraps',
+       'categorie',
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 5);
 
--- Sous-Catégories
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (1, 'SousCategorie1', 1, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (2, 'SousCategorie2', 1, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (3, 'SousCategorie3', 1, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (4, 'SousCategorie4', 2, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (5, 'SousCategorie5', 3, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (6, 'SousCategorie6', 3, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (7, 'SousCategorie7', 3, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (8, 'SousCategorie8', 4, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (9, 'SousCategorie9', 5, 1);
-INSERT INTO sous_categorie (id, nom, categorie_id, restaurant_id)
-VALUES (10, 'SousCategorie10', 5, 1);
+-- Insertion des sous-catégories
+INSERT INTO categorie (id, nom, categorie_type, categorie_id, restaurant_id)
+SELECT 6,
+       'Boeuf',
+       'sous-categorie',
+       1,
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 6);
+INSERT INTO categorie (id, nom, categorie_type, categorie_id, restaurant_id)
+SELECT 7,
+       'Poulet',
+       'sous-categorie',
+       2,
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 7);
+INSERT INTO categorie (id, nom, categorie_type, categorie_id, restaurant_id)
+SELECT 8,
+       'Eaux',
+       'sous-categorie',
+       3,
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 8);
+INSERT INTO categorie (id, nom, categorie_type, categorie_id, restaurant_id)
+SELECT 9,
+       'Jus',
+       'sous-categorie',
+       3,
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 9);
+INSERT INTO categorie (id, nom, categorie_type, categorie_id, restaurant_id)
+SELECT 10,
+       'Soda',
+       'sous-categorie',
+       3,
+       1 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 10);
 
--- Types de paiement
+-- Insertion des ingrédients
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 1,
+       'Tomate',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 1);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 2,
+       'Fromage',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 2);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 3,
+       'Salade',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 3);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 4,
+       'Poulet',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 4);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 5,
+       'Boeuf',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 5);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 6,
+       'Eau',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 6);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 7,
+       'Cola',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 7);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 8,
+       'Citron',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 8);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 9,
+       'Pomme',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 9);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 10,
+       'Orange',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 10);
+INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
+SELECT 11,
+       'Glaçon',
+       'ingredient',
+       1 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 11);
+
+-- Insertion des extras
+INSERT INTO extra (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 12,
+       'Bacon',
+       100,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM extra WHERE id = 12);
+INSERT INTO extra (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 13,
+       'Avocat',
+       150,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM extra WHERE id = 13);
+INSERT INTO extra (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 14,
+       'Glaçon',
+       150,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM extra WHERE id = 14);
+
+-- Insertion des produits
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 1,
+       'Burger Classique',
+       850,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 1);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 2,
+       'Double Bacon',
+       1050,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 2);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 3,
+       'Chicken Deluxe',
+       900,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 3);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 4,
+       'Wrap Caesar',
+       700,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 4);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 5,
+       'Spicy Beef',
+       750,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 5);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 6,
+       'Eau plate',
+       100,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 6);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 7,
+       'Eau gazeuse',
+       150,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 7);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 8,
+       'Jus de pomme',
+       200,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 8);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 9,
+       'Jus d orange',
+       200,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 9);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 10,
+       'Coca',
+       250,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 10);
+INSERT INTO produit (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 11,
+       'Limonade',
+       250,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit WHERE id = 11);
+
+-- Association des produits avec les catégories
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 1,
+       6 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 1 AND categorie_id = 6);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 2,
+       6 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 2 AND categorie_id = 6);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 3,
+       7 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 3 AND categorie_id = 7);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 4,
+       5 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 4 AND categorie_id = 5);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 5,
+       6 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 5 AND categorie_id = 6);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 6,
+       8 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 6 AND categorie_id = 8);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 7,
+       8 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 7 AND categorie_id = 8);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 8,
+       9 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 8 AND categorie_id = 9);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 9,
+       9 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 9 AND categorie_id = 9);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 10,
+       10 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 10 AND categorie_id = 10);
+INSERT INTO produit_appartient_categorie (produit_id, categorie_id)
+SELECT 11,
+       10 WHERE NOT EXISTS (SELECT 1 FROM produit_appartient_categorie WHERE produit_id = 11 AND categorie_id = 10);
+
+-- Association des produits avec les ingrédients
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 1,
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 1 AND ingredient_id = 1);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 1,
+       2 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 1 AND ingredient_id = 2);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 1,
+       3 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 1 AND ingredient_id = 3);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 1,
+       5 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 1 AND ingredient_id = 5);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 2,
+       1 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 2 AND ingredient_id = 1);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 2,
+       2 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 2 AND ingredient_id = 2);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 2,
+       5 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 2 AND ingredient_id = 5);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 6,
+       6 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 6 AND ingredient_id = 6);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 7,
+       6 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 7 AND ingredient_id = 6);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 8,
+       9 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 8 AND ingredient_id = 9);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 9,
+       10 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 9 AND ingredient_id = 10);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 10,
+       7 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 10 AND ingredient_id = 7);
+INSERT INTO produit_contient_ingredient (produit_id, ingredient_id)
+SELECT 11,
+       8 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_ingredient WHERE produit_id = 11 AND ingredient_id = 8);
+
+-- Association des produits avec les extras
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 1,
+       12 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 1 AND extra_id = 12);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 2,
+       12 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 2 AND extra_id = 12);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 3,
+       12 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 3 AND extra_id = 12);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 3,
+       13 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 3 AND extra_id = 13);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 4,
+       12 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 4 AND extra_id = 12);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 5,
+       12 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 5 AND extra_id = 12);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 6,
+       14 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 6 AND extra_id = 14);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 7,
+       14 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 7 AND extra_id = 14);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 8,
+       14 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 8 AND extra_id = 14);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 9,
+       14 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 9 AND extra_id = 14);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 10,
+       14 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 10 AND extra_id = 14);
+INSERT INTO produit_contient_extra (produit_id, extra_id)
+SELECT 11,
+       14 WHERE NOT EXISTS (SELECT 1 FROM produit_contient_extra WHERE produit_id = 11 AND extra_id = 14);
+
+-- Insertion des menus
+INSERT INTO menu (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 1,
+       'Menu Burger Classique',
+       1000,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE id = 1);
+INSERT INTO menu (id, nom, prix_ht, taux_tva, restaurant_id)
+SELECT 2,
+       'Menu Double Bacon',
+       1200,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu WHERE id = 2);
+
+-- Insertion des menu items
+INSERT INTO menu_item (id, optional, prix_ht, menu, taux_tva, restaurant_id)
+SELECT 1,
+       FALSE,
+       0,
+       1,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu_item WHERE id = 1);
+INSERT INTO menu_item (id, optional, prix_ht, menu, taux_tva, restaurant_id)
+SELECT 2,
+       TRUE,
+       200,
+       1,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu_item WHERE id = 2);
+INSERT INTO menu_item (id, optional, prix_ht, menu, taux_tva, restaurant_id)
+SELECT 3,
+       FALSE,
+       0,
+       2,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu_item WHERE id = 3);
+INSERT INTO menu_item (id, optional, prix_ht, menu, taux_tva, restaurant_id)
+SELECT 4,
+       FALSE,
+       0,
+       1,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu_item WHERE id = 4);
+INSERT INTO menu_item (id, optional, prix_ht, menu, taux_tva, restaurant_id)
+SELECT 5,
+       FALSE,
+       0,
+       2,
+       'normal',
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu_item WHERE id = 5);
+
+-- Association des menu items avec les produits
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 1,
+       1 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 1 AND produit_id = 1);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 2,
+       3 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 2 AND produit_id = 3);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 3,
+       2 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 3 AND produit_id = 2);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 4,
+       6 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 4 AND produit_id = 6);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 4,
+       7 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 4 AND produit_id = 7);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 4,
+       8 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 4 AND produit_id = 8);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 4,
+       9 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 4 AND produit_id = 9);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 4,
+       10 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 4 AND produit_id = 10);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 4,
+       11 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 4 AND produit_id = 11);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 5,
+       6 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 5 AND produit_id = 6);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 5,
+       7 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 5 AND produit_id = 7);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 5,
+       8 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 5 AND produit_id = 8);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 5,
+       9 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 5 AND produit_id = 9);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 5,
+       10 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 5 AND produit_id = 10);
+INSERT INTO menu_item_contient_produit (menu_item_id, produit_id)
+SELECT 5,
+       11 WHERE NOT EXISTS (SELECT 1 FROM menu_item_contient_produit WHERE menu_item_id = 5 AND produit_id = 11);
+
+-- Insertion des type de paiement
 INSERT INTO paiement_type (id, name, is_enable, restaurant_id)
-VALUES (1, 'Type1', true, 1);
+SELECT 1,
+       'CARTE BANCAIRE',
+       true,
+       1 WHERE NOT EXISTS (SELECT 1 FROM paiement_type WHERE id = 1);
 INSERT INTO paiement_type (id, name, is_enable, restaurant_id)
-VALUES (2, 'Type2', true, 1);
+SELECT 2,
+       'CHEQUE',
+       true,
+       1 WHERE NOT EXISTS (SELECT 1 FROM paiement_type WHERE id = 2);
 INSERT INTO paiement_type (id, name, is_enable, restaurant_id)
-VALUES (3, 'Type3', true, 1);
-
--- Utilisateurs
-INSERT INTO users (id, username, password, last_connection, roles, restaurant_id)
-VALUES (1, 'user1', 'password1', NULL, 'ROLE_USER', 1);
-INSERT INTO users (id, username, password, last_connection, roles, restaurant_id)
-VALUES (2, 'user2', 'password2', NULL, 'ROLE_USER', 1);
-INSERT INTO users (id, username, password, last_connection, roles, restaurant_id)
-VALUES (3, 'user3', 'password3', NULL, 'ROLE_USER', 1);
+SELECT 3,
+       'ESPECE',
+       true,
+       1 WHERE NOT EXISTS (SELECT 1 FROM paiement_type WHERE id = 3);
+INSERT INTO paiement_type (id, name, is_enable, restaurant_id)
+SELECT 4,
+       'TICKET RESTAURANT',
+       true,
+       1 WHERE NOT EXISTS (SELECT 1 FROM paiement_type WHERE id = 4);

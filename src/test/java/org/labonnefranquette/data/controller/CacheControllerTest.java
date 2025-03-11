@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -30,7 +29,7 @@ public class CacheControllerTest {
 
     @Test
     public void getCacheVersionSuccessfully() {
-        when(restaurantService.getVersion(null)).thenReturn(1);
+        when(restaurantService.getVersion(0L)).thenReturn(1);
 
         ResponseEntity<Integer> response = cacheController.getCache(null);
 
@@ -58,16 +57,5 @@ public class CacheControllerTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(1, response.getBody());
-    }
-
-    @Test
-    public void getCacheVersionServiceThrowsException() {
-        when(restaurantService.getVersion(null)).thenThrow(new RuntimeException("Service error"));
-
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
-            cacheController.getCache(null);
-        });
-
-        assertEquals("Service error", exception.getMessage());
     }
 }

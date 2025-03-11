@@ -3,6 +3,7 @@ package org.labonnefranquette.data.services.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.security.service.CustomUserDetailsService;
@@ -66,12 +67,18 @@ public class AuthServiceImplTest {
     public void refreshSuccessfully() {
         // Arrange
         String refreshToken = "validRefreshToken";
+        Restaurant restaurant = mock(Restaurant.class);
+
         when(jwtUtil.isValidRefreshToken(refreshToken)).thenReturn(true);
         when(jwtUtil.extractUsername(refreshToken)).thenReturn("testUser");
         when(userDetailsService.loadUserByUsername("testUser")).thenReturn(userDetails);
+        when(userService.findUserByUsername(anyString())).thenReturn(user);
         when(jwtUtil.generateToken(anyString(), anyList(), anyLong())).thenReturn("newAccessToken");
+        when(restaurant.getId()).thenReturn(1L);
+        when(user.getRestaurant()).thenReturn(restaurant);
         // Act
         String newAccessToken = authService.refresh(refreshToken);
+
         // Assert
         assertNotNull(newAccessToken);
         assertEquals("newAccessToken", newAccessToken);

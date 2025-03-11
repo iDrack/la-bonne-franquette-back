@@ -139,6 +139,10 @@ Les commandes sont récupérées par un websocket
     public ResponseEntity<CommandeReadDTO> patchCommande(@PathVariable long id, @RequestBody Map<String, Object> updates,
                                                          @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
                                                          @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+        if (id <= 0 || updates == null) {
+            log.error("Erreur : Données invalide ou nuls.");
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
         Commande updatedCommande = commandeService.patchCommande(id, updates);
         if (updatedCommande == null) {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);

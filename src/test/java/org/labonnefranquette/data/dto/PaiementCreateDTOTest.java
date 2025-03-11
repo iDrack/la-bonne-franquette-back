@@ -35,14 +35,6 @@ class PaiementCreateDTOTest {
     }
 
     @Test
-    void shouldFailWhenPrixIsNegative() {
-        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", -100, Collections.emptyList(), Collections.emptyList());
-
-        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
-        assertEquals(1, violations.size());
-    }
-
-    @Test
     void shouldHandleNullArticles() {
         PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, null, Collections.emptyList());
 

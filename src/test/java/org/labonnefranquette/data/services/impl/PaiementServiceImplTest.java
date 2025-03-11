@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.PaiementType;
+import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.repository.PaiementRepository;
 import org.labonnefranquette.data.repository.PaiementTypeRepository;
 import org.labonnefranquette.data.security.JWTUtil;
@@ -36,6 +37,9 @@ class PaiementServiceImplTest {
 
     @Mock
     private JWTUtil jwtUtil;
+
+    @Mock
+    private CommandeRepository commandeRepository;
 
     @InjectMocks
     private PaiementServiceImpl paiementService;
