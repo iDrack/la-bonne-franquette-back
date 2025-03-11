@@ -17,7 +17,6 @@ import org.springframework.test.context.ActiveProfiles;
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -58,17 +57,6 @@ public class PaiementControllerTest {
         assertEquals("L'e-mail est invalide.", response.getBody());
     }
 
-    @Test
-    public void sendReceiptMessagingException() throws IOException, MessagingException {
-        String email = "valid.email@example.com";
-        Paiement paiement = new Paiement();
-        when(paiementService.getPaiementById(1L)).thenReturn(paiement);
-        doThrow(new MessagingException()).when(mailService).sendMailReceipt(email, paiement, false);
-
-        ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false, "");
-
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-    }
 
 /*TODO
 

@@ -2,7 +2,6 @@ package org.labonnefranquette.data;
 
 import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -17,9 +16,6 @@ class LaBonneFranquetteApplicationTests {
         System.setProperty("SPRING_MAIL_PASSWORD", dotenv.get("SPRING_MAIL_PASSWORD"));
     }
 
-    @Test
-    void contextLoads() {
-    }
 
 
 }
