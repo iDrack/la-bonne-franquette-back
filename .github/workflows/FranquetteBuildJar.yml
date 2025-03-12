@@ -31,7 +31,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-      - name: Cache maven dependencies
+      - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
           path: ~/.m2
@@ -39,6 +39,12 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: franquette-jar
+          path: target/*.jar
+
   test:
     runs-on: ubuntu-latest
     needs: build
@@ -84,13 +90,16 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
+      - name: Download JAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: franquette-jar
+          path: staging/target
       - name: Create staging repertory
-        run: mkdir staging staging/target
-      - name: Copy jar into staging repertory
-        run: cp target/*.jar staging/target
+        run: mkdir staging
       - name: Copy Docker-compose into staging repertory
         run: cp docker-compose.yml staging
-      - name: Copy Dockerfile into stating repertory
+      - name: Copy Dockerfile into staging repertory
         run: cp Dockerfile staging
       - name: Copy shell script into staging repertory
         run: cp runner_la_Franquette.sh staging
