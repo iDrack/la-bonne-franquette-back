@@ -95,8 +95,6 @@ jobs:
         with:
           name: franquette-jar
           path: staging/target
-      - name: Create staging repertory
-        run: mkdir staging
       - name: Copy Docker-compose into staging repertory
         run: cp docker-compose.yml staging
       - name: Copy Dockerfile into staging repertory
@@ -105,5 +103,5 @@ jobs:
         run: cp runner_la_Franquette.sh staging
       - uses: actions/upload-artifact@v4
         with:
-          name: Package
+          name: La_bonne_Franquette
           path: staging
