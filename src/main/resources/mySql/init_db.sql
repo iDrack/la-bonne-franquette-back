@@ -41,38 +41,38 @@ SELECT 10, 'Soda', 'sous-categorie', 3, 1
 WHERE NOT EXISTS (SELECT 1 FROM categorie WHERE id = 10);
 
 -- Insertion des ingrédients
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 1, 'Tomate', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 1, 'Tomate', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 1);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 2, 'Fromage', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 2, 'Fromage', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 2);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 3, 'Salade', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 3, 'Salade', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 3);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 4, 'Poulet', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 4, 'Poulet', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 4);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 5, 'Boeuf', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 5, 'Boeuf', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 5);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 6, 'Eau', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 6, 'Eau', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 6);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 7, 'Cola', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 7, 'Cola', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 7);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 8, 'Citron', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 8, 'Citron', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 8);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 9, 'Pomme', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 9, 'Pomme', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 9);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 10, 'Orange', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 10, 'Orange', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 10);
-INSERT INTO ingredient (id, nom, ingredient_type, restaurant_id)
-SELECT 11, 'Glaçon', 'ingredient', 1
+INSERT INTO ingredient (id, nom, restaurant_id)
+SELECT 11, 'Glaçon', 1
 WHERE NOT EXISTS (SELECT 1 FROM ingredient WHERE id = 11);
 
 -- Insertion des extras

@@ -1,7 +1,6 @@
 package org.labonnefranquette.data.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -30,9 +29,4 @@ public class Ingredient extends HasRestaurantAbs {
     @JsonBackReference(value = "produit-ingredient")
     @With
     private Set<Produit> produitSet;
-
-    @Column(name = "ingredient_type", insertable = false, updatable = false)
-    @JsonIgnore
-    @With
-    private String ingredientType;
 }
