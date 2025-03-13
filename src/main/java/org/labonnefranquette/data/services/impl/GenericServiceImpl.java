@@ -28,11 +28,6 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     }
 
     @Override
-    public List<T> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
     public Optional<T> findAllById(ID id) {
         return repository.findById(id);
     }
@@ -51,7 +46,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     @Override
     public List<T> findAll(String token) {
         Long idRestaurant = jwtUtil.extractRestaurantId(token);
-        return findAll().stream().filter((x) -> Objects.equals(x.getRestaurant().getId(), idRestaurant)).toList();
+        return repository.findAll().stream().filter((x) -> Objects.equals(x.getRestaurant().getId(), idRestaurant)).toList();
     }
 
     @Override

@@ -11,7 +11,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,16 +34,6 @@ class GenericServiceImplTest {
     @BeforeEach
     void setUp() {
         genericService = new GenericServiceImpl<>(repository);
-    }
-
-    @Test
-    void findAll_returnsAllItems() {
-        List<HasRestaurant> items = List.of(mock(HasRestaurant.class), mock(HasRestaurant.class));
-        when(repository.findAll()).thenReturn(items);
-
-        List<HasRestaurant> result = genericService.findAll();
-
-        assertEquals(items, result);
     }
 
     @Test
