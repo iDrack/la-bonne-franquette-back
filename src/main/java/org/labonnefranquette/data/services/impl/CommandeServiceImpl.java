@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Slf4j
@@ -104,6 +106,13 @@ public class CommandeServiceImpl implements CommandeService {
                 if (field.getType().isEnum() && value instanceof String) {
                     Object enumValue = Enum.valueOf((Class<Enum>) field.getType(), (String) value);
                     ReflectionUtils.setField(field, commande, enumValue);
+                }  else if (field.getType().equals(Date.class) && value instanceof String) {
+                    try {
+                        Date dateValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse((String) value);
+                        ReflectionUtils.setField(field, commande, dateValue);
+                    } catch (ParseException e) {
+                        throw new RuntimeException("Invalid date format: " + value);
+                    }
                 } else {
                     ReflectionUtils.setField(field, commande, value);
                 }
