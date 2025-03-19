@@ -40,6 +40,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/api/v1/user/**").permitAll()
                         .requestMatchers("/api/v1/test-connection").permitAll()
                         .requestMatchers("/api/v1/cache/rafraichir").permitAll()
+                        .requestMatchers("/api/v1/restaurant/create").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )

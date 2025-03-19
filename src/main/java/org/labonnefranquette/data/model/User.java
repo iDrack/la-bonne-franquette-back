@@ -9,9 +9,7 @@ import org.labonnefranquette.data.model.interfaces.HasRestaurant;
 import java.util.Date;
 
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"email"})
-})
+@Table(name = "users")
 @Data
 public class User implements HasRestaurant {
     @Id
@@ -42,8 +40,16 @@ public class User implements HasRestaurant {
         if (this.roles == null) {
             this.roles = role.name();
         } else {
-            this.roles += ", " + role.name();
+            if (this.roles.isEmpty()) {
+                this.roles = role.name();
+            } else {
+                this.roles += ", " + role.name();
+            }
         }
+    }
+
+    public void resetRoles() {
+        this.roles = "";
     }
 
     @Override

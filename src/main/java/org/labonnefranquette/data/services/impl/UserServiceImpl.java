@@ -22,13 +22,13 @@ public class UserServiceImpl implements UserService {
     private RestaurantService restaurantService;
 
     @Override
-    public User createUser(UserCreateDto userCreateDto) {
-        Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + " - Restaurant introuvable."));
+    public User createUser(UserCreateDto userCreateDto) throws IllegalArgumentException {
+        Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + ", restaurant introuvable."));
         if (!this.dataIsConformed(userCreateDto)) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: Informations de connexions incorrectes.");
         }
         if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
-            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur éxiste déjà.");
+            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur '" + userCreateDto.getUsername() + "' éxiste déjà.");
         }
 
         userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
@@ -48,11 +48,25 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    /**
+     * Modifie l'utilisateur pour qu'il devienne Admin
+     *
+     * @param user L'utilisateur à modifier
+     * @return L'utilisateur modifié
+     */
+    @Override
+    public User setUserAdmin(User user) {
+        user.resetRoles();
+        user.setRoles(Roles.ROLE_ADMIN);
+        userRepository.save(user);
+        return user;
+    }
+
     Boolean dataIsConformed(UserCreateDto user) {
         if (user == null) {
             return false;
         }
-        if (user.getUsername() == null || !isValidUsername(user.getUsername())) {
+        if (user.getUsername() == null) {
             return false;
         }
         if (user.getPassword() != null && !this.isValidPassword(user.getPassword())) {
