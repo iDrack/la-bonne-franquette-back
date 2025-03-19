@@ -3,13 +3,16 @@ package org.labonnefranquette.data.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "restaurant")
 @Data
+@AllArgsConstructor
 public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,6 +65,18 @@ public class Restaurant {
 
     public Restaurant() {
         this.versionCarte = 1;
+        this.isTVAEnable = false;
+        this.employees = new ArrayList<>();
+        this.ingredients = new ArrayList<>();
+        this.produits = new ArrayList<>();
+        this.categories = new ArrayList<>();
+        this.extras = new ArrayList<>();
+        this.commandes = new ArrayList<>();
+        this.menuItems = new ArrayList<>();
+        this.menus = new ArrayList<>();
+        this.paiementTypes = new ArrayList<>();
+        this.paiements = new ArrayList<>();
+        this.sousCategories = new ArrayList<>();
     }
 
     public void updateVersionCarte() {
