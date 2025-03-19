@@ -12,7 +12,7 @@ public interface RestaurantService {
 
     public void updateCacheVersion(Long idRestaurant);
 
-    public Restaurant createRestaurant(String restaurantName);
+    public Restaurant createRestaurant(String restaurantName) throws IllegalArgumentException;
 
     public Restaurant addUserToRestaurant(Restaurant restaurant, User user);
 }

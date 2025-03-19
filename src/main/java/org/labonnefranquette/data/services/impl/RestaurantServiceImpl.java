@@ -39,9 +39,16 @@ public class RestaurantServiceImpl implements RestaurantService {
      *
      * @param restaurantName Nom du restaurant à créer
      * @return Le nouveau restaurant
+     * @throws IllegalArgumentException si le nom de restaurant est déjà pris
      */
     @Override
-    public Restaurant createRestaurant(String restaurantName) {
+    public Restaurant createRestaurant(String restaurantName) throws IllegalArgumentException {
+        if (Boolean.TRUE.equals(this.restaurantRepository.existsByName(restaurantName))) {
+            throw new IllegalArgumentException("Ce nom de restaurant est déjà pris : " + restaurantName);
+        }
+        if (restaurantName == null || restaurantName.trim().isEmpty()) {
+            throw new IllegalArgumentException("Le nom du restaurant ne peut pas être nul ou vide.");
+        }
         Restaurant restaurant = new Restaurant();
         restaurant.setName(restaurantName);
         restaurantRepository.save(restaurant);

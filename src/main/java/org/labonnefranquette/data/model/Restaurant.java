@@ -19,7 +19,7 @@ public class Restaurant {
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", length = 100, nullable = false)
+    @Column(name = "name", length = 100, nullable = false, unique = true)
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String name;
 

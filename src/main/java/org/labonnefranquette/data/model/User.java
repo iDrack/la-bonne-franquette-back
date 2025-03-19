@@ -42,8 +42,16 @@ public class User implements HasRestaurant {
         if (this.roles == null) {
             this.roles = role.name();
         } else {
-            this.roles += ", " + role.name();
+            if (this.roles.isEmpty()) {
+                this.roles = role.name();
+            } else {
+                this.roles += ", " + role.name();
+            }
         }
+    }
+
+    public void resetRoles() {
+        this.roles = "";
     }
 
     @Override

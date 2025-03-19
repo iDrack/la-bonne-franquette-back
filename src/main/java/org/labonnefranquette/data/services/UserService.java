@@ -5,7 +5,9 @@ import org.labonnefranquette.data.model.User;
 
 public interface UserService {
 
-    public User createUser(UserCreateDto user);
+    public User createUser(UserCreateDto user) throws IllegalArgumentException;
 
     public User findUserByUsername(String username);
+
+    public User setUserAdmin(User user);
 }

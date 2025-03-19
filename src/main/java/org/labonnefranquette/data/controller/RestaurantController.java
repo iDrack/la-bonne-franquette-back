@@ -30,6 +30,12 @@ public class RestaurantController {
     @Autowired
     private UserService userService;
 
+    /**
+     * Controller de création de Restaurant
+     *
+     * @param restaurantCreateDTO DTO de création de restaurant avec le nom du restaurant, le nom du responsable et son mot de passe
+     * @return L'UserReadDTO du responsable de restaurant venant d'être créé.
+     */
     @PostMapping(path = "/create", produces = "application/json")
     public ResponseEntity<UserReadDto> createRestaurant(@Valid @RequestBody RestaurantCreateDTO restaurantCreateDTO) {
         Restaurant restaurant;
@@ -38,7 +44,7 @@ public class RestaurantController {
             restaurant = restaurantService.createRestaurant(restaurantCreateDTO.getRestaurantName());
 
             user = userService.createUser(new UserCreateDto(restaurantCreateDTO.getUsername(), restaurantCreateDTO.getPassword(), restaurant.getId()));
-
+            user = userService.setUserAdmin(user);
             restaurantService.addUserToRestaurant(restaurant, user);
         } catch (Exception e) {
             log.error("Erreur: ", e);
