@@ -23,12 +23,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserCreateDto userCreateDto) throws IllegalArgumentException {
-        Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + " - Restaurant introuvable."));
+        Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + ", restaurant introuvable."));
         if (!this.dataIsConformed(userCreateDto)) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: Informations de connexions incorrectes.");
         }
         if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
-            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur éxiste déjà.");
+            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur '" + userCreateDto.getUsername() + "' éxiste déjà.");
         }
 
         userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return false;
         }
-        if (user.getUsername() == null || !isValidUsername(user.getUsername())) {
+        if (user.getUsername() == null) {
             return false;
         }
         if (user.getPassword() != null && !this.isValidPassword(user.getPassword())) {

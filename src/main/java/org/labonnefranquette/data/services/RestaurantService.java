@@ -14,5 +14,7 @@ public interface RestaurantService {
 
     public Restaurant createRestaurant(String restaurantName) throws IllegalArgumentException;
 
+    public void deleteRestaurant(Restaurant restaurant);
+
     public Restaurant addUserToRestaurant(Restaurant restaurant, User user);
 }
