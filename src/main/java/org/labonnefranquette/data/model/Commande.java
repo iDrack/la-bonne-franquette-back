@@ -89,6 +89,7 @@ public class Commande extends HasRestaurantAbs implements HasPrice {
                 ", articles=" + articles +
                 ", menus=" + menus +
                 ", paiementType=" + paiementType +
+                ", paiements=" + paiementSet +
                 '}';
     }
 }

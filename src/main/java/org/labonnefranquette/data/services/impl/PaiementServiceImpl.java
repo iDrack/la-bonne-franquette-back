@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -49,16 +48,11 @@ public class PaiementServiceImpl implements PaiementService {
     public Paiement createPaiement(Long idCommande, Paiement paiement) throws RuntimeException {
         Commande commande = commandeService.findCommandeById(idCommande);
         paiement.setCommande(commande);
-        //Paiement nouveauPaiement = new Paiement( paiementTypeRepository.findByName(paiementCreateDTO.getType()), paiementCreateDTO.getPrix(), commande);
         paiement.setRestaurant(commande.getRestaurant());
         paiementRepository.save(paiement);
-        if (commande.getPaiementSet() == null) {
-            commande.setPaiementSet(new ArrayList<Paiement>());
-        }
-        commande.getPaiementSet().add(paiement);
-        commandeService.ajoutPaiement(commande, paiement);
         int prixPaye = 0;
         for (Paiement currentPaiement : commande.getPaiementSet()) {
+            System.out.println(currentPaiement.toString());
             prixPaye += currentPaiement.getPrix();
         }
         if (commande.getPrixTTC() == prixPaye) {
