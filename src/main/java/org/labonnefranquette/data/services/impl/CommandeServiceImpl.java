@@ -6,6 +6,7 @@ import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.projection.CommandeListeProjection;
 import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.CommandeService;
@@ -119,5 +120,10 @@ public class CommandeServiceImpl implements CommandeService {
             }
         });
         return commandeRepository.save(commande);
+    }
+
+    @Override
+    public List<CommandeListeProjection> findAllCommandeListeProjection(Date date) {
+        return commandeRepository.findAllCommandeListe(new java.sql.Date(date.getTime()));
     }
 }

@@ -6,11 +6,12 @@ import org.labonnefranquette.data.model.enums.StatusCommande;
 import java.util.Date;
 
 public interface CommandeListeProjection {
-    int getNumero();
+    long getId();
+    short getNumero();
     Date getDateSaisie();
-    int getNbArticle();
-    int getPrixHT();
+    Date getDateLivraison();
+    int getPrixTTC();
+    Boolean getSurPlace();
     StatusCommande getStatus();
-
-    PaiementType getPaiementType();
+    String getPaiementType();
 }

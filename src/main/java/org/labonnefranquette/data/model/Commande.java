@@ -19,7 +19,9 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "commande")
+@Table(name = "commande", indexes = {
+        @Index(name = "idx_date_saisie", columnList = "date_saisie")
+})
 @NoArgsConstructor
 @AllArgsConstructor
 public class Commande extends HasRestaurantAbs implements HasPrice {

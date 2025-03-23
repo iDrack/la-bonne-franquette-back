@@ -3,7 +3,9 @@ package org.labonnefranquette.data.services;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.projection.CommandeListeProjection;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +20,5 @@ public interface CommandeService {
     Commande advanceStatusCommande(Long id) throws RuntimeException;
 
     Commande patchCommande(Long id, Map<String, Object> updates);
+    List<CommandeListeProjection> findAllCommandeListeProjection(Date date);
 }

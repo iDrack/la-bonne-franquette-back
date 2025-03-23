@@ -11,6 +11,7 @@ import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
 import org.labonnefranquette.data.exception.PriceException;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.projection.CommandeListeProjection;
 import org.labonnefranquette.data.services.CommandeService;
 import org.labonnefranquette.data.utils.ControlInputTool;
 import org.labonnefranquette.data.utils.DtoTools;
@@ -21,6 +22,8 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -69,14 +72,24 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-/*
-Les commandes sont récupérées par un websocket
-    @GetMapping("/liste")
-    public ResponseEntity<List<CommandeListeProjection>> fetchAllCommandesListe() {
-        List<CommandeListeProjection> commandes = commandeService.findAllCommandeListe();
-        return new ResponseEntity<>(commandes, HttpStatus.OK);
+
+    @GetMapping("/liste/{year}-{month}-{day}")
+    public ResponseEntity<List<CommandeListeProjection>> fetchAllCommandesListe(@PathVariable int day, @PathVariable int month, @PathVariable int year,
+                                                                                @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                                                @RequestHeader(value = "Auth-Token") String authToken) {
+        List<CommandeListeProjection> commandeList;
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year, month - 1, day, 0, 0, 0);
+            Date date = calendar.getTime();
+            commandeList = commandeService.findAllCommandeListeProjection(date);
+        } catch (Exception e) {
+            log.error("Erreur: ", e);
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        return new ResponseEntity<>(commandeList, HttpStatus.OK);
     }
-*/
+
 
     @GetMapping("/{id}")
     public ResponseEntity<CommandeReadDTO> fetchCommandeById(@PathVariable Long id,
