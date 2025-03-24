@@ -79,7 +79,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(UserUpdateDto userUpdateDto) throws IllegalArgumentException {
         if (!this.dataIsConformed(userUpdateDto)) {
-            throw new IllegalArgumentException("Impossible de modifeir cette utilisateur: Informations de connexions incorrectes.");
+            throw new IllegalArgumentException("Impossible de modifier cette utilisateur: Informations de connexions incorrectes.");
         }
         if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userUpdateDto.getUsername()))) {
             throw new IllegalArgumentException("Impossible de modifier l'utilisateur " + userUpdateDto.getOldUsername() + ", le nom '" + userUpdateDto.getUsername() + "est déjà prit.");
