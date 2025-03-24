@@ -53,10 +53,11 @@ public class CommandeServiceImpl implements CommandeService {
         Restaurant restaurant = restaurantService.findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant));
 
         commande.setRestaurant(restaurant);
-        commande.setDateSaisie(new Date());
         int nbArticles = (commande.getArticles() == null ? 0 : commande.getArticles().size());
         int nbMenus = (commande.getMenus() == null ? 0 : commande.getMenus().size());
         commande.setNbArticle(nbArticles + nbMenus);
+        commande.setPaiementSet(new ArrayList<>());
+
         if (!commandeTools.isCorrectPrice(commande)) {
             throw new PriceException("Le prix saisie est incorrect");
         }
@@ -109,7 +110,7 @@ public class CommandeServiceImpl implements CommandeService {
                     ReflectionUtils.setField(field, commande, enumValue);
                 }  else if (field.getType().equals(Date.class) && value instanceof String) {
                     try {
-                        Date dateValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse((String) value);
+                        Date dateValue = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS").parse((String) value);
                         ReflectionUtils.setField(field, commande, dateValue);
                     } catch (ParseException e) {
                         throw new RuntimeException("Invalid date format: " + value);

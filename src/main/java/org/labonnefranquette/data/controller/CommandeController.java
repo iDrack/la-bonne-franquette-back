@@ -73,6 +73,7 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
         }
     }
 
+    //Utilisé par la vue "Voir les commandes" de l'application
     @GetMapping("/liste/{year}-{month}-{day}")
     public ResponseEntity<List<CommandeListeProjection>> fetchAllCommandesListe(@PathVariable int day, @PathVariable int month, @PathVariable int year,
                                                                                 @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))

@@ -11,6 +11,7 @@ import org.labonnefranquette.data.model.entity.Selection;
 import org.labonnefranquette.data.model.enums.StatusCommande;
 
 import java.util.Collection;
+import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -18,11 +19,15 @@ import java.util.Collection;
 public class CommandeCreateDTO  {
     @NotNull
     private Boolean surPlace;
-    private Collection<Selection> menus;
-    private Collection<Paiement> paiementSet;
+    @NotNull
+    private Date dateSaisie;
+    @NotNull
+    private Date dateLivraison;
     @NotNull
     private StatusCommande status;
-    private Collection<Article> articles;
     @Min(value = 0, message = "Le prix doit etre positif")
     private int prixTTC;
+
+    private Collection<Article> articles;
+    private Collection<Selection> menus;
 }
