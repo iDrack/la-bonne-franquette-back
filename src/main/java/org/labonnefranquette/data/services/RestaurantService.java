@@ -3,6 +3,7 @@ package org.labonnefranquette.data.services;
 import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.User;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface RestaurantService {
@@ -17,4 +18,6 @@ public interface RestaurantService {
     public void deleteRestaurant(Restaurant restaurant);
 
     public Restaurant addUserToRestaurant(Restaurant restaurant, User user);
+
+    public List<User> getAllUserFromRestaurant(Long idRestaurant) throws NullPointerException;
 }
