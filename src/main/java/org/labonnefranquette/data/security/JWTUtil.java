@@ -95,4 +95,8 @@ public class JWTUtil {
                 .getBody();
         return claims.get("restaurantId", Long.class);
     }
+
+    public Boolean isAdmin(String token) {
+        return this.extractRoles(token).contains("ROLE_ADMIN");
+    }
 }

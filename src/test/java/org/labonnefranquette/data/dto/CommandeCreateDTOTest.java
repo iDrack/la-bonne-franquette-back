@@ -13,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -38,7 +39,7 @@ public class CommandeCreateDTOTest {
         articles = new ArrayList<>();
         prixHT = 100;
         dtoTools = new DtoTools();
-        commandeCreateDTO = new CommandeCreateDTO(surPlace, menus, paiementSet, status, articles, prixHT);
+        commandeCreateDTO = new CommandeCreateDTO(surPlace, new Date(), new Date(), status, prixHT, articles, menus);
     }
 
     @Test
@@ -54,11 +55,6 @@ public class CommandeCreateDTOTest {
     @Test
     public void testMenus() {
         assertEquals(menus, commandeCreateDTO.getMenus());
-    }
-
-    @Test
-    public void testPaiementSet() {
-        assertEquals(paiementSet, commandeCreateDTO.getPaiementSet());
     }
 
     @Test

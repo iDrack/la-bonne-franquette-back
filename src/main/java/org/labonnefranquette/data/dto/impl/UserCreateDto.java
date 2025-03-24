@@ -17,6 +17,15 @@ public class UserCreateDto  {
 
     private Long restaurantId;
 
+    private String role;
+
+    public UserCreateDto(@NotBlank(message = "Nom du responsable est obligatoire.") String username, @NotBlank(message = "Mot de passe du responsable est obligatoire.") String password, Long id) {
+        this.username = username;
+        this.password = password;
+        this.restaurantId = id;
+        this.role = "ROLE_USER";
+    }
+
     @Override
     public String toString() {
         return "user=" + this.username + ".";
