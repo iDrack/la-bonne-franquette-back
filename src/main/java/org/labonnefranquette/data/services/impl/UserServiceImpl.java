@@ -35,7 +35,20 @@ public class UserServiceImpl implements UserService {
         User user = new User();
         user.setUsername(userCreateDto.getUsername());
         user.setPassword(userCreateDto.getPassword());
-        user.setRoles(Roles.ROLE_USER);
+        if (userCreateDto.getRole() == null || userCreateDto.getRole().isEmpty()) {
+            user.setRoles(Roles.ROLE_USER);
+        } else {
+            switch (userCreateDto.getRole()) {
+                case "ROLE_ADMIN":
+                    user.setRoles(Roles.ROLE_ADMIN);
+                case "ROLE_USER":
+                    user.setRoles(Roles.ROLE_USER);
+                case "ROLE_MANAGER":
+                    user.setRoles(Roles.ROLE_MANAGER);
+                default:
+                    user.setRoles(Roles.ROLE_USER);
+            }
+        }
         user.setRestaurant(restaurant);
 
         this.userRepository.save(user);

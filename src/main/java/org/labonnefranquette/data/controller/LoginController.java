@@ -31,20 +31,24 @@ public class LoginController {
     private DtoTools dtoTools;
 
     @PutMapping(value = "/signup", produces = "application/json")
-    public ResponseEntity<UserLoginDto> signup(@RequestBody UserCreateDto userCreateDto) {
+    public ResponseEntity<?> signup(@RequestBody UserCreateDto userCreateDto) {
         try {
             if (!ControlInputTool.isValidObject(userCreateDto, UserCreateDto.class)) {
                 throw new Exception("Les informations de connexions sont invalides.");
             }
             User user = authService.signup(userCreateDto);
             if (user == null) {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Informations de l'utilisateur invalides.");
+                return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
             } else {
                 return new ResponseEntity<>(dtoTools.convertToDto(user, UserLoginDto.class), HttpStatus.CREATED);
             }
         } catch (Exception e) {
             log.error("Erreur de création de compte: ", e);
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -79,7 +83,7 @@ public class LoginController {
             authService.logout(tokens.get("accessToken"), tokens.get("refreshToken"));
             return ResponseEntity.status(HttpStatus.OK).body("{\"message\":\"Deconnexion reussie.\"}");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erreur lors de la déconnexion.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"message\":\"Erreur lors de la déconnexion.\"}");
         }
     }
 
