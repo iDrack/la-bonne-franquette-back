@@ -61,6 +61,6 @@ public class RestaurantController {
             }
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(new UserReadDto(user.getUsername(), user.getRestaurant().getId()), HttpStatus.OK);
+        return new ResponseEntity<>(new UserReadDto(user.getUsername(), user.getRestaurant().getId(), user.getRoles()), HttpStatus.OK);
     }
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.UserCreateDto;
 import org.labonnefranquette.data.dto.impl.UserReadDto;
+import org.labonnefranquette.data.dto.impl.UserUpdateDto;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.RestaurantService;
@@ -75,6 +76,40 @@ public class EquipeController {
             userCreateDto.setRestaurantId(jwtUtil.extractRestaurantId(authToken));
             User userCreated = userService.createUser(userCreateDto);
             UserReadDto retUser = dtoTools.convertToDto(userCreated, UserReadDto.class);
+            return new ResponseEntity<>(retUser, HttpStatus.OK);
+        } catch (IllegalArgumentException e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", "Une erreur est survenu.");
+            return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+    @PutMapping
+    public ResponseEntity<?> updateEmployee(
+            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+            @RequestHeader(value = "Auth-Token", required = true) String authToken, @RequestBody UserUpdateDto userUpdateDto) {
+        try {
+            if (!jwtUtil.isAdmin(authToken)) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour créer un nouvel utilisateur.");
+                return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
+            }
+
+            User user = userService.updateUser(userUpdateDto);
+            if (user == null) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Impossible de trouver l'utilisateur : " + userUpdateDto.getOldUsername());
+                return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
+            }
+            UserReadDto retUser = dtoTools.convertToDto(user, UserReadDto.class);
+
             return new ResponseEntity<>(retUser, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             log.error("e: ", e);
