@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -77,5 +78,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
         restaurantRepository.save(restaurant);
         return restaurant;
+    }
+
+    @Override
+    public List<User> getAllUserFromRestaurant(Long idRestaurant) throws NullPointerException {
+        Restaurant restaurant = restaurantRepository.findById(idRestaurant).orElseThrow(() -> new NullPointerException("Impossible de trouver le restaurant avec l'id : " + idRestaurant));
+        return restaurant.getEmployees();
     }
 }
