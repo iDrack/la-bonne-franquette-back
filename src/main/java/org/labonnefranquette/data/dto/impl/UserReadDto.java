@@ -11,4 +11,6 @@ public class UserReadDto {
     private String username;
 
     private Long restaurantId;
+
+    private String roles;
 }
