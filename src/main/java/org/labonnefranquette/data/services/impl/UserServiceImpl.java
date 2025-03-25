@@ -77,6 +77,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public boolean deleteUserByUsername(String username) {
+        User user = findUserByUsername(username);
+        if (user == null) return false;
+
+        userRepository.deleteById(user.getId());
+        return true;
+    }
+
+    @Override
     public User updateUser(UserUpdateDto userUpdateDto) throws IllegalArgumentException {
         if (!this.dataIsConformed(userUpdateDto)) {
             throw new IllegalArgumentException("Impossible de modifier cette utilisateur: Informations de connexions incorrectes.");

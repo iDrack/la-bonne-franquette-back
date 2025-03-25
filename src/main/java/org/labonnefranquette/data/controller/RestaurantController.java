@@ -10,6 +10,7 @@ import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.model.User;
 import org.labonnefranquette.data.services.RestaurantService;
 import org.labonnefranquette.data.services.UserService;
+import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +34,9 @@ public class RestaurantController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DtoTools dtoTools;
 
     /**
      * Controller de création de Restaurant
@@ -61,6 +65,6 @@ public class RestaurantController {
             }
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(new UserReadDto(user.getUsername(), user.getRestaurant().getId(), user.getRoles()), HttpStatus.OK);
+        return new ResponseEntity<>(dtoTools.convertToDto(user, UserReadDto.class), HttpStatus.OK);
     }
 }

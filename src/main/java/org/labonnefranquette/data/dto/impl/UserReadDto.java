@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserReadDto {
+    private Long id;
+
     private String username;
 
     private Long restaurantId;

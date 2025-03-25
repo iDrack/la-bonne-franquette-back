@@ -15,7 +15,7 @@ public class User implements HasRestaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Byte id;
+    private Long id;
 
     @Column(name = "username", length = 100, nullable = false, unique = true)
     @NotNull(message = "Ce champs ne peut pas être vide")

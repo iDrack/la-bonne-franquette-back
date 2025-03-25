@@ -12,5 +12,7 @@ public interface UserService {
 
     public User setUserAdmin(User user);
 
-    public User updateUser(UserUpdateDto userUpdateDto) throws IllegalArgumentException;
+    public boolean deleteUserByUsername(String username);
+
+    User updateUser(UserUpdateDto userUpdateDto) throws IllegalArgumentException;
 }

@@ -123,4 +123,38 @@ public class EquipeController {
             return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @DeleteMapping("/{username}")
+    public ResponseEntity<?> deleteUser(@PathVariable("username") String username,
+                                        @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                        @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+        try {
+            if (!jwtUtil.isAdmin(authToken)) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour créer un nouvel utilisateur.");
+                return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
+            }
+
+            boolean result = userService.deleteUserByUsername(username);
+            Map<String, String> retMap = new HashMap<>();
+            if (!result) {
+                retMap.put("Erreur", "Impossible de trouver l'utilisateur : " + username);
+                return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
+            }
+
+            retMap.put("Response", "L'utilisateur : '" + username + "' a été supprimer avec succés.");
+            return new ResponseEntity<>(retMap, HttpStatus.OK);
+
+        } catch (IllegalArgumentException e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", "Une erreur est survenu.");
+            return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
