@@ -94,7 +94,8 @@ public class EquipeController {
     @PutMapping
     public ResponseEntity<?> updateEmployee(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = true) String authToken, @RequestBody UserUpdateDto userUpdateDto) {
+            @RequestHeader(value = "Auth-Token", required = true) String authToken,
+            @RequestBody UserUpdateDto userUpdateDto) {
         try {
             if (!jwtUtil.isAdmin(authToken)) {
                 Map<String, String> retMap = new HashMap<>();

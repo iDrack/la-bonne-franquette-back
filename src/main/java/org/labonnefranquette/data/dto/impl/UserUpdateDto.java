@@ -13,6 +13,9 @@ public class UserUpdateDto {
     @NotBlank(message = "Ancien username vide")
     private String oldUsername;
 
+    @NotBlank(message = "Ancien not de passe vide")
+    private String oldPassword;
+
     @NotBlank(message = "Le username est requis")
     private String username;
 
