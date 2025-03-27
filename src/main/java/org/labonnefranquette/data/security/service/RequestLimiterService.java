@@ -2,9 +2,9 @@ package org.labonnefranquette.data.security.service;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 @Service
 public class RequestLimiterService {
@@ -21,7 +21,7 @@ public class RequestLimiterService {
         lastRequestTime = currentTime;
         long lastRequestTime = requestTimes.getOrDefault(key, 0L);
 
-        if (currentTime - lastRequestTime < TimeUnit.SECONDS.toMillis(2)) {
+        if (currentTime - lastRequestTime < 1) {
             return false;
         }
 

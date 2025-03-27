@@ -13,8 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -92,13 +90,16 @@ public class UserServiceImpl implements UserService {
         if (!this.dataIsConformed(userUpdateDto)) {
             throw new IllegalArgumentException("Impossible de modifier cette utilisateur: Informations de connexions incorrectes.");
         }
-        if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userUpdateDto.getUsername()))) {
-            throw new IllegalArgumentException("Impossible de modifier l'utilisateur " + userUpdateDto.getOldUsername() + ", le nom '" + userUpdateDto.getUsername() + "est déjà prit.");
+        if (!userUpdateDto.getUsername().equals(userUpdateDto.getOldUsername())) {
+            if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userUpdateDto.getUsername()))) {
+                throw new IllegalArgumentException("Impossible de modifier l'utilisateur " + userUpdateDto.getOldUsername() + ", le nom '" + userUpdateDto.getUsername() + "est déjà prit.");
+            }
         }
+
         User user = findUserByUsername(userUpdateDto.getOldUsername());
 
         if (user == null) return null;
-        if (!Objects.equals(passwordEncoder.encode(userUpdateDto.getOldPassword()), user.getPassword())) {
+        if (!passwordEncoder.matches(userUpdateDto.getOldPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Impossible de modifier l'utilisateur " + userUpdateDto.getOldUsername() + ", l'ancien mot de passe est incorrect.");
         }
 
