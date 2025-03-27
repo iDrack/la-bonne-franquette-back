@@ -3,6 +3,7 @@ package org.labonnefranquette.data.services.impl;
 import org.labonnefranquette.data.model.Commande;
 import org.labonnefranquette.data.model.Paiement;
 import org.labonnefranquette.data.model.PaiementType;
+import org.labonnefranquette.data.model.enums.StatusCommande;
 import org.labonnefranquette.data.repository.CommandeRepository;
 import org.labonnefranquette.data.repository.PaiementRepository;
 import org.labonnefranquette.data.repository.PaiementTypeRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PaiementServiceImpl implements PaiementService {
@@ -51,13 +53,21 @@ public class PaiementServiceImpl implements PaiementService {
         paiement.setRestaurant(commande.getRestaurant());
         paiementRepository.save(paiement);
         int prixPaye = 0;
+        String type = commande.getPaiementType();
+
         for (Paiement currentPaiement : commande.getPaiementSet()) {
-            System.out.println(currentPaiement.toString());
+            if (!Objects.equals(type, "AUCUN") && !Objects.equals(currentPaiement.getType(), type)) {
+                commande.setPaiementType("MIX");
+            } else  {
+                commande.setPaiementType(currentPaiement.getType());
+            }
             prixPaye += currentPaiement.getPrix();
         }
         if (commande.getPrixTTC() == prixPaye) {
+            commande.setStatus(StatusCommande.TERMINEE);
             commande.setPaye(true);
         }
+        System.out.println(commande);
         commandeRepository.save(commande);
         return paiement;
     }
