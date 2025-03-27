@@ -14,4 +14,5 @@ public interface CommandeListeProjection {
     Boolean getSurPlace();
     StatusCommande getStatus();
     String getPaiementType();
+    boolean getPaye();
 }

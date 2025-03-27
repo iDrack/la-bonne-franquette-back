@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface CommandeRepository extends JpaRepository<Commande, Long> {
 
-    @Query(value = "SELECT c.id as id, c.numero as numero, c.dateSaisie as dateSaisie, c.dateLivraison as dateLivraison, c.surPlace as surPlace, c.prixTTC as prixTTC, c.status as status, c.paiementType as paiementType FROM Commande c WHERE DATE(c.dateSaisie) = :date ORDER BY c.dateSaisie DESC")
+    @Query(value = "SELECT c.id as id, c.numero as numero, c.dateSaisie as dateSaisie, c.dateLivraison as dateLivraison, c.surPlace as surPlace, c.paye as paye, c.prixTTC as prixTTC, c.status as status, c.paiementType as paiementType FROM Commande c WHERE DATE(c.dateSaisie) = :date ORDER BY c.dateSaisie DESC")
     List<CommandeListeProjection> findAllCommandeListe(@Param("date") Date date);
 
     @Query(value = "SELECT c FROM Commande c WHERE c.status = :status")
