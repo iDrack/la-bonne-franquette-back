@@ -61,14 +61,14 @@ public class LoginController {
             Map<String, String> token = authService.authenticate(userLoginDto);
             if (token == null) {
                 Map<String, String> response = new HashMap<>();
-                response.put("Erreur", "Les identifiants de connexions sont incorrect.");
-                System.out.println("Identifiants de connexions incorrect.");
+                response.put("Erreur", "Les identifiants de connexions sont incorrects.");
+                System.out.println("Identifiants de connexions incorrects.");
                 return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
             }
             return new ResponseEntity<>(token, HttpStatus.OK);
         } catch (Exception e) {
             Map<String, String> response = new HashMap<>();
-            response.put("Erreur", "Les identifiants de connexions sont incorrect.");
+            response.put("Erreur", "Les identifiants de connexions sont incorrects.");
             log.error("Erreur: ", e);
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }

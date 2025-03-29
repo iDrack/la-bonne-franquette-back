@@ -57,7 +57,7 @@ public class EquipeController {
         } catch (NullPointerException e) {
             log.error("e: ", e);
             Map<String, String> retMap = new HashMap<>();
-            retMap.put("Erreur", "Une erreur est survenu.");
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
             return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -85,7 +85,7 @@ public class EquipeController {
         } catch (Exception e) {
             log.error("e: ", e);
             Map<String, String> retMap = new HashMap<>();
-            retMap.put("Erreur", "Une erreur est survenu.");
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
             return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -120,7 +120,7 @@ public class EquipeController {
         } catch (Exception e) {
             log.error("e: ", e);
             Map<String, String> retMap = new HashMap<>();
-            retMap.put("Erreur", "Une erreur est survenu.");
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
             return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -132,7 +132,7 @@ public class EquipeController {
         try {
             if (!jwtUtil.isAdmin(authToken)) {
                 Map<String, String> retMap = new HashMap<>();
-                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour créer un nouvel utilisateur.");
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour supprimer un utilisateur.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
 
@@ -143,7 +143,7 @@ public class EquipeController {
                 return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
             }
 
-            retMap.put("Response", "L'utilisateur : '" + username + "' a été supprimer avec succés.");
+            retMap.put("Response", "L'utilisateur : " + username + " a été supprimer avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {
@@ -154,7 +154,7 @@ public class EquipeController {
         } catch (Exception e) {
             log.error("e: ", e);
             Map<String, String> retMap = new HashMap<>();
-            retMap.put("Erreur", "Une erreur est survenu.");
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
             return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

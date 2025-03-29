@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: Informations de connexions incorrectes.");
         }
         if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
-            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur '" + userCreateDto.getUsername() + "' éxiste déjà.");
+            throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: L'utilisateur " + userCreateDto.getUsername() + " éxiste déjà.");
         }
 
         userCreateDto.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
         }
         if (!userUpdateDto.getUsername().equals(userUpdateDto.getOldUsername())) {
             if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userUpdateDto.getUsername()))) {
-                throw new IllegalArgumentException("Impossible de modifier l'utilisateur " + userUpdateDto.getOldUsername() + ", le nom '" + userUpdateDto.getUsername() + "est déjà prit.");
+                throw new IllegalArgumentException("Impossible de modifier l'utilisateur " + userUpdateDto.getOldUsername() + ", le nom " + userUpdateDto.getUsername() + "est déjà prit.");
             }
         }
 
