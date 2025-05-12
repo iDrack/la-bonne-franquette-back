@@ -67,6 +67,7 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
             StatusCommande statusCommande = StatusCommande.valueOf(status.replace("-", "_").toUpperCase());
             List<Commande> commandes = commandeService.findAllCommandeWithStatut(statusCommande, authToken);
             List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
+            System.out.println("CommandesDtos : " + commandesDtos);
             return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -153,6 +154,7 @@ Les commandes ne sont pas récupérés par un endpoint REST mais par un websocke
     public ResponseEntity<CommandeReadDTO> patchCommande(@PathVariable long id, @RequestBody Map<String, Object> updates,
                                                          @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
                                                          @RequestHeader(value = "Auth-Token", required = false) String authToken) {
+        System.out.println("Called");
         if (id <= 0 || updates == null) {
             log.error("Erreur : Données invalide ou nuls.");
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

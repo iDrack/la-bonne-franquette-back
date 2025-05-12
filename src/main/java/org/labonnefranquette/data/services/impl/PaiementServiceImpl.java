@@ -64,10 +64,8 @@ public class PaiementServiceImpl implements PaiementService {
             prixPaye += currentPaiement.getPrix();
         }
         if (commande.getPrixTTC() == prixPaye) {
-            commande.setStatus(StatusCommande.TERMINEE);
             commande.setPaye(true);
         }
-        System.out.println(commande);
         commandeRepository.save(commande);
         return paiement;
     }
