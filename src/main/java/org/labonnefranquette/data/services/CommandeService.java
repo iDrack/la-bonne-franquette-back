@@ -13,6 +13,8 @@ public interface CommandeService {
 
     List<Commande> findAllCommandeWithStatut(StatusCommande status, String token);
 
+    List<Commande> findAllCommande();
+
     Commande findCommandeById(long id) throws NullPointerException;
     Commande createCommande(Commande commande, String token);
     Boolean deleteCommande(Long id);

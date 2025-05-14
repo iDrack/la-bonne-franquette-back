@@ -45,15 +45,13 @@ public class CommandeController {
     private CommandeService commandeService;
     @Autowired
     private DtoTools dtoTools;
-/*
-Les commandes ne sont pas récupérés par un endpoint REST mais par un websocket
+
     @GetMapping
     public ResponseEntity<List<CommandeReadDTO>> fetchAllCommandes() {
         List<Commande> commandes = commandeService.findAllCommande();
         List<CommandeReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, CommandeReadDTO.class)).toList();
         return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
     }
-*/
 
     //Utilisé lors d'affichage de l'écran de la cuisine
     @GetMapping(value = "/status/{status}", produces = "application/json")

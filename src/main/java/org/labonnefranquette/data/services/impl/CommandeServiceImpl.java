@@ -42,6 +42,11 @@ public class CommandeServiceImpl implements CommandeService {
     }
 
     @Override
+    public List<Commande> findAllCommande() {
+        return commandeRepository.findAll();
+    }
+
+    @Override
     public Commande findCommandeById(long id) throws NullPointerException {
         return commandeRepository.findById(id).orElseThrow(() -> new NullPointerException("Commande n'existe pas."));
     }
