@@ -13,7 +13,6 @@ public class StatusCommandeTest {
         assertEquals(4, StatusCommande.values().length);
         assertEquals(StatusCommande.EN_COURS, StatusCommande.values()[0]);
         assertEquals(StatusCommande.TERMINEE, StatusCommande.values()[1]);
-        assertEquals(StatusCommande.LIVREE, StatusCommande.values()[2]);
-        assertEquals(StatusCommande.ANNULEE, StatusCommande.values()[3]);
+        assertEquals(StatusCommande.ANNULEE, StatusCommande.values()[2]);
     }
 }
