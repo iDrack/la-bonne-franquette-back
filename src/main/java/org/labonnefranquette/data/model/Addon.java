@@ -14,7 +14,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "addon")
+@Table(name = "addons")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Addon extends RestaurantItemAbs {
