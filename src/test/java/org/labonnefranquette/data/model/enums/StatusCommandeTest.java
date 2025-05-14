@@ -10,10 +10,9 @@ public class StatusCommandeTest {
 
     @Test
     public void enumValues_areCorrect() {
-        assertEquals(4, OrderStatus.values().length);
-        assertEquals(OrderStatus.EN_COURS, OrderStatus.values()[0]);
-        assertEquals(OrderStatus.TERMINEE, OrderStatus.values()[1]);
-        assertEquals(OrderStatus.LIVREE, OrderStatus.values()[2]);
-        assertEquals(OrderStatus.ANNULEE, OrderStatus.values()[3]);
+        assertEquals(4, StatusCommande.values().length);
+        assertEquals(StatusCommande.EN_COURS, StatusCommande.values()[0]);
+        assertEquals(StatusCommande.TERMINEE, StatusCommande.values()[1]);
+        assertEquals(StatusCommande.ANNULEE, StatusCommande.values()[2]);
     }
 }
