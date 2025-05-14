@@ -42,6 +42,11 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public List<Order> findAllOrder() {
+        return orderRepository.findAll();
+    }
+
+    @Override
     public Order getById(long id) throws NullPointerException {
         return orderRepository.findById(id).orElseThrow(() -> new NullPointerException("Commande n'existe pas."));
     }

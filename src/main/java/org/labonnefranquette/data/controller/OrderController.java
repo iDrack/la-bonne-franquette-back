@@ -75,6 +75,17 @@ public class OrderController {
         }
     }
 
+    @Operation(
+            summary = "Récupérer toutes les commandes",
+            description = "Renvoie la liste des commandes du restaurant correspondant à celui de l'utilisateur faisant la requête."
+    )
+    @GetMapping
+    public ResponseEntity<List<OrderReadDTO>> fetchAllCommandes() {
+        List<Order> commandes = orderService.findAllOrder();
+        List<OrderReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, OrderReadDTO.class)).toList();
+        return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
+    }
+
     /**
      * Récupère la liste des commandes sous forme de projection pour une date donnée.
      *
