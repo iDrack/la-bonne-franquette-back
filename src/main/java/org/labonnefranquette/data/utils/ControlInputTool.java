@@ -10,7 +10,7 @@ public class ControlInputTool {
     private static final PolicyFactory POLICY = Sanitizers.FORMATTING.and(Sanitizers.LINKS);
     private static final int MAX_LENGTH = 255;
 
-    public static boolean isValidString(String input) {
+    public static boolean checkString(String input) {
         if (input == null || input.trim().isEmpty()) {
             return false;
         }
@@ -39,7 +39,7 @@ public class ControlInputTool {
         return true;
     }
 
-    public static boolean isValidObject(Object obj, Class<?> classExpected) {
+    public static boolean checkObject(Object obj, Class<?> classExpected) {
         if (obj == null || !classExpected.isInstance(obj)) {
             return false;
         }
@@ -49,7 +49,7 @@ public class ControlInputTool {
                 field.setAccessible(true);
                 try {
                     String value = (String) field.get(obj);
-                    if (!isValidString(value)) {
+                    if (!checkString(value)) {
                         return false;
                     }
                 } catch (IllegalAccessException e) {
@@ -61,7 +61,7 @@ public class ControlInputTool {
         return true;
     }
 
-    public static boolean isValidNumber(Number input) {
+    public static boolean checkNumber(Number input) {
         if (input == null ) {
             return false;
         }
@@ -72,27 +72,27 @@ public class ControlInputTool {
         }
     }
 
-    public static boolean isValidTokens(Map<String, String> tokens) {
+    public static boolean checkToken(Map<String, String> tokens) {
         if (tokens == null || tokens.size() != 2) {
             return false;
         }
         if (!tokens.containsKey("accessToken") || !tokens.containsKey("refreshToken")) {
             return false;
         }
-        if (!isValidString(tokens.get("accessToken")) || !isValidString(tokens.get("refreshToken"))) {
+        if (!checkString(tokens.get("accessToken")) || !checkString(tokens.get("refreshToken"))) {
             return false;
         }
         return true;
     }
 
-    public static boolean isValidRefreshToken(Map<String, String> refreshToken) {
+    public static boolean checkRefreshToken(Map<String, String> refreshToken) {
         if (refreshToken == null || refreshToken.size() != 1) {
             return false;
         }
         if (!refreshToken.containsKey("refreshToken")) {
             return false;
         }
-        if (!isValidString(refreshToken.get("refreshToken"))) {
+        if (!checkString(refreshToken.get("refreshToken"))) {
             return false;
         }
         return true;

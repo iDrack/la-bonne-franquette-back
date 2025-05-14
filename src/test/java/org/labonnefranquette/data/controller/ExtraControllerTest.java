@@ -2,8 +2,8 @@ package org.labonnefranquette.data.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.model.Extra;
-import org.labonnefranquette.data.repository.ExtraRepository;
+import org.labonnefranquette.data.model.Addon;
+import org.labonnefranquette.data.repository.AddonRepository;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,17 +25,17 @@ import static org.mockito.Mockito.when;
 public class ExtraControllerTest {
 
     @Mock
-    private GenericServiceImpl<Extra, ExtraRepository, Long> extraService;
+    private GenericServiceImpl<Addon, AddonRepository, Long> extraService;
 
     @InjectMocks
-    private ExtraController extraController;
+    private AddonController extraController;
 
     @Test
     public void getAllExtraSuccessfully() {
-        Extra extra = new Extra();
-        when(extraService.findAll(anyString())).thenReturn(Arrays.asList(extra));
+        Addon extra = new Addon();
+        when(extraService.getAll(anyString())).thenReturn(Arrays.asList(extra));
 
-        ResponseEntity<List<Extra>> response = extraController.getAllExtra("");
+        ResponseEntity<List<Addon>> response = extraController.getAllExtra("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @ActiveProfiles("test")
 public class PaiementTypeTest {
 
-    private PaiementType paiementType;
+    private PaymentType paiementType;
 
     @BeforeEach
     public void setUp() {
-        paiementType = new PaiementType(1L, "CB", true, new ArrayList<>());
+        paiementType = new PaymentType(1L, "CB", true, new ArrayList<>());
     }
 
     @Test
@@ -33,7 +33,7 @@ public class PaiementTypeTest {
 
     @Test
     public void testSetPaiements() {
-        ArrayList<Paiement> paiements = new ArrayList<>();
+        ArrayList<Payment> paiements = new ArrayList<>();
         paiementType.setPaiements(paiements);
         assertEquals(paiements, paiementType.getPaiements());
     }

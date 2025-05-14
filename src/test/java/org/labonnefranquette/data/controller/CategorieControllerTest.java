@@ -2,8 +2,8 @@ package org.labonnefranquette.data.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.model.Categorie;
-import org.labonnefranquette.data.repository.CategorieRepository;
+import org.labonnefranquette.data.model.Category;
+import org.labonnefranquette.data.repository.CategoryRepository;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,17 +25,17 @@ import static org.mockito.Mockito.when;
 public class CategorieControllerTest {
 
     @Mock
-    private GenericServiceImpl<Categorie, CategorieRepository, Long> categorieService;
+    private GenericServiceImpl<Category, CategoryRepository, Long> categorieService;
 
     @InjectMocks
-    private CategorieController categorieController;
+    private CategoryController categorieController;
 
     @Test
     public void getAllCategorieSuccessfully() {
-        Categorie categorie = new Categorie();
-        when(categorieService.findAll(anyString())).thenReturn(Arrays.asList(categorie));
+        Category categorie = new Category();
+        when(categorieService.getAll(anyString())).thenReturn(Arrays.asList(categorie));
 
-        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie("test");
+        ResponseEntity<List<Category>> response = categorieController.getAllCategorie("test");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -44,9 +44,9 @@ public class CategorieControllerTest {
 
     @Test
     public void getAllCategorieWithEmptyList() {
-        when(categorieService.findAll(anyString())).thenReturn(Arrays.asList());
+        when(categorieService.getAll(anyString())).thenReturn(Arrays.asList());
 
-        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie("test");
+        ResponseEntity<List<Category>> response = categorieController.getAllCategorie("test");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
@@ -55,10 +55,10 @@ public class CategorieControllerTest {
 
     @Test
     public void getAllCategorieWithNullAuthToken() {
-        Categorie categorie = new Categorie();
-        when(categorieService.findAll(null)).thenReturn(Arrays.asList(categorie));
+        Category categorie = new Category();
+        when(categorieService.getAll(null)).thenReturn(Arrays.asList(categorie));
 
-        ResponseEntity<List<Categorie>> response = categorieController.getAllCategorie(null);
+        ResponseEntity<List<Category>> response = categorieController.getAllCategorie(null);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

@@ -13,11 +13,11 @@ public interface RestaurantService {
 
     public void updateCacheVersion(Long idRestaurant);
 
-    public Restaurant createRestaurant(String restaurantName) throws IllegalArgumentException;
+    public Restaurant create(String restaurantName) throws IllegalArgumentException;
 
-    public void deleteRestaurant(Restaurant restaurant);
+    public void delete(Restaurant restaurant);
 
-    public Restaurant addUserToRestaurant(Restaurant restaurant, User user);
+    public Restaurant addUser(Restaurant restaurant, User user);
 
-    public List<User> getAllUserFromRestaurant(Long idRestaurant) throws NullPointerException;
+    public List<User> getAllUser(Long idRestaurant) throws NullPointerException;
 }

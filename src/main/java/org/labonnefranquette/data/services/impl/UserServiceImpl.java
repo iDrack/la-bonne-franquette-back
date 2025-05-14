@@ -26,9 +26,9 @@ public class UserServiceImpl implements UserService {
     private DtoTools dtoTools;
 
     @Override
-    public User createUser(UserCreateDto userCreateDto) throws IllegalArgumentException {
+    public User create(UserCreateDto userCreateDto) throws IllegalArgumentException {
         Restaurant restaurant = restaurantService.findAllById(userCreateDto.getRestaurantId()).orElseThrow(() -> new RuntimeException("Id restaurant : " + userCreateDto.getRestaurantId() + ", restaurant introuvable."));
-        if (!this.dataIsConformed(userCreateDto)) {
+        if (!this.checkUser(userCreateDto)) {
             throw new IllegalArgumentException("Impossible de créer ce nouvel utilisateur: Informations de connexions incorrectes.");
         }
         if (Boolean.TRUE.equals(this.userRepository.existsByUsername(userCreateDto.getUsername()))) {
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findUserByUsername(String username) {
+    public User getByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
      * @return L'utilisateur modifié
      */
     @Override
-    public User setUserAdmin(User user) {
+    public User setAdmin(User user) {
         user.resetRoles();
         user.setRoles(Roles.ROLE_ADMIN);
         userRepository.save(user);
@@ -77,8 +77,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUserByUsername(String username) {
-        User user = findUserByUsername(username);
+    public boolean deleteByUsername(String username) {
+        User user = getByUsername(username);
         if (user == null) return false;
 
         userRepository.deleteById(user.getId());
@@ -86,8 +86,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUser(UserUpdateDto userUpdateDto) throws IllegalArgumentException {
-        if (!this.dataIsConformed(userUpdateDto)) {
+    public User update(UserUpdateDto userUpdateDto) throws IllegalArgumentException {
+        if (!this.checkUser(userUpdateDto)) {
             throw new IllegalArgumentException("Impossible de modifier cette utilisateur: Informations de connexions incorrectes.");
         }
         if (!userUpdateDto.getUsername().equals(userUpdateDto.getOldUsername())) {
@@ -96,7 +96,7 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-        User user = findUserByUsername(userUpdateDto.getOldUsername());
+        User user = getByUsername(userUpdateDto.getOldUsername());
 
         if (user == null) return null;
         if (!passwordEncoder.matches(userUpdateDto.getOldPassword(), user.getPassword())) {
@@ -132,20 +132,20 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    Boolean dataIsConformed(UserCreateDto user) {
+    Boolean checkUser(UserCreateDto user) {
         if (user == null) {
             return false;
         }
         if (user.getUsername() == null) {
             return false;
         }
-        if (user.getPassword() != null && !this.isValidPassword(user.getPassword())) {
+        if (user.getPassword() != null && !this.checkPassword(user.getPassword())) {
             return false;
         }
         return true;
     }
 
-    Boolean dataIsConformed(UserUpdateDto user) {
+    Boolean checkUser(UserUpdateDto user) {
         if (user == null) {
             return false;
         }
@@ -155,18 +155,18 @@ public class UserServiceImpl implements UserService {
         if (user.getUsername() == null) {
             return false;
         }
-        if (user.getPassword() != null && !this.isValidPassword(user.getPassword())) {
+        if (user.getPassword() != null && !this.checkPassword(user.getPassword())) {
             return false;
         }
         return true;
     }
 
-    boolean isValidUsername(String username) {
+    boolean checkUsername(String username) {
         User user = this.userRepository.findByUsername(username);
         return user == null;
     }
 
-    boolean isValidPassword(String password) {
+    boolean checkPassword(String password) {
         return password.matches("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$");
     }
 }

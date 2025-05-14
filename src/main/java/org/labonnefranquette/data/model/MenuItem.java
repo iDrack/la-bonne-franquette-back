@@ -35,11 +35,11 @@ public class MenuItem extends RestaurantItemAbs {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "menu_item_contient_produit",
+            name = "menu_item_contains_product",
             joinColumns = @JoinColumn(name = "menu_item_id"),
-            inverseJoinColumns = @JoinColumn(name = "produit_id")
+            inverseJoinColumns = @JoinColumn(name = "product_id")
     )
-    @JsonIgnoreProperties({"categorieSet", "ingredientSet"})
+    @JsonIgnoreProperties({"categories", "ingredients"})
     @With
-    private List<Produit> produitSet;
+    private List<Product> products;
 }

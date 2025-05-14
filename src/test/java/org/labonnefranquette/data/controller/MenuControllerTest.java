@@ -33,7 +33,7 @@ public class MenuControllerTest {
     @Test
     public void getAllMenuSuccessfully() {
         Menu menu = new Menu();
-        when(menuService.findAll(anyString())).thenReturn(Arrays.asList(menu));
+        when(menuService.getAll(anyString())).thenReturn(Arrays.asList(menu));
 
         ResponseEntity<List<Menu>> response = menuController.getAllMenu("");
 

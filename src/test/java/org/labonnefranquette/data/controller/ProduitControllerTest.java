@@ -2,8 +2,8 @@ package org.labonnefranquette.data.controller;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.model.Produit;
-import org.labonnefranquette.data.repository.ProduitRepository;
+import org.labonnefranquette.data.model.Product;
+import org.labonnefranquette.data.repository.ProductRepository;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -25,17 +25,17 @@ import static org.mockito.Mockito.when;
 public class ProduitControllerTest {
 
     @Mock
-    private GenericServiceImpl<Produit, ProduitRepository, Long> produitService;
+    private GenericServiceImpl<Product, ProductRepository, Long> produitService;
 
     @InjectMocks
-    private ProduitController produitController;
+    private ProductController produitController;
 
     @Test
     public void getAllProduitsSuccessfully() {
-        Produit produit = new Produit();
-        when(produitService.findAll(anyString())).thenReturn(Arrays.asList(produit));
+        Product produit = new Product();
+        when(produitService.getAll(anyString())).thenReturn(Arrays.asList(produit));
 
-        ResponseEntity<List<Produit>> response = produitController.getAllProduits("");
+        ResponseEntity<List<Product>> response = produitController.getAllProduits("");
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());

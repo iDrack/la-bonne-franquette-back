@@ -2,7 +2,7 @@ package org.labonnefranquette.data.model.entity;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.Extra;
+import org.labonnefranquette.data.model.Addon;
 import org.labonnefranquette.data.model.Ingredient;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -72,7 +72,7 @@ public class ArticleTest {
 
     @Test
     public void setExtraSet_setsExtraSetCorrectly() {
-        Extra extra = new Extra();
+        Addon extra = new Addon();
         article.setExtraSet(Arrays.asList(extra));
         assertTrue(article.getExtraSet().contains(extra));
     }

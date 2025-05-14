@@ -3,9 +3,9 @@ package org.labonnefranquette.data.controller;
 import jakarta.mail.MessagingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.Payment;
 import org.labonnefranquette.data.services.MailService;
-import org.labonnefranquette.data.services.PaiementService;
+import org.labonnefranquette.data.services.PaymentService;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
 public class PaiementControllerTest {
 
     @Mock
-    private PaiementService paiementService;
+    private PaymentService paiementService;
 
     @Mock
     private MailService mailService;
@@ -33,13 +33,13 @@ public class PaiementControllerTest {
     private DtoTools dtoTools;
 
     @InjectMocks
-    private PaiementController paiementController;
+    private PaymentController paiementController;
 
     @Test
     public void sendReceiptSuccessfully() throws IOException, MessagingException {
         String email = "valid.email@example.com";
-        Paiement paiement = new Paiement();
-        when(paiementService.getPaiementById(1L)).thenReturn(paiement);
+        Payment paiement = new Payment();
+        when(paiementService.getById(1L)).thenReturn(paiement);
 
         ResponseEntity<String> response = paiementController.sendReceipt(1L, email, false, "");
 

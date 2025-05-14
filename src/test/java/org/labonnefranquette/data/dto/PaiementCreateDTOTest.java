@@ -5,7 +5,7 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.dto.impl.PaiementCreateDTO;
+import org.labonnefranquette.data.dto.impl.PaymentCreateDTO;
 
 import java.util.Collections;
 import java.util.Set;
@@ -20,25 +20,25 @@ class PaiementCreateDTOTest {
 
     @Test
     void shouldCreatePaiementCreateDTOWithValidData() {
-        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, Collections.emptyList(), Collections.emptyList());
+        PaymentCreateDTO dto = new PaymentCreateDTO("CREDIT_CARD", 500, Collections.emptyList(), Collections.emptyList());
 
-        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<PaymentCreateDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
     }
 
     @Test
     void shouldFailWhenTypeIsNull() {
-        PaiementCreateDTO dto = new PaiementCreateDTO(null, 500, Collections.emptyList(), Collections.emptyList());
+        PaymentCreateDTO dto = new PaymentCreateDTO(null, 500, Collections.emptyList(), Collections.emptyList());
 
-        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<PaymentCreateDTO>> violations = validator.validate(dto);
         assertEquals(1, violations.size());
     }
 
     @Test
     void shouldHandleNullArticles() {
-        PaiementCreateDTO dto = new PaiementCreateDTO("CREDIT_CARD", 500, null, Collections.emptyList());
+        PaymentCreateDTO dto = new PaymentCreateDTO("CREDIT_CARD", 500, null, Collections.emptyList());
 
-        Set<ConstraintViolation<PaiementCreateDTO>> violations = validator.validate(dto);
+        Set<ConstraintViolation<PaymentCreateDTO>> violations = validator.validate(dto);
         assertTrue(violations.isEmpty());
     }
 }

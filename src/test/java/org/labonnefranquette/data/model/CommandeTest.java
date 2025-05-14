@@ -2,7 +2,7 @@ package org.labonnefranquette.data.model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.model.enums.OrderStatus;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Date;
@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 public class CommandeTest {
 
-    private Commande commande;
+    private Order commande;
     private String paiementType;
 
 
     @BeforeEach
     public void setUp() {
-        commande = new Commande();
+        commande = new Order();
         paiementType = "CB";
     }
 
@@ -44,8 +44,8 @@ public class CommandeTest {
 
     @Test
     public void setStatus_setsStatusCorrectly() {
-        commande.setStatus(StatusCommande.EN_COURS);
-        assertEquals(StatusCommande.EN_COURS, commande.getStatus());
+        commande.setStatus(OrderStatus.EN_COURS);
+        assertEquals(OrderStatus.EN_COURS, commande.getStatus());
     }
 
     @Test
@@ -62,8 +62,8 @@ public class CommandeTest {
 
     @Test
     public void setPrixTTC_setsPrixTTCCorrectly() {
-        commande.setPrixTTC(100);
-        assertEquals(100, commande.getPrixTTC());
+        commande.setTotalPrice(100);
+        assertEquals(100, commande.getTotalPrice());
     }
 
     @Test

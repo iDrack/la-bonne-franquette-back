@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class ConnectionTestControllerTest {
 
-    private final ConnectionTestController connectionTestController = new ConnectionTestController();
+    private final CheckController connectionTestController = new CheckController();
 
     @Test
     public void testConnectionSuccessfully() {

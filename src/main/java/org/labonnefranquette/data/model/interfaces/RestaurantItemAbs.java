@@ -41,11 +41,11 @@ public abstract class RestaurantItemAbs extends HasRestaurantAbs implements Rest
         this.tauxTVA = tauxTVA;
     }
 
-    public int getPrixTTC() {
+    public int getTotalPrice() {
         return (int) ((this.prixHT) * this.getTauxTVAFloat());
     }
 
-    public void setPrixTTC(int prixHT) {
+    public void setTotalPrice(int prixHT) {
         this.prixHT = prixHT;
     }
 

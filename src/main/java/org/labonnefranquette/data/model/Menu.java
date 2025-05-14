@@ -20,12 +20,12 @@ public class Menu extends RestaurantItemAbs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nom", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     @NotNull(message = "Ce champs ne peut pas être vide")
-    private String nom;
+    private String name;
 
     @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
     @With
-    private Collection<MenuItem> menuItemSet;
+    private Collection<MenuItem> menuItems;
 
 }

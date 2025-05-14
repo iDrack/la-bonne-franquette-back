@@ -36,7 +36,7 @@ public class IngredientControllerTest {
     @Test
     public void getAllIngredientsSuccessfully() {
         Ingredient ingredient = new Ingredient();
-        when(ingredientService.findAll(anyString())).thenReturn(Arrays.asList(ingredient));
+        when(ingredientService.getAll(anyString())).thenReturn(Arrays.asList(ingredient));
 
         ResponseEntity<List<Ingredient>> response = ingredientController.getAllIngredients("");
 

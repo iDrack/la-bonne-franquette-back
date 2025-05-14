@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 public class ProduitTest {
 
-    private Produit produit;
+    private Product produit;
 
     @BeforeEach
     public void setUp() {
-        produit = new Produit();
+        produit = new Product();
     }
 
     @Test
@@ -45,7 +45,7 @@ public class ProduitTest {
 
     @Test
     public void setCategorieSet_setsCategorieSetCorrectly() {
-        Categorie categorie = new Categorie();
+        Category categorie = new Category();
         produit.setCategorieSet(Arrays.asList(categorie));
         assertTrue(produit.getCategorieSet().contains(categorie));
     }

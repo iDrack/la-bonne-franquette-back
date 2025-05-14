@@ -4,7 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.Payment;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -27,7 +27,7 @@ public class PDFTools {
         return instance;
     }
 
-    public Path toPDF(Paiement paiement, String filename, boolean seeDetails) throws IOException {
+    public Path toPDF(Payment paiement, String filename, boolean seeDetails) throws IOException {
         Path pathTmp = Paths.get("tmp");
         if (!Files.exists(pathTmp)) {
             Files.createDirectories(pathTmp);
@@ -58,9 +58,9 @@ public class PDFTools {
         contentStream.beginText();
         contentStream.setLeading(14.5f);
         contentStream.newLineAtOffset(100, 700);
-        contentStream.showText("Numéro de commande : " + paiement.getCommande().getNumero());
+        contentStream.showText("Numéro de commande : " + paiement.getOrder().getNumber());
         contentStream.newLine();
-        contentStream.showText("Identifiant de commande : " + paiement.getCommande().getId());
+        contentStream.showText("Identifiant de commande : " + paiement.getOrder().getId());
         contentStream.newLine();
         contentStream.showText("Date : " + formattedDate);
         contentStream.newLine();
@@ -70,8 +70,8 @@ public class PDFTools {
         if (paiement.getArticles() != null && seeDetails) {
             paiement.getArticles().forEach(article -> {
                 try {
-                    String articleName = article.getNom();
-                    String articlePrice = String.format("%.2f€", (article.getPrixTTC() * 1.1) / 100);
+                    String articleName = article.getName();
+                    String articlePrice = String.format("%.2f€", (article.getTotalPrice() * 1.1) / 100);
                     contentStream.showText("    " + articleName + " : " + articlePrice);
                     contentStream.newLine();
                 } catch (IOException e) {
@@ -81,7 +81,7 @@ public class PDFTools {
         }
 
         contentStream.newLine();
-        contentStream.showText("Prix HT : " + String.format("%.2f", paiement.getPrix() / 100.0) + "€");
+        contentStream.showText("Prix HT : " + String.format("%.2f", paiement.getPrice() / 100.0) + "€");
         contentStream.newLine();
         contentStream.showText("Taux de TVA : 10%");
         contentStream.endText();

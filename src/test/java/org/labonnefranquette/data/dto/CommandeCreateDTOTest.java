@@ -2,12 +2,12 @@ package org.labonnefranquette.data.dto;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
-import org.labonnefranquette.data.model.Commande;
-import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.dto.impl.OrderCreateDTO;
+import org.labonnefranquette.data.model.Order;
+import org.labonnefranquette.data.model.Payment;
 import org.labonnefranquette.data.model.entity.Article;
 import org.labonnefranquette.data.model.entity.Selection;
-import org.labonnefranquette.data.model.enums.StatusCommande;
+import org.labonnefranquette.data.model.enums.OrderStatus;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -23,23 +23,23 @@ public class CommandeCreateDTOTest {
 
     private Boolean surPlace;
     private Collection<Selection> menus;
-    private Collection<Paiement> paiementSet;
-    private StatusCommande status;
+    private Collection<Payment> paiementSet;
+    private OrderStatus status;
     private Collection<Article> articles;
     private int prixHT;
     private DtoTools dtoTools;
-    private CommandeCreateDTO commandeCreateDTO;
+    private OrderCreateDTO commandeCreateDTO;
 
     @BeforeEach
     public void setUp() {
         surPlace = true;
         menus = new ArrayList<>();
         paiementSet = new ArrayList<>();
-        status = StatusCommande.EN_COURS;
+        status = OrderStatus.EN_COURS;
         articles = new ArrayList<>();
         prixHT = 100;
         dtoTools = new DtoTools();
-        commandeCreateDTO = new CommandeCreateDTO(surPlace, new Date(), new Date(), status, prixHT, articles, menus);
+        commandeCreateDTO = new OrderCreateDTO(surPlace, new Date(), new Date(), status, prixHT, articles, menus);
     }
 
     @Test
@@ -74,43 +74,43 @@ public class CommandeCreateDTOTest {
 
     @Test
     public void testConvertedCommandeNotNull() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
         assertNotNull(commande);
     }
 
     @Test
     public void testConvertedSurPlace() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
         assertEquals(surPlace, commande.getSurPlace());
     }
 
     @Test
     public void testConvertedMenus() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
         assertEquals(menus, commande.getMenus());
     }
 
     @Test
     public void testConvertedPaiementSet() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
         assertEquals(paiementSet, commande.getPaiementSet());
     }
 
     @Test
     public void testConvertedStatus() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
         assertEquals(status, commande.getStatus());
     }
 
     @Test
     public void testConvertedArticles() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
         assertEquals(articles, commande.getArticles());
     }
 
     @Test
     public void testConvertedPrixTTC() {
-        Commande commande = dtoTools.convertToEntity(commandeCreateDTO, Commande.class);
-        assertEquals(prixHT, commande.getPrixTTC());
+        Order commande = dtoTools.convertToEntity(commandeCreateDTO, Order.class);
+        assertEquals(prixHT, commande.getTotalPrice());
     }
 }

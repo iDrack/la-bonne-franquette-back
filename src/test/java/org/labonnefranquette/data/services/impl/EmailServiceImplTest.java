@@ -40,7 +40,7 @@ public class EmailServiceImplTest {
         String subject = "Test Subject";
         String body = "Test Body";
 
-        mailService.sendMailTo(to, subject, body);
+        mailService.sendMail(to, subject, body);
 
         verify(emailSender, times(1)).send(any(SimpleMailMessage.class));
     }
@@ -56,7 +56,7 @@ public class EmailServiceImplTest {
         MimeMessage mimeMessage = mock(MimeMessage.class);
         when(emailSender.createMimeMessage()).thenReturn(mimeMessage);
 
-        mailService.sendMailWithAttachment(to, subject, body, attachmentPath, filename);
+        mailService.sendTemplatedMail(to, subject, body, attachmentPath, filename);
 
         verify(emailSender, times(1)).send(any(MimeMessage.class));
     }
@@ -74,7 +74,7 @@ public class EmailServiceImplTest {
         doThrow(new RuntimeException("Simulated exception")).when(emailSender).send(any(MimeMessage.class));
 
         assertThrows(RuntimeException.class, () -> {
-            mailService.sendMailWithAttachment(to, subject, body, attachmentPath, filename);
+            mailService.sendTemplatedMail(to, subject, body, attachmentPath, filename);
         });
     }
 }

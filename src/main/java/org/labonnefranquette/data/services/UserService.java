@@ -6,13 +6,13 @@ import org.labonnefranquette.data.model.User;
 
 public interface UserService {
 
-    public User createUser(UserCreateDto userCreateDto) throws IllegalArgumentException;
+    public User create(UserCreateDto userCreateDto) throws IllegalArgumentException;
 
-    public User findUserByUsername(String username);
+    public User getByUsername(String username);
 
-    public User setUserAdmin(User user);
+    public User setAdmin(User user);
 
-    public boolean deleteUserByUsername(String username);
+    public boolean deleteByUsername(String username);
 
-    User updateUser(UserUpdateDto userUpdateDto) throws IllegalArgumentException;
+    User update(UserUpdateDto userUpdateDto) throws IllegalArgumentException;
 }

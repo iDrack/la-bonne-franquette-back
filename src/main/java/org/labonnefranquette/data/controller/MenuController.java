@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,16 +20,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/menu")
-@Tag(name = "Menu Controller", description = "Controller pour les interractions des menus.")
+@Tag(name = "Menu Controller", description = "Controller pour les interactions des menus.")
 public class MenuController {
 
     @Autowired
     private GenericServiceImpl<Menu, MenuRepository, Long> menuService;
 
+    /**
+     * Récupère la liste de tous les menus.
+     *
+     * @param authToken JWT pour l'authentification (obligatoire)
+     * @return la liste des menus, HTTP 200
+     */
+    @Operation(
+            summary = "Récupérer tous les menus",
+            description = "Renvoie la liste complète des menus disponibles pour le restaurant."
+    )
     @GetMapping(produces = "application/json")
-    public ResponseEntity<List<Menu>> getAllMenu(
+    public ResponseEntity<List<Menu>> getAll(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(menuService.findAll(authToken), HttpStatus.OK);
+            @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+        return new ResponseEntity<>(menuService.getAll(authToken), HttpStatus.OK);
     }
 }

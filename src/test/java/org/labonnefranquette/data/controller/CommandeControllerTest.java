@@ -3,11 +3,11 @@ package org.labonnefranquette.data.controller;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.dto.impl.CommandeCreateDTO;
-import org.labonnefranquette.data.dto.impl.CommandeReadDTO;
-import org.labonnefranquette.data.model.Commande;
-import org.labonnefranquette.data.model.enums.StatusCommande;
-import org.labonnefranquette.data.services.CommandeService;
+import org.labonnefranquette.data.dto.impl.OrderCreateDTO;
+import org.labonnefranquette.data.dto.impl.OrderReadDTO;
+import org.labonnefranquette.data.model.Order;
+import org.labonnefranquette.data.model.enums.OrderStatus;
+import org.labonnefranquette.data.services.OrderService;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -26,7 +26,7 @@ import static org.mockito.Mockito.when;
 class CommandeControllerTest {
 
     @Mock
-    private CommandeService commandeService;
+    private OrderService commandeService;
 
     @Mock
     private DtoTools dtoTools;
@@ -35,7 +35,7 @@ class CommandeControllerTest {
     @Mock
     private SimpMessagingTemplate template;
     @InjectMocks
-    private CommandeController commandeController;
+    private OrderController commandeController;
 
     @BeforeEach
     void setUp() {
@@ -44,14 +44,14 @@ class CommandeControllerTest {
 
     @Test
     void fetchAllCommandesEnCoursWithValidStatus() {
-        Commande commande = new Commande();
-        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        when(commandeService.findAllCommandeWithStatut(StatusCommande.EN_COURS, AUTH_TOKEN))
+        Order commande = new Order();
+        OrderReadDTO commandeReadDTO = new OrderReadDTO();
+        when(commandeService.getAllByStatus(OrderStatus.EN_COURS, AUTH_TOKEN))
                 .thenReturn(List.of(commande));
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class))
+        when(dtoTools.convertToDto(commande, OrderReadDTO.class))
                 .thenReturn(commandeReadDTO);
 
-        ResponseEntity<List<CommandeReadDTO>> response =
+        ResponseEntity<List<OrderReadDTO>> response =
                 commandeController.fetchAllCommandesEnCours("EN_COURS", AUTH_TOKEN);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -60,14 +60,14 @@ class CommandeControllerTest {
 
     @Test
     void createCommandeWithValidData() {
-        CommandeCreateDTO commandeCreateDTO = new CommandeCreateDTO();
-        Commande commande = new Commande();
-        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        when(dtoTools.convertToEntity(commandeCreateDTO, Commande.class))
+        OrderCreateDTO commandeCreateDTO = new OrderCreateDTO();
+        Order commande = new Order();
+        OrderReadDTO commandeReadDTO = new OrderReadDTO();
+        when(dtoTools.convertToEntity(commandeCreateDTO, Order.class))
                 .thenReturn(commande);
-        when(commandeService.createCommande(commande, AUTH_TOKEN))
+        when(commandeService.create(commande, AUTH_TOKEN))
                 .thenReturn(commande);
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class))
+        when(dtoTools.convertToDto(commande, OrderReadDTO.class))
                 .thenReturn(commandeReadDTO);
 
         ResponseEntity<?> response = commandeController.createCommande(commandeCreateDTO, AUTH_TOKEN);
@@ -79,7 +79,7 @@ class CommandeControllerTest {
     @Test
     void deleteCommandeWithValidId() {
         Long id = 1L;
-        when(commandeService.deleteCommande(id)).thenReturn(true);
+        when(commandeService.delete(id)).thenReturn(true);
 
         ResponseEntity<Boolean> response = commandeController.deleteCommande(id, AUTH_TOKEN);
 
@@ -90,13 +90,13 @@ class CommandeControllerTest {
     @Test
     void updateCommandeWithValidId() {
         Long id = 1L;
-        Commande commande = new Commande();
-        CommandeReadDTO commandeReadDTO = new CommandeReadDTO();
-        when(commandeService.advanceStatusCommande(id)).thenReturn(commande);
-        when(dtoTools.convertToDto(commande, CommandeReadDTO.class))
+        Order commande = new Order();
+        OrderReadDTO commandeReadDTO = new OrderReadDTO();
+        when(commandeService.updateStatus(id)).thenReturn(commande);
+        when(dtoTools.convertToDto(commande, OrderReadDTO.class))
                 .thenReturn(commandeReadDTO);
 
-        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(id, AUTH_TOKEN);
+        ResponseEntity<OrderReadDTO> response = commandeController.updateCommande(id, AUTH_TOKEN);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(commandeReadDTO, response.getBody());
@@ -104,14 +104,14 @@ class CommandeControllerTest {
 
     @Test
     void fetchAllCommandesEnCoursWithInvalidStatus() {
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours("INVALID_STATUS", "authToken");
+        ResponseEntity<List<OrderReadDTO>> response = commandeController.fetchAllCommandesEnCours("INVALID_STATUS", "authToken");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
 
     @Test
     void fetchAllCommandesEnCoursWithNullStatus() {
-        ResponseEntity<List<CommandeReadDTO>> response = commandeController.fetchAllCommandesEnCours(null, "authToken");
+        ResponseEntity<List<OrderReadDTO>> response = commandeController.fetchAllCommandesEnCours(null, "authToken");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -125,7 +125,7 @@ class CommandeControllerTest {
 
     @Test
     void updateCommandeWithInvalidId() {
-        ResponseEntity<CommandeReadDTO> response = commandeController.updateCommande(-1L, "authToken");
+        ResponseEntity<OrderReadDTO> response = commandeController.updateCommande(-1L, "authToken");
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }
@@ -134,7 +134,7 @@ class CommandeControllerTest {
     void patchCommandeWithNullData() {
         Long id = 1L;
 
-        ResponseEntity<CommandeReadDTO> response = commandeController.patchCommande(id, null, AUTH_TOKEN);
+        ResponseEntity<OrderReadDTO> response = commandeController.patchCommande(id, null, AUTH_TOKEN);
 
         assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     }

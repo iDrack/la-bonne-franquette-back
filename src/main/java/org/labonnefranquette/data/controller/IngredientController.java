@@ -1,5 +1,6 @@
 package org.labonnefranquette.data.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,16 +20,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/ingredient")
-@Tag(name = "Ingredient Controller", description = "Controller pour les interractions des ingrédients.")
+@Tag(name = "Ingredient Controller", description = "Controller pour les interactions des ingrédients.")
 public class IngredientController {
 
     @Autowired
     private GenericServiceImpl<Ingredient, IngredientRepository, Long> ingredientService;
 
+    /**
+     * Récupère la liste de tous les ingrédients.
+     *
+     * @param authToken JWT pour l'authentification (obligatoire)
+     * @return la liste des ingrédients, HTTP 200
+     */
+    @Operation(
+            summary = "Récupérer tous les ingrédients",
+            description = "Renvoie la liste complète des ingrédients disponibles pour le restaurant."
+    )
     @GetMapping(produces = "application/json")
-    public ResponseEntity<List<Ingredient>> getAllIngredients(
+    public ResponseEntity<List<Ingredient>> getAll(
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        return new ResponseEntity<>(ingredientService.findAll(authToken), HttpStatus.OK);
+            @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+        return new ResponseEntity<>(ingredientService.getAll(authToken), HttpStatus.OK);
     }
 }

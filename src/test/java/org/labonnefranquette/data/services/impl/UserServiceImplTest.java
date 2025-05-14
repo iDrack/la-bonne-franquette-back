@@ -58,7 +58,7 @@ public class UserServiceImplTest {
         userCreateDto.setPassword("ValidPassword1");
         userCreateDto.setRestaurantId(1L);
 
-        User user = userService.createUser(userCreateDto);
+        User user = userService.create(userCreateDto);
 
         assertEquals("validUser", user.getUsername());
         assertEquals("encodedPassword", user.getPassword());
@@ -73,7 +73,7 @@ public class UserServiceImplTest {
         userCreateDto.setPassword("invalid");
         userCreateDto.setRestaurantId(-1L);
 
-        assertThrows(RuntimeException.class, () -> userService.createUser(userCreateDto));
+        assertThrows(RuntimeException.class, () -> userService.create(userCreateDto));
         verify(userRepository, never()).save(any(User.class));
     }
 
@@ -87,7 +87,7 @@ public class UserServiceImplTest {
         userCreateDto.setPassword("ValidPassword1");
         userCreateDto.setRestaurantId(1L);
 
-        assertThrows(IllegalArgumentException.class, () -> userService.createUser(userCreateDto));
+        assertThrows(IllegalArgumentException.class, () -> userService.create(userCreateDto));
         verify(userRepository, never()).save(any(User.class));
     }
 
@@ -97,7 +97,7 @@ public class UserServiceImplTest {
         userCreateDto.setUsername("validUser");
         userCreateDto.setPassword("ValidPassword1");
 
-        assertTrue(userService.dataIsConformed(userCreateDto));
+        assertTrue(userService.checkUser(userCreateDto));
     }
 
     @Test
@@ -106,14 +106,14 @@ public class UserServiceImplTest {
         userCreateDto.setUsername("invalidUser");
         userCreateDto.setPassword("invalid");
 
-        assertFalse(userService.dataIsConformed(userCreateDto));
+        assertFalse(userService.checkUser(userCreateDto));
     }
 
     @Test
     public void isValidUsernameWithNonExistingUser() {
         when(userRepository.findByUsername(anyString())).thenReturn(null);
 
-        assertTrue(userService.isValidUsername("newUser"));
+        assertTrue(userService.checkUsername("newUser"));
     }
 
     @Test
@@ -122,16 +122,16 @@ public class UserServiceImplTest {
         user.setUsername("existingUser");
         when(userRepository.findByUsername(anyString())).thenReturn(user);
 
-        assertFalse(userService.isValidUsername("existingUser"));
+        assertFalse(userService.checkUsername("existingUser"));
     }
 
     @Test
     public void isValidPasswordWithValidPassword() {
-        assertTrue(userService.isValidPassword("ValidPassword1"));
+        assertTrue(userService.checkPassword("ValidPassword1"));
     }
 
     @Test
     public void isValidPasswordWithInvalidPassword() {
-        assertFalse(userService.isValidPassword("invalid"));
+        assertFalse(userService.checkPassword("invalid"));
     }
 }

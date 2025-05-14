@@ -1,7 +1,7 @@
 package org.labonnefranquette.data.controller.admin;
 
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.labonnefranquette.data.model.Categorie;
+import org.labonnefranquette.data.model.Category;
 import org.labonnefranquette.data.services.GenericService;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -13,10 +13,10 @@ import org.springframework.test.context.ActiveProfiles;
 public class AdminCategorieControllerTest {
 
     @Mock
-    private GenericService<Categorie, Long> categorieService;
+    private GenericService<Category, Long> categorieService;
 
     @InjectMocks
-    private AdminCategorieController adminCategorieController;
+    private AdminCategoryController adminCategorieController;
 /*TODO
 
     @Test

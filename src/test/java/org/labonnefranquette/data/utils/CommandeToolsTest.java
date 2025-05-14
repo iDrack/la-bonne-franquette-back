@@ -2,8 +2,8 @@ package org.labonnefranquette.data.utils;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.Commande;
-import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.Order;
+import org.labonnefranquette.data.model.Payment;
 import org.labonnefranquette.data.model.entity.Article;
 import org.mockito.Mockito;
 import org.springframework.test.context.ActiveProfiles;
@@ -16,16 +16,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ActiveProfiles("test")
 public class CommandeToolsTest {
 
-    private CommandeTools commandeTools;
+    private OrderTools commandeTools;
 
     @BeforeEach
     public void setup() {
-        commandeTools = new CommandeTools();
+        commandeTools = new OrderTools();
     }
 
     @Test
     public void isCorrectPrice_returnsTrueWhenPricesMatch() {
-        Commande commande = new Commande();
+        Order commande = new Order();
 
         Article mockArticle = Mockito.mock(Article.class);
 
@@ -34,44 +34,44 @@ public class CommandeToolsTest {
 
         commande.setArticles(new ArrayList<>(List.of(mockArticle)));
 
-        commande.setPrixTTC(100);
-        assertTrue(commandeTools.isCorrectPrice(commande));
+        commande.setTotalPrice(100);
+        assertTrue(commandeTools.checkPrice(commande));
     }
     @Test
     void calculNumeroCommande_incrementsCounterCorrectly() {
-        short firstNumber = commandeTools.calculNumeroCommande();
-        short secondNumber = commandeTools.calculNumeroCommande();
+        short firstNumber = commandeTools.setOrderNumber();
+        short secondNumber = commandeTools.setOrderNumber();
 
         assertEquals(firstNumber + 1, secondNumber);
     }
 
     @Test
     void calculPaiementTypeCommande_returnsAUCUNWhenNoPayments() {
-        Set<Paiement> paiements = Collections.emptySet();
+        Set<Payment> paiements = Collections.emptySet();
 
-        assertEquals("AUCUN", commandeTools.calculPaiementTypeCommande(paiements));
+        assertEquals("AUCUN", commandeTools.setOrderPaymentType(paiements));
     }
 
     @Test
     void calculPaiementTypeCommande_returnsSingleTypeWhenAllPaymentsSame() {
-        Paiement paiement = new Paiement();
+        Payment paiement = new Payment();
         paiement.setType("CREDIT_CARD");
-        Set<Paiement> paiements = new HashSet<>();
+        Set<Payment> paiements = new HashSet<>();
         paiements.add(paiement);
 
-        assertEquals("CREDIT_CARD", commandeTools.calculPaiementTypeCommande(paiements));
+        assertEquals("CREDIT_CARD", commandeTools.setOrderPaymentType(paiements));
     }
 
     @Test
     void calculPaiementTypeCommande_returnsMIXEDWhenPaymentsDifferent() {
-        Paiement paiement1 = new Paiement();
+        Payment paiement1 = new Payment();
         paiement1.setType("CREDIT_CARD");
-        Paiement paiement2 = new Paiement();
+        Payment paiement2 = new Payment();
         paiement2.setType("CASH");
-        Set<Paiement> paiements = new HashSet<>();
+        Set<Payment> paiements = new HashSet<>();
         paiements.add(paiement1);
         paiements.add(paiement2);
 
-        assertEquals("MIXED", commandeTools.calculPaiementTypeCommande(paiements));
+        assertEquals("MIXED", commandeTools.setOrderPaymentType(paiements));
     }
 }

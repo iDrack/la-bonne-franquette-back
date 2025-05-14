@@ -12,24 +12,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 public class ExtraTest {
 
-    private Extra extra;
+    private Addon extra;
 
     @BeforeEach
     public void setUp() {
-        Set<Produit> produitSet = new HashSet<>();
-        extra = new Extra(1L, "Extra Cheese", produitSet);
+        Set<Product> produitSet = new HashSet<>();
+        extra = new Addon(1L, "Extra Cheese", produitSet);
     }
 
     @Test
     public void testSetNom() {
-        extra.setNom("Extra Bacon");
-        assertEquals("Extra Bacon", extra.getNom());
+        extra.setName("Extra Bacon");
+        assertEquals("Extra Bacon", extra.getName());
     }
 
     @Test
     public void testSetProduitSet() {
-        Set<Produit> newProduitSet = new HashSet<>();
-        extra.setProduitSet(newProduitSet);
-        assertEquals(newProduitSet, extra.getProduitSet());
+        Set<Product> newProduitSet = new HashSet<>();
+        extra.setProducts(newProduitSet);
+        assertEquals(newProduitSet, extra.getProducts());
     }
 }

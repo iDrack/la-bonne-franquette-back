@@ -15,18 +15,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test")
 public class PaiementTest {
 
-    private Paiement paiement;
-    private PaiementType paiementType;
-    private Commande commande;
+    private Payment paiement;
+    private PaymentType paiementType;
+    private Order commande;
     private Collection<Article> articles;
     private Collection<Selection> selections;
 
     @BeforeEach
     public void setUp() {
-        commande = new Commande();
+        commande = new Order();
         articles = new ArrayList<>();
         selections = new ArrayList<>();
-        paiement = new Paiement("CB", 100, commande, articles, selections);
+        paiement = new Payment("CB", 100, commande, articles, selections);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class PaiementTest {
 
     @Test
     public void testSetCommande() {
-        Commande newCommande = new Commande();
+        Order newCommande = new Order();
         paiement.setCommande(newCommande);
         assertEquals(newCommande, paiement.getCommande());
     }

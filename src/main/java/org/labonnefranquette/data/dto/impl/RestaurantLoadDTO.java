@@ -12,13 +12,13 @@ public class RestaurantLoadDTO {
     private List<Ingredient> ingredients;
 
     @NotBlank(message = "Les extras sont requis")
-    private List<Extra> extras;
+    private List<Addon> addons;
 
     @NotBlank(message = "Les catégories sont requis")
-    private List<Categorie> categories;
+    private List<Category> categories;
 
     @NotBlank(message = "Les produits sont requis")
-    private List<Produit> produits;
+    private List<Product> products;
 
     @NotBlank(message = "Les menus sont requis")
     private List<Menu> menus;

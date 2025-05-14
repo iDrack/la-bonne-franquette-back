@@ -10,11 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @ActiveProfiles("test")
 public class SousCategorieTest {
 
-    private SousCategorie sousCategorie;
+    private SubCategory sousCategorie;
 
     @BeforeEach
     public void setUp() {
-        sousCategorie = new SousCategorie();
+        sousCategorie = new SubCategory();
     }
 
     @Test
@@ -31,7 +31,7 @@ public class SousCategorieTest {
 
     @Test
     public void setCategorie_setsCategorieCorrectly() {
-        Categorie categorie = new Categorie();
+        Category categorie = new Category();
         sousCategorie.setCategorie(categorie);
         assertEquals(categorie, sousCategorie.getCategorie());
     }

@@ -1,16 +1,16 @@
 package org.labonnefranquette.data.services;
 
 import jakarta.mail.MessagingException;
-import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.Payment;
 
 import java.io.IOException;
 
 public interface MailService {
-    void sendMailTo(String to, String subject, String body);
+    void sendMail(String to, String subject, String body);
 
-    void sendMailWithAttachment(String to, String subject, String body, String attachementPath, String filename) throws MessagingException;
+    void sendTemplatedMail(String to, String subject, String body, String attachementPath, String filename) throws MessagingException;
 
-    void sendMailReceipt(String to, Paiement paiement, boolean seeDetails) throws IOException, MessagingException;
+    void sendMailReceipt(String to, Payment paiement, boolean seeDetails) throws IOException, MessagingException;
 
     void setMailUser(String mailUser);
 }

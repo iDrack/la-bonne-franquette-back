@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/restaurant")
-@Tag(name = "Restaurant Controller", description = "Controller pour les interractions des restaurants.")
+@Tag(name = "Restaurant Controller", description = "Controller pour les interactions des restaurants.")
 public class RestaurantController {
 
     @Autowired
@@ -46,22 +46,22 @@ public class RestaurantController {
      */
     @PostMapping(path = "/create", produces = "application/json")
     @Transactional
-    public ResponseEntity<?> createRestaurant(@Valid @RequestBody RestaurantCreateDTO restaurantCreateDTO) {
+    public ResponseEntity<?> create(@Valid @RequestBody RestaurantCreateDTO restaurantCreateDTO) {
         Restaurant restaurant = null;
         User user;
         try {
-            restaurant = restaurantService.createRestaurant(restaurantCreateDTO.getRestaurantName());
+            restaurant = restaurantService.create(restaurantCreateDTO.getRestaurantName());
 
-            user = userService.createUser(new UserCreateDto(restaurantCreateDTO.getUsername(), restaurantCreateDTO.getPassword(), restaurant.getId()));
-            user = userService.setUserAdmin(user);
-            restaurantService.addUserToRestaurant(restaurant, user);
+            user = userService.create(new UserCreateDto(restaurantCreateDTO.getUsername(), restaurantCreateDTO.getPassword(), restaurant.getId()));
+            user = userService.setAdmin(user);
+            restaurantService.addUser(restaurant, user);
         } catch (Exception e) {
             log.error("Erreur: ", e);
             Map<String, String> result = new HashMap<>();
             result.put("Erreur", e.getMessage());
             // Supprimer le restaurant si l'utilisateur ne peut pas être créé
             if (restaurant != null) {
-                restaurantService.deleteRestaurant(restaurant);
+                restaurantService.delete(restaurant);
             }
             return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
         }

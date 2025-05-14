@@ -17,7 +17,7 @@ public class ControlInputToolTest {
         // Arrange
         String validString = "Valid string.";
         // Act
-        boolean isValid = ControlInputTool.isValidString(validString);
+        boolean isValid = ControlInputTool.checkString(validString);
         // Assert
         assertTrue(isValid);
     }
@@ -27,7 +27,7 @@ public class ControlInputToolTest {
         // Arrange
         String invalidString = "<script>alert('XSS');</script>";
         // Act
-        boolean isValid = ControlInputTool.isValidString(invalidString);
+        boolean isValid = ControlInputTool.checkString(invalidString);
         // Assert
         assertFalse(isValid);
     }
@@ -37,7 +37,7 @@ public class ControlInputToolTest {
         // Arrange
         TestObject validObject = new TestObject("Valid string");
         // Act
-        boolean isValid = ControlInputTool.isValidObject(validObject, TestObject.class);
+        boolean isValid = ControlInputTool.checkObject(validObject, TestObject.class);
         // Assert
         assertTrue(isValid);
     }
@@ -47,7 +47,7 @@ public class ControlInputToolTest {
         // Arrange
         TestObject invalidObject = new TestObject("<script>alert('XSS');</script>");
         // Act
-        boolean isValid = ControlInputTool.isValidObject(invalidObject, TestObject.class);
+        boolean isValid = ControlInputTool.checkObject(invalidObject, TestObject.class);
         // Assert
         assertFalse(isValid);
     }
@@ -57,7 +57,7 @@ public class ControlInputToolTest {
         // Arrange
         Number validNumber = 10;
         // Act
-        boolean isValid = ControlInputTool.isValidNumber(validNumber);
+        boolean isValid = ControlInputTool.checkNumber(validNumber);
         // Assert
         assertTrue(isValid);
     }
@@ -67,7 +67,7 @@ public class ControlInputToolTest {
         // Arrange
         Number invalidNumber = -10;
         // Act
-        boolean isValid = ControlInputTool.isValidNumber(invalidNumber);
+        boolean isValid = ControlInputTool.checkNumber(invalidNumber);
         // Assert
         assertFalse(isValid);
     }
@@ -79,7 +79,7 @@ public class ControlInputToolTest {
         validTokens.put("accessToken", "validAccessToken");
         validTokens.put("refreshToken", "validRefreshToken");
         // Act
-        boolean isValid = ControlInputTool.isValidTokens(validTokens);
+        boolean isValid = ControlInputTool.checkToken(validTokens);
         // Assert
         assertTrue(isValid);
     }
@@ -90,7 +90,7 @@ public class ControlInputToolTest {
         Map<String, String> invalidTokens = new HashMap<>();
         invalidTokens.put("accessToken", "validAccessToken");
         // Act
-        boolean isValid = ControlInputTool.isValidTokens(invalidTokens);
+        boolean isValid = ControlInputTool.checkToken(invalidTokens);
         // Assert
         assertFalse(isValid);
     }
@@ -101,7 +101,7 @@ public class ControlInputToolTest {
         Map<String, String> validRefreshToken = new HashMap<>();
         validRefreshToken.put("refreshToken", "validRefreshToken");
         // Act
-        boolean isValid = ControlInputTool.isValidRefreshToken(validRefreshToken);
+        boolean isValid = ControlInputTool.checkRefreshToken(validRefreshToken);
         // Assert
         assertTrue(isValid);
     }
@@ -112,7 +112,7 @@ public class ControlInputToolTest {
         Map<String, String> invalidRefreshToken = new HashMap<>();
         invalidRefreshToken.put("invalidKey", "validRefreshToken");
         // Act
-        boolean isValid = ControlInputTool.isValidRefreshToken(invalidRefreshToken);
+        boolean isValid = ControlInputTool.checkRefreshToken(invalidRefreshToken);
         // Assert
         assertFalse(isValid);
     }

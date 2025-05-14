@@ -21,12 +21,12 @@ public class Ingredient extends HasRestaurantAbs {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "nom", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     @NotNull(message = "Ce champs ne peut pas être vide")
-    private String nom;
+    private String name;
 
-    @ManyToMany(mappedBy = "ingredientSet")
-    @JsonBackReference(value = "produit-ingredient")
+    @ManyToMany(mappedBy = "ingredients")
+    @JsonBackReference(value = "product-ingredient")
     @With
-    private Set<Produit> produitSet;
+    private Set<Product> products;
 }

@@ -12,11 +12,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 @Tag("unit")
 public class CategorieTest {
 
-    private Categorie categorie;
+    private Category categorie;
 
     @BeforeEach
     public void setUp() {
-        categorie = new Categorie();
+        categorie = new Category();
     }
 
     @Test

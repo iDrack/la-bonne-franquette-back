@@ -33,14 +33,14 @@ public class MenuTest {
 
     @Test
     public void setNom_setsNomCorrectly() {
-        menu.setNom("testNom");
-        assertEquals("testNom", menu.getNom());
+        menu.setName("testNom");
+        assertEquals("testNom", menu.getName());
     }
 
     @Test
     public void setNom_setsNullNom() {
-        menu.setNom(null);
-        assertNull(menu.getNom());
+        menu.setName(null);
+        assertNull(menu.getName());
     }
 
     @Test

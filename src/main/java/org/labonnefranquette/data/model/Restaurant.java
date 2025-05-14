@@ -34,13 +34,13 @@ public class Restaurant {
     private List<User> employees;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Categorie> categories;
+    private List<Category> categories;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Commande> commandes;
+    private List<Order> orders;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Extra> extras;
+    private List<Addon> addons;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ingredient> ingredients;
@@ -52,31 +52,31 @@ public class Restaurant {
     private List<MenuItem> menuItems;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Paiement> paiements;
+    private List<Payment> payments;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<PaiementType> paiementTypes;
+    private List<PaymentType> paymentTypes;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Produit> produits;
+    private List<Product> products;
 
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SousCategorie> sousCategories;
+    private List<SubCategory> subCategories;
 
     public Restaurant() {
         this.versionCarte = 1;
         this.isTVAEnable = false;
         this.employees = new ArrayList<>();
         this.ingredients = new ArrayList<>();
-        this.produits = new ArrayList<>();
+        this.products = new ArrayList<>();
         this.categories = new ArrayList<>();
-        this.extras = new ArrayList<>();
-        this.commandes = new ArrayList<>();
+        this.addons = new ArrayList<>();
+        this.orders = new ArrayList<>();
         this.menuItems = new ArrayList<>();
         this.menus = new ArrayList<>();
-        this.paiementTypes = new ArrayList<>();
-        this.paiements = new ArrayList<>();
-        this.sousCategories = new ArrayList<>();
+        this.paymentTypes = new ArrayList<>();
+        this.payments = new ArrayList<>();
+        this.subCategories = new ArrayList<>();
     }
 
     public void updateVersionCarte() {

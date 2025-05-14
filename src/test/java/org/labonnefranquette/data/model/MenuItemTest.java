@@ -14,18 +14,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class MenuItemTest {
 
     private MenuItem menuItem;
-    private Produit produit1;
-    private Produit produit2;
+    private Product produit1;
+    private Product produit2;
 
     @BeforeEach
     public void setUp() {
         menuItem = new MenuItem();
-        produit1 = new Produit();
+        produit1 = new Product();
         produit1.setId(1L);
         produit1.setNom("Produit 1");
         produit1.setPrixHT(100);
 
-        produit2 = new Produit();
+        produit2 = new Product();
         produit2.setId(2L);
         produit2.setNom("Produit 2");
         produit2.setPrixHT(200);

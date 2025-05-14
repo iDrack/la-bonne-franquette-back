@@ -41,7 +41,7 @@ class GenericServiceImplTest {
         HasRestaurant item = mock(HasRestaurant.class);
         when(repository.findById(1L)).thenReturn(Optional.of(item));
 
-        Optional<HasRestaurant> result = genericService.findAllById(1L);
+        Optional<HasRestaurant> result = genericService.getAllById(1L);
 
         assertTrue(result.isPresent());
         assertEquals(item, result.get());
@@ -51,7 +51,7 @@ class GenericServiceImplTest {
     void findAllById_returnsEmptyWhenNotFound() {
         when(repository.findById(1L)).thenReturn(Optional.empty());
 
-        Optional<HasRestaurant> result = genericService.findAllById(1L);
+        Optional<HasRestaurant> result = genericService.getAllById(1L);
 
         assertFalse(result.isPresent());
     }

@@ -1,9 +1,9 @@
 package org.labonnefranquette.data.dto;
 
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.dto.impl.PaiementReadDTO;
-import org.labonnefranquette.data.model.Paiement;
-import org.labonnefranquette.data.model.PaiementType;
+import org.labonnefranquette.data.dto.impl.PaymentReadDTO;
+import org.labonnefranquette.data.model.Payment;
+import org.labonnefranquette.data.model.PaymentType;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -16,8 +16,8 @@ class PaiementReadDTOTest {
 
     @Test
     void shouldCreatePaiementReadDTOWithValidData() {
-        PaiementType type = new PaiementType(1L, "CB", true, new ArrayList<Paiement>());
-        PaiementReadDTO dto = new PaiementReadDTO();
+        PaymentType type = new PaymentType(1L, "CB", true, new ArrayList<Payment>());
+        PaymentReadDTO dto = new PaymentReadDTO();
         dto.setId(1L);
         dto.setCommandeId(100L);
         dto.setDate(Date.valueOf("2023-01-01"));
@@ -35,7 +35,7 @@ class PaiementReadDTOTest {
 
     @Test
     void shouldHandleNullArticles() {
-        PaiementReadDTO dto = new PaiementReadDTO();
+        PaymentReadDTO dto = new PaymentReadDTO();
         dto.setArticles(null);
 
         assertEquals(null, dto.getArticles());
@@ -43,7 +43,7 @@ class PaiementReadDTOTest {
 
     @Test
     void shouldHandleNegativePrix() {
-        PaiementReadDTO dto = new PaiementReadDTO();
+        PaymentReadDTO dto = new PaymentReadDTO();
         dto.setPrix(-100);
 
         assertEquals(-100, dto.getPrix());

@@ -72,7 +72,7 @@ public class AuthServiceImplTest {
         when(jwtUtil.isValidRefreshToken(refreshToken)).thenReturn(true);
         when(jwtUtil.extractUsername(refreshToken)).thenReturn("testUser");
         when(userDetailsService.loadUserByUsername("testUser")).thenReturn(userDetails);
-        when(userService.findUserByUsername(anyString())).thenReturn(user);
+        when(userService.getByUsername(anyString())).thenReturn(user);
         when(jwtUtil.generateToken(anyString(), anyList(), anyLong())).thenReturn("newAccessToken");
         when(restaurant.getId()).thenReturn(1L);
         when(user.getRestaurant()).thenReturn(restaurant);

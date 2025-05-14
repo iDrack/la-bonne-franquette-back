@@ -1,7 +1,7 @@
 package org.labonnefranquette.data.model.interfaces;
 
 public interface HasPrice {
-    public int getPrixTTC();
+    public int getTotalPrice();
 
-    public void setPrixTTC(int prixTTC);
+    public void setTotalPrice(int prixTTC);
 }
