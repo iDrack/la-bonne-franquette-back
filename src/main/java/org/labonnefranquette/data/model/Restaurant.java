@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "restaurant")
+@Table(name = "restaurants")
 @Data
 @AllArgsConstructor
 public class Restaurant {
@@ -23,8 +23,8 @@ public class Restaurant {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String name;
 
-    @Column(name = "version_carte", nullable = false)
-    private int versionCarte;
+    @Column(name = "menu_version", nullable = false)
+    private int menuVersion;
 
     @Column(name = "tva_enable", nullable = false)
     @NotNull(message = "Ce champs ne peut pas être vide.")
@@ -64,7 +64,7 @@ public class Restaurant {
     private List<SubCategory> subCategories;
 
     public Restaurant() {
-        this.versionCarte = 1;
+        this.menuVersion = 1;
         this.isTVAEnable = false;
         this.employees = new ArrayList<>();
         this.ingredients = new ArrayList<>();
@@ -80,6 +80,6 @@ public class Restaurant {
     }
 
     public void updateVersionCarte() {
-        this.versionCarte++;
+        this.menuVersion++;
     }
 }

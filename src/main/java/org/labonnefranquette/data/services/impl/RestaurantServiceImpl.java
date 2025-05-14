@@ -25,7 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public int getVersion(Long idRestaurant) {
-        return findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant)).getVersionCarte();
+        return findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant)).getMenuVersion();
     }
 
     @Override

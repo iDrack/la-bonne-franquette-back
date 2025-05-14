@@ -20,7 +20,7 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "payment")
+@Table(name = "payments")
 public class Payment extends HasRestaurantAbs {
 
     @Id

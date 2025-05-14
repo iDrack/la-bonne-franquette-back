@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "menu")
+@Table(name = "menus")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Menu extends RestaurantItemAbs {

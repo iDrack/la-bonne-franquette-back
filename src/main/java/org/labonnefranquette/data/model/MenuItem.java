@@ -14,7 +14,7 @@ import java.util.List;
 
 @Data
 @Entity
-@Table(name = "menu_item")
+@Table(name = "menu_items")
 @NoArgsConstructor
 @AllArgsConstructor
 public class MenuItem extends RestaurantItemAbs {

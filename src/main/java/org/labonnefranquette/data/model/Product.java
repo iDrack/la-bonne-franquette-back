@@ -11,7 +11,7 @@ import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "product")
+@Table(name = "products")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Product extends RestaurantItemAbs {

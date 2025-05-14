@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@DiscriminatorValue("subcategory")
+@DiscriminatorValue("sub-category")
 @NoArgsConstructor
 @AllArgsConstructor
 public class SubCategory extends Category {

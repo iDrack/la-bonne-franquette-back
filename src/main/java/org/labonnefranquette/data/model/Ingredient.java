@@ -13,7 +13,7 @@ import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "ingredient")
+@Table(name = "ingredients")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Ingredient extends HasRestaurantAbs {

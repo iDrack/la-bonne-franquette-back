@@ -17,7 +17,7 @@ import java.util.Collection;
 @DiscriminatorColumn(name = "category_type",
         discriminatorType = DiscriminatorType.STRING)
 @DiscriminatorValue("category")
-@Table(name = "category")
+@Table(name = "categories")
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category extends HasRestaurantAbs {
