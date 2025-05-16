@@ -11,7 +11,7 @@ import java.util.Date;
 
 @Data
 public class OrderReadDTO {
-    private long orderId;
+    private long id;
     private short number;
     private Date creationDate;
     private Date deliveryDate;

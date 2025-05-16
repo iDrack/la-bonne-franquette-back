@@ -67,9 +67,9 @@ public class OrderController {
                 return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
             }
             OrderStatus orderStatus = OrderStatus.valueOf(status.replace("-", "_").toUpperCase());
-            List<Order> commandes = orderService.getAllByStatus(orderStatus, authToken);
-            List<OrderReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, OrderReadDTO.class)).toList();
-            return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
+            List<Order> orders = orderService.getAllByStatus(orderStatus, authToken);
+            List<OrderReadDTO> orderDTOs = orders.stream().map(order -> dtoTools.convertToDto(order, OrderReadDTO.class)).toList();
+            return new ResponseEntity<>(orderDTOs, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
@@ -81,9 +81,9 @@ public class OrderController {
     )
     @GetMapping
     public ResponseEntity<List<OrderReadDTO>> fetchAllCommandes() {
-        List<Order> commandes = orderService.findAllOrder();
-        List<OrderReadDTO> commandesDtos = commandes.stream().map(commande -> dtoTools.convertToDto(commande, OrderReadDTO.class)).toList();
-        return new ResponseEntity<>(commandesDtos, HttpStatus.OK);
+        List<Order> orders = orderService.findAllOrder();
+        List<OrderReadDTO> ordersDTOs = orders.stream().map(order -> dtoTools.convertToDto(order, OrderReadDTO.class)).toList();
+        return new ResponseEntity<>(ordersDTOs, HttpStatus.OK);
     }
 
     /**
@@ -134,6 +134,7 @@ public class OrderController {
         Order order = null;
         try {
             order = orderService.getById(id);
+            System.out.println(order);
         } catch (NullPointerException e) {
             log.error("Erreur: ", e);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
