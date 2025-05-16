@@ -21,36 +21,36 @@ INSERT INTO categories(id, name, category_type, restaurant_id)
 SELECT 5, 'Boissons',     'category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=5);
 
 -- Sub-categories
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 6,  'Bœuf',        'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=6);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 7,  'Poulet',      'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=7);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 8,  'Végétarien',  'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=8);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 6,  'Bœuf',        'sub-category', 1,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=6);
+INSERT INTO categories(id, name, category_type,category_id, restaurant_id)
+SELECT 7,  'Poulet',      'sub-category', 1,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=7);
+INSERT INTO categories(id, name, category_type,category_id, restaurant_id)
+SELECT 8,  'Végétarien',  'sub-category', 1,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=8);
 
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 9,  'César',       'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=9);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 10, 'Poulet',      'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=10);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 9,  'César',       'sub-category', 2,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=9);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 10, 'Poulet',      'sub-category', 2,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=10);
 
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 11, 'Margherita',  'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=11);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 12, 'Reine',       'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=12);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 13, 'Végétarienne','sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=13);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 11, 'Margherita',  'sub-category', 3,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=11);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 12, 'Reine',       'sub-category', 3, 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=12);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 13, 'Végétarienne','sub-category', 3, 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=13);
 
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 14, 'Gâteaux',     'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=14);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 15, 'Glaces',      'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=15);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 14, 'Gâteaux',     'sub-category', 4, 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=14);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 15, 'Glaces',      'sub-category', 4, 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=15);
 
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 16, 'Eaux',        'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=16);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 17, 'Sodas',       'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=17);
-INSERT INTO categories(id, name, category_type, restaurant_id)
-SELECT 18, 'Jus',         'sub-category', 1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=18);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 16, 'Eaux',        'sub-category', 5,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=16);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 17, 'Sodas',       'sub-category', 5,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=17);
+INSERT INTO categories(id, name, category_type, category_id, restaurant_id)
+SELECT 18, 'Jus',         'sub-category', 5,  1 WHERE NOT EXISTS(SELECT 1 FROM categories WHERE id=18);
 
 -- 3) INGREDIENTS (11)
 INSERT INTO ingredients(id, name, restaurant_id) SELECT 1,  'Tomate',      1 WHERE NOT EXISTS(SELECT 1 FROM ingredients WHERE id=1);
