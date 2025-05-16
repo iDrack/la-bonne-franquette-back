@@ -9,14 +9,18 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 
-import java.util.Set;
+import java.util.Collection;
 
 @Data
 @Entity
-@Table(name = "ingredients")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "category_type",
+        discriminatorType = DiscriminatorType.STRING)
+@DiscriminatorValue("category")
+@Table(name = "categories")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ingredient extends HasRestaurantAbs {
+public class Category extends HasRestaurantAbs {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -25,8 +29,12 @@ public class Ingredient extends HasRestaurantAbs {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String name;
 
-    @ManyToMany(mappedBy = "ingredients")
-    @JsonBackReference(value = "product-ingredient")
+    @ManyToMany(mappedBy = "categories")
+    @JsonBackReference(value = "category-product")
     @With
-    private Set<Product> products;
+    private Collection<Product> products;
+
+    @Column(name = "category_type", insertable = false, updatable = false)
+    @With
+    private String categoryType;
 }

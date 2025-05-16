@@ -1,22 +1,24 @@
 package org.labonnefranquette.data.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.With;
-import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
+import org.labonnefranquette.data.model.interfaces.RestaurantItemAbs;
 
 import java.util.Set;
 
 @Data
 @Entity
-@Table(name = "ingredients")
+@Table(name = "addons")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ingredient extends HasRestaurantAbs {
+public class Addon extends RestaurantItemAbs {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -25,8 +27,8 @@ public class Ingredient extends HasRestaurantAbs {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String name;
 
-    @ManyToMany(mappedBy = "ingredients")
-    @JsonBackReference(value = "product-ingredient")
+    @ManyToMany(mappedBy = "addons")
+    @JsonIgnore
     @With
     private Set<Product> products;
 }

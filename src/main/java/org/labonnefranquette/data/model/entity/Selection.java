@@ -9,9 +9,9 @@ import java.util.List;
 @Embeddable
 public class Selection {
 
-    private String nom;
+    private String name;
     private List<Article> articles;
-    private Integer quantite;
-    private int prixTTC;
-    private boolean isModified;
+    private Integer quantity;
+    private int totalPrice;
+    private boolean modified;
 }

@@ -46,7 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public User signup(UserCreateDto userCreateDto) {
-        return userService.createUser(userCreateDto);
+        return userService.create(userCreateDto);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class AuthServiceImpl implements AuthService {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userLoginDto.getUsername(), userLoginDto.getPassword()));
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(userLoginDto.getUsername());
-        User user = userService.findUserByUsername(userLoginDto.getUsername());
+        User user = userService.getByUsername(userLoginDto.getUsername());
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
@@ -85,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
                 List<String> roles = userDetailsService.loadUserByUsername(username).getAuthorities().stream()
                         .map(GrantedAuthority::getAuthority)
                         .collect(Collectors.toList());
-                User user = userService.findUserByUsername(username);
+                User user = userService.getByUsername(username);
                 return jwtUtil.generateToken(username, roles, user.getRestaurant().getId());
             }
         } catch (Exception e) {

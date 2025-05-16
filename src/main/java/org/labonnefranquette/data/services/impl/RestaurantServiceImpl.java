@@ -25,7 +25,7 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     public int getVersion(Long idRestaurant) {
-        return findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant)).getVersionCarte();
+        return findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant)).getMenuVersion();
     }
 
     @Override
@@ -43,7 +43,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @throws IllegalArgumentException si le nom de restaurant est déjà pris
      */
     @Override
-    public Restaurant createRestaurant(String restaurantName) throws IllegalArgumentException {
+    public Restaurant create(String restaurantName) throws IllegalArgumentException {
         if (Boolean.TRUE.equals(this.restaurantRepository.existsByName(restaurantName))) {
             throw new IllegalArgumentException("Impossible de créer ce nouveau restaurant: Le nom  : '" + restaurantName + "' éxiste déjà.");
         }
@@ -58,7 +58,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public void deleteRestaurant(Restaurant restaurant) {
+    public void delete(Restaurant restaurant) {
         restaurantRepository.delete(restaurant);
     }
 
@@ -70,7 +70,7 @@ public class RestaurantServiceImpl implements RestaurantService {
      * @return Le restaurant modifié
      */
     @Override
-    public Restaurant addUserToRestaurant(Restaurant restaurant, User user) {
+    public Restaurant addUser(Restaurant restaurant, User user) {
         if (restaurant.getEmployees() == null) {
             restaurant.setEmployees(new ArrayList<>(Collections.singletonList(user)));
         } else {
@@ -81,7 +81,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
-    public List<User> getAllUserFromRestaurant(Long idRestaurant) throws NullPointerException {
+    public List<User> getAllUser(Long idRestaurant) throws NullPointerException {
         Restaurant restaurant = restaurantRepository.findById(idRestaurant).orElseThrow(() -> new NullPointerException("Impossible de trouver le restaurant avec l'id : " + idRestaurant));
         return restaurant.getEmployees();
     }

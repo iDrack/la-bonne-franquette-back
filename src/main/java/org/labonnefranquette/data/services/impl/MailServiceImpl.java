@@ -2,7 +2,7 @@ package org.labonnefranquette.data.services.impl;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.labonnefranquette.data.model.Paiement;
+import org.labonnefranquette.data.model.Payment;
 import org.labonnefranquette.data.services.MailService;
 import org.labonnefranquette.data.utils.PDFTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +41,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendMailTo(String to, String subject, String body) {
+    public void sendMail(String to, String subject, String body) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(mailUser);
         message.setTo(to);
@@ -51,7 +51,7 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendMailWithAttachment(String to, String subject, String body, String attachementPath, String filename) throws MessagingException {
+    public void sendTemplatedMail(String to, String subject, String body, String attachementPath, String filename) throws MessagingException {
         MimeMessage message = emailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(mailUser);
@@ -64,14 +64,14 @@ public class MailServiceImpl implements MailService {
     }
 
     @Override
-    public void sendMailReceipt(String to, Paiement paiement, boolean seeDetails) throws IOException, MessagingException {
+    public void sendMailReceipt(String to, Payment payment, boolean seeDetails) throws IOException, MessagingException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         formatter.setTimeZone(TimeZone.getTimeZone("Europe/Paris"));
-        String formattedDate = formatter.format(paiement.getDate());
+        String formattedDate = formatter.format(payment.getDate());
         PDFTools pdfTools = PDFTools.getInstance();
-        String filename = String.format("Commande_%d_%d.pdf", paiement.getId(), paiement.getCommande().getNumero());
-        Path path = pdfTools.toPDF(paiement, filename, seeDetails);
-        sendMailWithAttachment(to, "Votre facture du " + formattedDate + ".", "Votre facture du " + formattedDate + ".", path.toString(), filename);
+        String filename = String.format("Commande_%d_%d.pdf", payment.getId(), payment.getOrder().getNumber());
+        Path path = pdfTools.toPDF(payment, filename, seeDetails);
+        sendTemplatedMail(to, "Votre facture du " + formattedDate + ".", "Votre facture du " + formattedDate + ".", path.toString(), filename);
         Files.delete(path);
     }
 }
