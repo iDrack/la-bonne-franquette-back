@@ -33,7 +33,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     }
 
     @Override
-    public void deleteById(ID id) {
+    public Optional<T> deleteById(ID id) {
         Optional<T> itemFound = repository.findById(id);
         if (itemFound.isPresent()) {
             T item = itemFound.get();
@@ -41,6 +41,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
             restaurantService.updateCacheVersion(restaurantId);
             repository.deleteById(id);
         }
+        return itemFound;
     }
 
     @Override

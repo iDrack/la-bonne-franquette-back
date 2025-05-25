@@ -186,7 +186,7 @@ public class UserController {
                 return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
             }
 
-            retMap.put("Response", "L'utilisateur : " + username + " a été supprimer avec succés.");
+            retMap.put("Response", "L'utilisateur : " + username + " a été supprimé avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {
