@@ -70,7 +70,7 @@ public class ProductController {
                 return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
             }
 
-            retMap.put("Response", "Le produit : " + result.get().getName() + " a été supprimé avec succés.");
+            retMap.put("Response", "Le produit \"" + result.get().getName() + "\" a été supprimé avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {

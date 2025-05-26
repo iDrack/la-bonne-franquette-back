@@ -24,7 +24,12 @@ public class Menu extends RestaurantItemAbs {
     @NotNull(message = "Ce champs ne peut pas être vide")
     private String name;
 
-    @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
+    @OneToMany(
+            mappedBy = "menu",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true
+    )
     @With
     private Collection<MenuItem> menuItems;
 

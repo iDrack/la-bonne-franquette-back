@@ -15,13 +15,21 @@ import lombok.NoArgsConstructor;
 public class SubCategory extends Category {
 
     @ManyToOne
-    @JoinColumn(name = "category_id", nullable = true)
+    @JoinColumn(
+            name = "category_id",
+            nullable = true,
+            foreignKey = @ForeignKey(
+                    name = "FK_subcategory_parent",
+                    foreignKeyDefinition = "FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE"
+            )
+    )
     @JsonBackReference
     private Category category;
 
     @Transient
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private long categoryId;
+
 
     @PostLoad
     private void onLoad() {
