@@ -87,10 +87,3 @@ public class AddonController {
         }
     }
 }
-
-/*TODO: Gérer les cuppression, par exmple pas de cascade par défaut
-Exemple :
-Ingredient / Extra si tu suppr ca fait rien, sinon c'est vite le bordel (par contre ca enleve dans les bind dans les tables ManyMany)
-Produit si tu suppr ca fait rien non plus, pareil ca enleve juste les binds
-Menu si tu suppr ca peut faire suppr les menuItem associé, et suppr menuItem ca fait rien
- */

@@ -38,6 +38,7 @@ public class MenuItem extends RestaurantItemAbs {
             joinColumns = @JoinColumn(name = "menu_item_id"),
             inverseJoinColumns = @JoinColumn(
                     name = "product_id",
+                    nullable = true,
                     foreignKey = @ForeignKey(
                             name = "FK_menu_item_contains_product_product",
                             foreignKeyDefinition = "FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE SET NULL"
