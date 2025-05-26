@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
@@ -37,4 +38,13 @@ public class Category extends HasRestaurantAbs {
     @Column(name = "category_type", insertable = false, updatable = false)
     @With
     private String categoryType;
+
+    @OneToMany(
+            mappedBy = "category",
+            cascade = CascadeType.REMOVE,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY
+    )
+    @With
+    private Collection<SubCategory> subCategories = new ArrayList<>();
 }

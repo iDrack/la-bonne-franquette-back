@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
+
 import java.io.IOException;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -29,14 +30,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String token = request.getHeader("auth-token");
 
-        if (token != null && jwtUtil.isValidAccessToken(token)) {
-            String username = jwtUtil.extractUsername(token);
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+        if (token != null) {
+            if (jwtUtil.isValidAccessToken(token)) {
+                String username = jwtUtil.extractUsername(token);
+                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
 
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            } else {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.setHeader("WWW-Authenticate", "Bearer error=\"invalid_token\", error_description=\"Le token d'authentification est invalide ou expiré\"");
+                response.setContentType("application/json");
+                response.getWriter().write("{\"erreur\":\"Token d'authentification invalide ou expiré\"}");
+                return;
+            }
         }
 
         filterChain.doFilter(request, response);

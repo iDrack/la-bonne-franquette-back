@@ -60,7 +60,7 @@ public class IngredientController {
         try {
             if (!jwtUtil.isAdmin(authToken)) {
                 Map<String, String> retMap = new HashMap<>();
-                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour supprimer un extra.");
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour supprimer un ingrédient.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
 
@@ -71,7 +71,7 @@ public class IngredientController {
                 return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
             }
 
-            retMap.put("Response", "L'ingrédient : " + result.get().getName() + " a été supprimé avec succés.");
+            retMap.put("Response", "L'ingrédient \"" + result.get().getName() + "\" a été supprimé avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {

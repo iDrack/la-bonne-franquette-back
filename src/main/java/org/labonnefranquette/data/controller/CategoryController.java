@@ -59,7 +59,7 @@ public class CategoryController {
         try {
             if (!jwtUtil.isAdmin(authToken)) {
                 Map<String, String> retMap = new HashMap<>();
-                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour supprimer un utilisateur.");
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour supprimer une catégorie.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
 
@@ -70,7 +70,7 @@ public class CategoryController {
                 return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
             }
 
-            retMap.put("Response", "La catégorie : " + result.get().getName() + " a été supprimer avec succés.");
+            retMap.put("Response", "La catégorie \"" + result.get().getName() + "\" a été supprimer avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {
