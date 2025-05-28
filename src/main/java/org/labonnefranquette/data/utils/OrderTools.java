@@ -13,38 +13,38 @@ import java.util.stream.Collectors;
 @Component
 public class OrderTools {
 
-    private static short compteurNumeroCommande = 0;
-    private static AtomicLong dernierUsageCompteur = new AtomicLong(System.currentTimeMillis());
+    private static short orderNumberCount = 0;
+    private static AtomicLong lastUse = new AtomicLong(System.currentTimeMillis());
 
 
-    private static synchronized void verifierEtReinitialiserSiNecessaire() {
+    private static synchronized void init() {
         long currentTime = System.currentTimeMillis();
-        if (currentTime - dernierUsageCompteur.get() >= 3 * 60 * 60 * 1000) { // 3 heures
-            compteurNumeroCommande = 0;
+        if (currentTime - lastUse.get() >= 3 * 60 * 60 * 1000) { // 3 heures
+            orderNumberCount = 0;
         }
     }
-    private static synchronized short incrementeCompteur() {
-        verifierEtReinitialiserSiNecessaire();
-        if (compteurNumeroCommande > 400) {
-            compteurNumeroCommande = 0;
+    private static synchronized short increment() {
+        init();
+        if (orderNumberCount >= 400) {
+            orderNumberCount = 0;
         }
-        compteurNumeroCommande++;
-        dernierUsageCompteur.set(System.currentTimeMillis());
-        return compteurNumeroCommande;
+        orderNumberCount++;
+        lastUse.set(System.currentTimeMillis());
+        return orderNumberCount;
     }
 
-    public Boolean checkPrice(@NotNull Order commande) {
+    public Boolean checkPrice(@NotNull Order order) {
 
         int articlesPrice = 0;
-        if (commande.getArticles() != null) {
-            articlesPrice = commande.getArticles().stream()
+        if (order.getArticles() != null) {
+            articlesPrice = order.getArticles().stream()
                     .mapToInt(article -> article.getQuantity() * article.getTotalPrice())
                     .sum();
         }
 
         int menusPrice = 0;
-        if (commande.getMenus() != null) {
-            menusPrice = commande.getMenus().stream()
+        if (order.getMenus() != null) {
+            menusPrice = order.getMenus().stream()
                     .mapToInt(menu -> menu.getQuantity() * menu.getTotalPrice())
                     .sum();
         }
@@ -52,22 +52,22 @@ public class OrderTools {
 
         int correctPrice = articlesPrice + menusPrice;
 
-        return correctPrice == commande.getTotalPrice();
+        return correctPrice == order.getTotalPrice();
     }
     public short setOrderNumber() {
-        return incrementeCompteur();
+        return increment();
     }
 
-    public String setOrderPaymentType(Collection<Payment> paiementSet) {
+    public String setOrderPaymentType(Collection<Payment> payments) {
 
-        if (paiementSet.isEmpty()) {
+        if (payments.isEmpty()) {
             return "AUCUN";
         }
-        Set<String> typesPaiement = paiementSet.stream()
+        Set<String> paymentsType = payments.stream()
                 .map(Payment::getType)
                 .collect(Collectors.toSet());
-        if (typesPaiement.size() == 1) {
-            return typesPaiement.iterator().next();
+        if (paymentsType.size() == 1) {
+            return paymentsType.iterator().next();
         }
         return "MIXED";
     }
