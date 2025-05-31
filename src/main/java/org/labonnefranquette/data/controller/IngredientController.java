@@ -67,6 +67,14 @@ public class IngredientController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter un ingrédient.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
+
+            // Vérification de doublon
+            if (ingredientService.existsByName(ingredientCreateDTO.getName())) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Un ingrédient avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
+
             Ingredient newIngredient = dtoTools.convertToEntity(ingredientCreateDTO, Ingredient.class);
             var result = ingredientService.create(newIngredient, authToken);
             Map<String, String> retMap = new HashMap<>();

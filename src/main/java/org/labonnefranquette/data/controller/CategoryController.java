@@ -69,6 +69,14 @@ public class CategoryController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter une catégorie.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
+
+            // Vérification de doublon
+            if (categoryService.existsByName(categoryCreateDTO.getName())) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Une catégorie avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
+
             if (Objects.equals(categoryCreateDTO.getCategoryType(), "category")) {
                 Category newCategory = dtoTools.convertToEntity(categoryCreateDTO, Category.class);
                 var category = categoryService.create(newCategory, authToken);

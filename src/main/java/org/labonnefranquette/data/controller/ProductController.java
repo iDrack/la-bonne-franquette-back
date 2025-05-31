@@ -66,13 +66,20 @@ public class ProductController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter un produit.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
+
+            // Vérification de doublon
+            if (productService.existsByName(productCreateDTO.getName())) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Un produit avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
+
             Product newAddon = dtoTools.convertToEntity(productCreateDTO, Product.class);
             var result = productService.create(newAddon, authToken);
             Map<String, String> retMap = new HashMap<>();
 
             retMap.put("Response", "Le produit \"" + result.getName() + "\" a été ajouté avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
-
 
         } catch (IllegalArgumentException e) {
             log.error("e: ", e);

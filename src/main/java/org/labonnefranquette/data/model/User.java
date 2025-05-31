@@ -56,4 +56,8 @@ public class User implements HasRestaurant {
     public String toString() {
         return "user=" + this.username + ".";
     }
+
+    public String getName() {
+        return this.getUsername();
+    }
 }

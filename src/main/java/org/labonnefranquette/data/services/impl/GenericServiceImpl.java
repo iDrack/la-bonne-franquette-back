@@ -58,4 +58,9 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
         return repository.save(newT);
     }
 
+    @Override
+    public boolean existsByName(String name) {
+        return repository.findAll().stream().anyMatch(item -> item.getName().equalsIgnoreCase(name));
+    }
+
 }

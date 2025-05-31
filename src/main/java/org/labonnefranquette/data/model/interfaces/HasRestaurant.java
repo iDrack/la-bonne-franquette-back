@@ -6,4 +6,6 @@ public interface HasRestaurant {
     public Restaurant getRestaurant();
 
     public void setRestaurant(Restaurant restaurant);
+
+    String getName();
 }

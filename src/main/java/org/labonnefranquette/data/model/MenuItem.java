@@ -46,4 +46,8 @@ public class MenuItem extends RestaurantItemAbs {
             )
     )
     private List<Product> products;
+
+    public String getName() {
+        return String.valueOf(this.id);
+    }
 }

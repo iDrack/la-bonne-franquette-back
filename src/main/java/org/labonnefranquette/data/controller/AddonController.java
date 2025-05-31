@@ -66,13 +66,20 @@ public class AddonController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter un extra.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
+
+            // Vérification de doublon
+            if (addonService.existsByName(addonCreateDTO.getName())) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Un extra avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
+
             Addon newAddon = dtoTools.convertToEntity(addonCreateDTO, Addon.class);
             var result = addonService.create(newAddon, authToken);
             Map<String, String> retMap = new HashMap<>();
 
             retMap.put("Response", "L'extra \"" + result.getName() + "\" a été ajouté avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
-
 
         } catch (IllegalArgumentException e) {
             log.error("e: ", e);

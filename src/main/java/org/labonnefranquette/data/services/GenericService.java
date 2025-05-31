@@ -11,6 +11,6 @@ public interface GenericService<T extends HasRestaurant, ID> {
     Optional<T> deleteById(ID id);
     List<T> getAll(String token);
     T create(T newT, String token);
+
+    boolean existsByName(String name);
 }
-
-

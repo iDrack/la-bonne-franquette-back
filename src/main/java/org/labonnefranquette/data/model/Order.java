@@ -93,4 +93,8 @@ public class Order extends HasRestaurantAbs implements HasPrice {
                 ", payments=" + payments +
                 '}';
     }
+
+    public String getName() {
+        return String.valueOf(this.id);
+    }
 }

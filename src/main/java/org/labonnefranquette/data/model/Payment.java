@@ -85,4 +85,8 @@ public class Payment extends HasRestaurantAbs {
     public int hashCode() {
         return Objects.hash(type, price, order);
     }
+
+    public String getName() {
+        return String.valueOf(this.id);
+    }
 }

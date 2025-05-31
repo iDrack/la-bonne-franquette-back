@@ -67,13 +67,20 @@ public class MenuController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter un menu.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
+
+            // Vérification de doublon
+            if (menuService.existsByName(menuCreateDTO.getName())) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Un menu avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
+
             Menu newAddon = dtoTools.convertToEntity(menuCreateDTO, Menu.class);
             var result = menuService.create(newAddon, authToken);
             Map<String, String> retMap = new HashMap<>();
 
             retMap.put("Response", "Le menu \"" + result.getName() + "\" a été ajouté avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
-
 
         } catch (IllegalArgumentException e) {
             log.error("e: ", e);
