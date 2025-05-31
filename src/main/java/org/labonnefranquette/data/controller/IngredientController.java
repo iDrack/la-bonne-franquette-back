@@ -6,10 +6,12 @@ import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
+import org.labonnefranquette.data.dto.impl.IngredientCreateDTO;
 import org.labonnefranquette.data.model.Ingredient;
 import org.labonnefranquette.data.repository.IngredientRepository;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
+import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +32,8 @@ public class IngredientController {
 
     @Autowired
     private JWTUtil jwtUtil;
+    @Autowired
+    private DtoTools dtoTools;
 
     /**
      * Récupère la liste de tous les ingrédients.
@@ -48,6 +52,41 @@ public class IngredientController {
         return new ResponseEntity<>(ingredientService.getAll(authToken), HttpStatus.OK);
     }
 
+
+    @Operation(
+            summary = "Ajoute un ingrédient à la carte du restaurant",
+            description = "Ajoute un ingrédient à la carte du restaurant."
+    )
+    @PostMapping()
+    public ResponseEntity<?> addIngredient(@RequestBody IngredientCreateDTO ingredientCreateDTO,
+                                           @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                           @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+        try {
+            if (!jwtUtil.isAdmin(authToken)) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter un ingrédient.");
+                return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
+            }
+            Ingredient newIngredient = dtoTools.convertToEntity(ingredientCreateDTO, Ingredient.class);
+            var result = ingredientService.create(newIngredient, authToken);
+            Map<String, String> retMap = new HashMap<>();
+
+            retMap.put("Response", "L'ingrédient \"" + result.getName() + "\" a été ajouté avec succés.");
+            return new ResponseEntity<>(retMap, HttpStatus.OK);
+
+
+        } catch (IllegalArgumentException e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
+            return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @Operation(
             summary = "Supprimer un ingrédient de la carte",
