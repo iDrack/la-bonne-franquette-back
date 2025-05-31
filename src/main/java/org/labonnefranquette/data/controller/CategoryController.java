@@ -69,7 +69,7 @@ public class CategoryController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter une catégorie.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
-            if (Objects.equals(categoryCreateDTO.getCategoryType(), "sub-category")) {
+            if (Objects.equals(categoryCreateDTO.getCategoryType(), "category")) {
                 Category newCategory = dtoTools.convertToEntity(categoryCreateDTO, Category.class);
                 var category = categoryService.create(newCategory, authToken);
                 Map<String, String> retMap = new HashMap<>();
