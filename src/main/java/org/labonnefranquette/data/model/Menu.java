@@ -27,7 +27,7 @@ public class Menu extends RestaurantItemAbs {
     @OneToMany(
             mappedBy = "menu",
             fetch = FetchType.EAGER,
-            cascade = CascadeType.REMOVE,
+            cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     @With

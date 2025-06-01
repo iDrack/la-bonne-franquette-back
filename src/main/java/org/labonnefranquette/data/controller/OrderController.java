@@ -80,7 +80,8 @@ public class OrderController {
             description = "Renvoie la liste des commandes du restaurant correspondant à celui de l'utilisateur faisant la requête."
     )
     @GetMapping
-    public ResponseEntity<List<OrderReadDTO>> fetchAllCommandes() {
+    public ResponseEntity<List<OrderReadDTO>> fetchAllCommandes(@Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                                                @RequestHeader(value = "Auth-Token", required = true) String authToken) {
         List<Order> orders = orderService.findAllOrder();
         List<OrderReadDTO> ordersDTOs = orders.stream().map(order -> dtoTools.convertToDto(order, OrderReadDTO.class)).toList();
         return new ResponseEntity<>(ordersDTOs, HttpStatus.OK);

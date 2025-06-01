@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.MenuCreateDTO;
 import org.labonnefranquette.data.model.Menu;
+import org.labonnefranquette.data.model.Restaurant;
 import org.labonnefranquette.data.repository.MenuRepository;
 import org.labonnefranquette.data.security.JWTUtil;
+import org.labonnefranquette.data.services.RestaurantService;
 import org.labonnefranquette.data.services.impl.GenericServiceImpl;
 import org.labonnefranquette.data.utils.DtoTools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -34,6 +37,8 @@ public class MenuController {
     private JWTUtil jwtUtil;
     @Autowired
     private DtoTools dtoTools;
+    @Autowired
+    private RestaurantService restaurantService;
 
     /**
      * Récupère la liste de tous les menus.
@@ -75,8 +80,20 @@ public class MenuController {
                 return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
             }
 
-            Menu newAddon = dtoTools.convertToEntity(menuCreateDTO, Menu.class);
-            var result = menuService.create(newAddon, authToken);
+            Menu newMenu = dtoTools.convertToEntity(menuCreateDTO, Menu.class);
+            Long restaurantId = jwtUtil.extractRestaurantId(authToken);
+            Optional<Restaurant> restaurantFound = restaurantService.findAllById(restaurantId);
+            if (restaurantFound.isEmpty()) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Impossible de lier le menu à un restaurant.");
+                return new ResponseEntity<>(retMap, HttpStatus.NOT_FOUND);
+            }
+            Restaurant restaurant = restaurantFound.get();
+            if (newMenu.getMenuItems() != null) {
+                newMenu.getMenuItems().forEach(menuItem -> menuItem.setMenu(newMenu));
+                newMenu.getMenuItems().forEach(menuItem -> menuItem.setRestaurant(restaurant));
+            }
+            var result = menuService.create(newMenu, authToken);
             Map<String, String> retMap = new HashMap<>();
 
             retMap.put("Response", "Le menu \"" + result.getName() + "\" a été ajouté avec succés.");
