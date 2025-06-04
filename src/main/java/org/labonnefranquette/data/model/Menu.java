@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.With;
 import org.labonnefranquette.data.model.interfaces.RestaurantItemAbs;
 
-import java.util.Collection;
+import java.util.List;
 
 @Data
 @Entity
@@ -31,6 +31,6 @@ public class Menu extends RestaurantItemAbs {
             orphanRemoval = true
     )
     @With
-    private Collection<MenuItem> menuItems;
+    private List<MenuItem> menuItems;
 
 }

@@ -1,14 +1,14 @@
 package org.labonnefranquette.data.model.interfaces;
 
-import org.labonnefranquette.data.model.enums.TauxTVA;
+import org.labonnefranquette.data.model.enums.VATRate;
 
 public interface RestaurantItem extends HasRestaurant {
 
-    public float getTauxTVAFloat();
+    public float getVATRateFloat();
 
-    public TauxTVA getTauxTVA();
+    public VATRate getVATRate();
 
-    public void setTauxTVA(TauxTVA tauxTVA);
+    public void setVATRate(VATRate VATRate);
 
-    public void setPrixHT(int prixHT);
+    public void setPrice(int price);
 }

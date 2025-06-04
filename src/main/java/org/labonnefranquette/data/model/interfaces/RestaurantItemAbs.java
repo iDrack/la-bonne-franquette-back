@@ -7,46 +7,44 @@ import jakarta.persistence.MappedSuperclass;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import org.labonnefranquette.data.model.enums.TauxTVA;
+import org.labonnefranquette.data.model.enums.VATRate;
 
 @MappedSuperclass
 @Data
 public abstract class RestaurantItemAbs extends HasRestaurantAbs implements RestaurantItem, HasPrice {
-    @Column(name = "taux_tva")
+    @Column(name = "vat_rate")
     @NotNull(message = "Ce champs ne peut pas être vide.")
     @Enumerated(EnumType.STRING)
-    private TauxTVA tauxTVA;
+    private VATRate VATRate;
 
 
-    @Column(name = "prix_ht", nullable = false, length = 10)
+    @Column(name = "price", nullable = false, length = 10)
     @NotNull(message = "Ce champs ne peut pas être vide")
     @Min(value = 0, message = "Ce champs ne peut pas être négatif")
-    private int prixHT;
+    private int price;
 
 
-    public float getTauxTVAFloat() {
+    public float getVATRateFloat() {
         if (this.getRestaurant() != null && getRestaurant().getIsTVAEnable()) {
-            return tauxTVA.getFloat();
+            return VATRate.getFloat();
         }
-        return TauxTVA.AUCUN.getFloat();
+        return VATRate.AUCUN.getFloat();
     }
 
-    @Override
-    public TauxTVA getTauxTVA() {
-        return this.tauxTVA;
+    public VATRate getVATRate() {
+        return this.VATRate;
     }
 
-    @Override
-    public void setTauxTVA(TauxTVA tauxTVA) {
-        this.tauxTVA = tauxTVA;
+    public void setVATRate(VATRate VATRate) {
+        this.VATRate = VATRate;
     }
 
     public int getTotalPrice() {
-        return (int) ((this.prixHT) * this.getTauxTVAFloat());
+        return (int) ((this.price) * this.getVATRateFloat());
     }
 
-    public void setTotalPrice(int prixHT) {
-        this.prixHT = prixHT;
+    public void setTotalPrice(int totalPrice) {
+        this.price = totalPrice;
     }
 
 }

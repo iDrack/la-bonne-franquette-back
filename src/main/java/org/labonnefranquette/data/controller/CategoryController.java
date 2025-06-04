@@ -7,7 +7,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.CategoryCreateDTO;
+import org.labonnefranquette.data.dto.impl.CategoryUpdateDTO;
 import org.labonnefranquette.data.dto.impl.SubCategoryCreateDTO;
+import org.labonnefranquette.data.dto.impl.SubCategoryUpdateDTO;
 import org.labonnefranquette.data.model.Category;
 import org.labonnefranquette.data.model.SubCategory;
 import org.labonnefranquette.data.repository.CategoryRepository;
@@ -19,10 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @RestController
@@ -70,8 +69,7 @@ public class CategoryController {
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
 
-            // Vérification de doublon
-            if (categoryService.existsByName(categoryCreateDTO.getName())) {
+            if (categoryService.existsByName(categoryCreateDTO.getName(), jwtUtil.extractRestaurantId(authToken))) {
                 Map<String, String> retMap = new HashMap<>();
                 retMap.put("Erreur", "Une catégorie avec le même nom existe déjà.");
                 return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
@@ -117,6 +115,11 @@ public class CategoryController {
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour ajouter une catégorie.");
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
+            if (categoryService.existsByName(categoryCreateDTO.getName(), jwtUtil.extractRestaurantId(authToken))) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Une catégorie avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
             if (Objects.equals(categoryCreateDTO.getCategoryType(), "sub-category")) {
                 SubCategory newCategory = dtoTools.convertToEntity(categoryCreateDTO, SubCategory.class);
                 var category = categoryService.create(newCategory, authToken);
@@ -142,6 +145,99 @@ public class CategoryController {
             return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @Operation(
+            summary = "Modifie une sous-catégorie de la carte du restaurant",
+            description = "Modifie une sous-catégorie de la carte du restaurant."
+    )
+    @PutMapping()
+    public ResponseEntity<?> updateCategory(@RequestBody CategoryUpdateDTO categoryUpdateDTO,
+                                            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                            @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+        try {
+            if (!jwtUtil.isAdmin(authToken)) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour modifier une catégorie.");
+                return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
+            }
+            if (categoryUpdateDTO.getCategoryType().equalsIgnoreCase("category")) {
+                Optional<Category> found = categoryService.getByName(categoryUpdateDTO.getName(), jwtUtil.extractRestaurantId(authToken));
+                if (found.isPresent() && found.get().getId() == categoryUpdateDTO.getId()) {
+                    Map<String, String> retMap = new HashMap<>();
+                    retMap.put("Erreur", "Une catégorie avec le même nom existe déjà.");
+                    return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+                }
+                Category newCategory = dtoTools.convertToEntity(categoryUpdateDTO, Category.class);
+                var result = categoryService.update(newCategory.getId(), newCategory, authToken);
+                Map<String, String> retMap = new HashMap<>();
+
+                retMap.put("Response", "La catégorie \"" + result.getName() + "\" a été modifiée avec succés.");
+                return new ResponseEntity<>(retMap, HttpStatus.OK);
+            } else {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Données invalides");
+                return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+            }
+        } catch (IllegalArgumentException e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
+            return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Operation(
+            summary = "Modifie une sous-catégorie de la carte du restaurant",
+            description = "Modifie une sous-catégorie de la carte du restaurant."
+    )
+    @PutMapping("/sub")
+    public ResponseEntity<?> updateCategory(@RequestBody SubCategoryUpdateDTO categoryUpdateDTO,
+                                            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                            @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+        try {
+            if (!jwtUtil.isAdmin(authToken)) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour modifier une catégorie.");
+                return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
+            }
+
+            if (categoryUpdateDTO.getCategoryType().equalsIgnoreCase("sub-category")) {
+                Optional<Category> found = categoryService.getByName(categoryUpdateDTO.getName(), jwtUtil.extractRestaurantId(authToken));
+                if (found.isPresent() && found.get().getId() == categoryUpdateDTO.getId()) {
+                    Map<String, String> retMap = new HashMap<>();
+                    retMap.put("Erreur", "Une catégorie avec le même nom existe déjà.");
+                    return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+                }
+                Category newCategory = dtoTools.convertToEntity(categoryUpdateDTO, SubCategory.class);
+                var result = categoryService.update(newCategory.getId(), newCategory, authToken);
+                Map<String, String> retMap = new HashMap<>();
+
+                retMap.put("Response", "La catégorie \"" + result.getName() + "\" a été modifiée avec succés.");
+                return new ResponseEntity<>(retMap, HttpStatus.OK);
+            } else {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Données invalides");
+                return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+            }
+
+        } catch (IllegalArgumentException e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
+            return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
 
     @Operation(
             summary = "Supprimer une catégorie de la carte",

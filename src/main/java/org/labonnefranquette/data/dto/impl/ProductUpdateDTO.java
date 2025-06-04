@@ -9,7 +9,8 @@ import org.labonnefranquette.data.model.enums.VATRate;
 import java.util.Collection;
 
 @Data
-public class ProductCreateDTO {
+public class ProductUpdateDTO {
+    Long id;
     String name;
     VATRate VATRate;
     int price;

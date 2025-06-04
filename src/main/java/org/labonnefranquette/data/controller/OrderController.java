@@ -135,7 +135,6 @@ public class OrderController {
         Order order = null;
         try {
             order = orderService.getById(id);
-            System.out.println(order);
         } catch (NullPointerException e) {
             log.error("Erreur: ", e);
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
