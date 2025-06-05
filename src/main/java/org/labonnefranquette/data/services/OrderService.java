@@ -13,7 +13,7 @@ public interface OrderService {
 
     List<Order> getAllByStatus(OrderStatus status, String token);
 
-    List<Order> findAllOrder();
+    List<Order> findAllOrder(String token);
 
     Order getById(long id) throws NullPointerException;
     Order create(Order order, String token);

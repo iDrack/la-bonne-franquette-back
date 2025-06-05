@@ -82,7 +82,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<List<OrderReadDTO>> fetchAllCommandes(@Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
                                                                 @RequestHeader(value = "Auth-Token", required = true) String authToken) {
-        List<Order> orders = orderService.findAllOrder();
+        List<Order> orders = orderService.findAllOrder(authToken);
         List<OrderReadDTO> ordersDTOs = orders.stream().map(order -> dtoTools.convertToDto(order, OrderReadDTO.class)).toList();
         return new ResponseEntity<>(ordersDTOs, HttpStatus.OK);
     }

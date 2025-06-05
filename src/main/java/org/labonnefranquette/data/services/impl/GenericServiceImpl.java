@@ -14,7 +14,6 @@ import java.util.Optional;
 
 public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository<T, ID>, ID> implements GenericService<T, ID> {
 
-
     @Autowired
     private RestaurantService restaurantService;
 
@@ -36,6 +35,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     @Override
     public Optional<T> getByName(String name, Long restaurantId) {
         if (!existsByName(name, restaurantId)) return Optional.empty();
+
         return repository.findAll().stream()
                 .filter(item -> item.getName().equalsIgnoreCase(name) && item.getRestaurant().getId().equals(restaurantId))
                 .findFirst();
