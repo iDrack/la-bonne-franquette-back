@@ -66,45 +66,101 @@ INSERT INTO ingredients(id, name, restaurant_id) SELECT 10, 'Maïs',        1 WH
 INSERT INTO ingredients(id, name, restaurant_id) SELECT 11, 'Olives',      1 WHERE NOT EXISTS(SELECT 1 FROM ingredients WHERE id=11);
 
 -- 4) ADDONS (6)
-INSERT INTO addons(id, name, prix_ht, restaurant_id) SELECT 1, 'Bacon',    150,   1 WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id=1);
-INSERT INTO addons(id, name, prix_ht, restaurant_id) SELECT 2, 'Avocat',   150,   1 WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id=2);
-INSERT INTO addons(id, name, prix_ht, restaurant_id) SELECT 3, 'Œuf',      150,   1 WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id=3);
-INSERT INTO addons(id, name, prix_ht, restaurant_id) SELECT 4, 'Cornichon',150,   1 WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id=4);
-INSERT INTO addons(id, name, prix_ht, restaurant_id) SELECT 5, 'Cheddar',  150,   1 WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id=5);
-INSERT INTO addons(id, name, prix_ht, restaurant_id) SELECT 6, 'Ketchup',  100,   1 WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id=6);
+INSERT INTO addons(id, name, price, restaurant_id)
+SELECT 1, 'Bacon', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id = 1);
+INSERT INTO addons(id, name, price, restaurant_id)
+SELECT 2, 'Avocat', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id = 2);
+INSERT INTO addons(id, name, price, restaurant_id)
+SELECT 3, 'Œuf', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id = 3);
+INSERT INTO addons(id, name, price, restaurant_id)
+SELECT 4, 'Cornichon', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id = 4);
+INSERT INTO addons(id, name, price, restaurant_id)
+SELECT 5, 'Cheddar', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id = 5);
+INSERT INTO addons(id, name, price, restaurant_id)
+SELECT 6, 'Ketchup', 100, 1
+WHERE NOT EXISTS(SELECT 1 FROM addons WHERE id = 6);
 
 -- 5) PRODUCTS (~25)
 -- Burgers (sub-cat 6,7,8)
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 1,  'Burger Classique', 1200, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=1);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 2,  'Double Bacon',     1400, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=2);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 3,  'Veggie Burger',    1350, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=3);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 4,  'Chicken Deluxe',   1350, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=4);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 5,  'Double Burger Végétarien',1550, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=5);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 1, 'Burger Classique', 1200, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 1);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 2, 'Double Bacon', 1400, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 2);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 3, 'Veggie Burger', 1350, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 3);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 4, 'Chicken Deluxe', 1350, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 4);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 5, 'Double Burger Végétarien', 1550, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 5);
 
 -- Salades (sub-cat 9,10)
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 6,  'Salade César',    800,  1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=6);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 7,  'Salade de Chèvre',900,  1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=7);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 8,  'Salade Végé',     950,  1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=8);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 9,  'Salade Poulet',   950,  1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=9);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 6, 'Salade César', 800, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 6);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 7, 'Salade de Chèvre', 900, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 7);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 8, 'Salade Végé', 950, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 8);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 9, 'Salade Poulet', 950, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 9);
 
 -- Pizzas (sub-cat 11,12,13)
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 10, 'Pizza Margherita',900, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=10);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 11, 'Pizza Reine',     1000, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=11);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 12, 'Pizza Chorizo',   1100, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=12);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 13, 'Pizza Végé',      1100, 1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=13);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 10, 'Pizza Margherita', 900, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 10);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 11, 'Pizza Reine', 1000, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 11);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 12, 'Pizza Chorizo', 1100, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 12);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 13, 'Pizza Végé', 1100, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 13);
 
 -- Desserts (sub-cat 14,15)
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 14, 'Tarte aux pommes', 600,1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=14);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 15, 'Glace vanille',    850,1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=15);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 16, 'Mousse au chocolat',650,1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=16);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 14, 'Tarte aux pommes', 600, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 14);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 15, 'Glace vanille', 850, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 15);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 16, 'Mousse au chocolat', 650, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 16);
 
 -- Boissons (sub-cat 16,17,18)
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 17, 'Eau plate',    150,   1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=17);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 18, 'Eau gazeuse',  150,   1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=18);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 19, 'Coca',         300,   1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=19);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 20, 'Orangina',     300,   1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=20);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 21, 'Jus de pomme', 200,   1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=21);
-INSERT INTO products(id, name, prix_ht, restaurant_id) SELECT 22, 'Jus d''orange',200,   1 WHERE NOT EXISTS(SELECT 1 FROM products WHERE id=22);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 17, 'Eau plate', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 17);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 18, 'Eau gazeuse', 150, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 18);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 19, 'Coca', 300, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 19);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 20, 'Orangina', 300, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 20);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 21, 'Jus de pomme', 200, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 21);
+INSERT INTO products(id, name, price, restaurant_id)
+SELECT 22, 'Jus d''orange', 200, 1
+WHERE NOT EXISTS(SELECT 1 FROM products WHERE id = 22);
 
 -- 6) PRODUCT⇄CATEGORY
 -- Burgers → sub-cats 6,7,8
@@ -154,31 +210,31 @@ INSERT INTO product_contains_addon(product_id, addon_id) SELECT 1,3;
 -- … repeat for each product …
 
 -- 9) MENUS (3)
-INSERT INTO menus(id, name, prix_ht,  restaurant_id)
+INSERT INTO menus(id, name, price, restaurant_id)
 SELECT 1, 'Menu du jour',2000, 1 WHERE NOT EXISTS(SELECT 1 FROM menus WHERE id=1);
-INSERT INTO menus(id, name, prix_ht, restaurant_id)
+INSERT INTO menus(id, name, price, restaurant_id)
 SELECT 2, 'Menu Entrée/Plat',2000, 1 WHERE NOT EXISTS(SELECT 1 FROM menus WHERE id=2);
-INSERT INTO menus(id, name, prix_ht, restaurant_id)
+INSERT INTO menus(id, name, price, restaurant_id)
 SELECT 3, 'Menu Entrée/Plat + Dessert',2500, 1 WHERE NOT EXISTS(SELECT 1 FROM menus WHERE id=3);
 
 -- 10) MENU_ITEMS
 -- 1) Menu du jour → Chicken Deluxe (4)
-INSERT INTO menu_items(id, optional, menu, prix_ht, restaurant_id)
+INSERT INTO menu_items(id, optional, menu, price, restaurant_id)
 SELECT 1, FALSE, 1,1000, 1 WHERE NOT EXISTS(SELECT 1 FROM menu_items WHERE id=1);
 -- 2) Entrée
-INSERT INTO menu_items(id, optional, menu, prix_ht, restaurant_id)
+INSERT INTO menu_items(id, optional, menu, price, restaurant_id)
 SELECT 2, FALSE, 2,1000, 1 WHERE NOT EXISTS(SELECT 1 FROM menu_items WHERE id=2);
 -- 3) Plat
-INSERT INTO menu_items(id, optional, menu, prix_ht, restaurant_id)
+INSERT INTO menu_items(id, optional, menu, price, restaurant_id)
 SELECT 3, FALSE, 2,1000, 1 WHERE NOT EXISTS(SELECT 1 FROM menu_items WHERE id=3);
 -- 4) Entrée
-INSERT INTO menu_items(id, optional, menu, prix_ht, restaurant_id)
+INSERT INTO menu_items(id, optional, menu, price, restaurant_id)
 SELECT 4, FALSE, 3,1000, 1 WHERE NOT EXISTS(SELECT 1 FROM menu_items WHERE id=4);
 -- 5) Plat
-INSERT INTO menu_items(id, optional, menu, prix_ht, restaurant_id)
+INSERT INTO menu_items(id, optional, menu, price, restaurant_id)
 SELECT 5, FALSE, 3,1000, 1 WHERE NOT EXISTS(SELECT 1 FROM menu_items WHERE id=5);
 -- 6) Dessert optional
-INSERT INTO menu_items(id, optional, menu, prix_ht, restaurant_id)
+INSERT INTO menu_items(id, optional, menu, price, restaurant_id)
 SELECT 6, TRUE, 3, 1000, 1 WHERE NOT EXISTS(SELECT 1 FROM menu_items WHERE id=6);
 
 -- 11) MENU_ITEM⇄PRODUCT

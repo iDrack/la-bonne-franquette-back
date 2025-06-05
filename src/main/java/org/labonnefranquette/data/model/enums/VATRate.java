@@ -1,6 +1,6 @@
 package org.labonnefranquette.data.model.enums;
 
-public enum TauxTVA {
+public enum VATRate {
     AUCUN, INTERMEDIAIRE, NORMAL;
 
     public float getFloat() {
@@ -20,7 +20,7 @@ public enum TauxTVA {
         }
     }
 
-    public TauxTVA fromString(String tauxTVA) {
+    public VATRate fromString(String tauxTVA) {
         switch (tauxTVA) {
             case "AUCUN" -> {
                 return AUCUN;

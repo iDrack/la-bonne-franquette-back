@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.AddonCreateDTO;
+import org.labonnefranquette.data.dto.impl.AddonUpdateDTO;
 import org.labonnefranquette.data.model.Addon;
 import org.labonnefranquette.data.repository.AddonRepository;
 import org.labonnefranquette.data.security.JWTUtil;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -67,8 +69,7 @@ public class AddonController {
                 return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
             }
 
-            // Vérification de doublon
-            if (addonService.existsByName(addonCreateDTO.getName())) {
+            if (addonService.existsByName(addonCreateDTO.getName(), jwtUtil.extractRestaurantId(authToken))) {
                 Map<String, String> retMap = new HashMap<>();
                 retMap.put("Erreur", "Un extra avec le même nom existe déjà.");
                 return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
@@ -79,6 +80,48 @@ public class AddonController {
             Map<String, String> retMap = new HashMap<>();
 
             retMap.put("Response", "L'extra \"" + result.getName() + "\" a été ajouté avec succés.");
+            return new ResponseEntity<>(retMap, HttpStatus.OK);
+
+        } catch (IllegalArgumentException e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", e.getMessage());
+            return new ResponseEntity<>(retMap, HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            log.error("e: ", e);
+            Map<String, String> retMap = new HashMap<>();
+            retMap.put("Erreur", "Une erreur côté serveur est survenu.");
+            return new ResponseEntity<>(retMap, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Operation(
+            summary = "Modifie un extra de la carte du restaurant",
+            description = "Modifie un extra de la carte du restaurant."
+    )
+    @PutMapping()
+    public ResponseEntity<?> updateAddon(@RequestBody AddonUpdateDTO addonUpdateDTO,
+                                         @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
+                                         @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+        try {
+            if (!jwtUtil.isAdmin(authToken)) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour modifier un extra.");
+                return new ResponseEntity<>(retMap, HttpStatus.FORBIDDEN);
+            }
+
+            Optional<Addon> foundAddon = addonService.getByName(addonUpdateDTO.getName(), jwtUtil.extractRestaurantId(authToken));
+            if (foundAddon.isPresent() && foundAddon.get().getId() == addonUpdateDTO.getId()) {
+                Map<String, String> retMap = new HashMap<>();
+                retMap.put("Erreur", "Un extra avec le même nom existe déjà.");
+                return new ResponseEntity<>(retMap, HttpStatus.CONFLICT);
+            }
+
+            Addon newAddon = dtoTools.convertToEntity(addonUpdateDTO, Addon.class);
+            var result = addonService.update(newAddon.getId(), newAddon, authToken);
+            Map<String, String> retMap = new HashMap<>();
+
+            retMap.put("Response", "L'extra \"" + result.getName() + "\" a été modifié avec succés.");
             return new ResponseEntity<>(retMap, HttpStatus.OK);
 
         } catch (IllegalArgumentException e) {

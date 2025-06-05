@@ -2,14 +2,14 @@ package org.labonnefranquette.data.dto.impl;
 
 import lombok.Data;
 import org.labonnefranquette.data.model.MenuItem;
-import org.labonnefranquette.data.model.enums.TauxTVA;
+import org.labonnefranquette.data.model.enums.VATRate;
 
 import java.util.Collection;
 
 @Data
 public class MenuCreateDTO {
     String name;
-    TauxTVA tauxTVA;
-    int prixHT;
+    VATRate VATRate;
+    int price;
     Collection<MenuItem> menuItems;
 }
