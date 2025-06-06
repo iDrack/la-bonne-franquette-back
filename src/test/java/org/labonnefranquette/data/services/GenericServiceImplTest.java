@@ -48,8 +48,8 @@ class GenericServiceImplTest {
         addon1 = new Addon();
         addon1.setId(1L);
         addon1.setRestaurant(restaurant1);
-        addon1.setTauxTVA(null);
-        addon1.setPrixHT(100);
+        addon1.setVATRate(null);
+        addon1.setPrice(100);
 
         Restaurant restaurant2 = new Restaurant();
         restaurant2.setId(4L);
@@ -57,8 +57,8 @@ class GenericServiceImplTest {
         addon2 = new Addon();
         addon2.setId(2L);
         addon2.setRestaurant(restaurant2);
-        addon2.setTauxTVA(null);
-        addon2.setPrixHT(200);
+        addon2.setVATRate(null);
+        addon2.setPrice(200);
 
         token = "dummy-token";
 

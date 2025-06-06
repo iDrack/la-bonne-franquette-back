@@ -4,10 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.enums.TauxTVA;
-
+import org.labonnefranquette.data.model.enums.VATRate;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -16,7 +15,7 @@ class MenuTest {
 
     @Test
     void shouldConstructMenuAndAccessFields() {
-        Collection<MenuItem> menuItems = new ArrayList<>();
+        List<MenuItem> menuItems = new ArrayList<>();
         Menu menu = new Menu(1L, "Formule Midi", menuItems);
 
         assertEquals(1L, menu.getId());
@@ -29,7 +28,7 @@ class MenuTest {
         Menu menu = new Menu();
         menu.setId(2L);
         menu.setName("Formule Soir");
-        Collection<MenuItem> menuItems = new ArrayList<>();
+        List<MenuItem> menuItems = new ArrayList<>();
         menu.setMenuItems(menuItems);
 
         assertEquals(2L, menu.getId());
@@ -39,8 +38,8 @@ class MenuTest {
 
     @Test
     void shouldRespectEqualsAndHashCode() {
-        Collection<MenuItem> items1 = new ArrayList<>();
-        Collection<MenuItem> items2 = new ArrayList<>();
+        List<MenuItem> items1 = new ArrayList<>();
+        List<MenuItem> items2 = new ArrayList<>();
         Menu menu1 = new Menu(1L, "Menu Enfant", items1);
         Menu menu2 = new Menu(1L, "Menu Enfant", items1);
         Menu menu3 = new Menu(3L, "Menu Gourmand", items2);
@@ -85,42 +84,42 @@ class MenuTest {
     }
 
     @Test
-    void shouldSetAndGetTauxTVA() {
+    void shouldSetAndGetVATRate() {
         Menu menu = new Menu();
-        menu.setTauxTVA(TauxTVA.NORMAL);
-        assertEquals(TauxTVA.NORMAL, menu.getTauxTVA());
+        menu.setVATRate(VATRate.NORMAL);
+        assertEquals(VATRate.NORMAL, menu.getVATRate());
     }
 
     @Test
-    void shouldReturnCorrectTauxTVAFloatWhenTVAEnabled() {
+    void shouldReturnCorrectVATRateFloatWhenTVAEnabled() {
         Menu menu = new Menu();
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(true);
         menu.setRestaurant(restaurant);
-        menu.setTauxTVA(TauxTVA.NORMAL); // NORMAL = 1.2f par exemple
+        menu.setVATRate(VATRate.NORMAL); // NORMAL = 1.2f par exemple
 
-        assertEquals(1.2f, menu.getTauxTVAFloat(), 0.0001f);
+        assertEquals(1.2f, menu.getVATRateFloat(), 0.0001f);
     }
 
     @Test
-    void shouldReturnAucunTauxTVAFloatWhenTVADisabled() {
+    void shouldReturnAucunVATRateFloatWhenTVADisabled() {
         Menu menu = new Menu();
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(false);
         menu.setRestaurant(restaurant);
-        menu.setTauxTVA(TauxTVA.NORMAL);
+        menu.setVATRate(VATRate.NORMAL);
 
-        assertEquals(TauxTVA.AUCUN.getFloat(), menu.getTauxTVAFloat(), 0.0001f);
+        assertEquals(VATRate.AUCUN.getFloat(), menu.getVATRateFloat(), 0.0001f);
     }
 
     @Test
-    void shouldCalculateTotalPriceAccordingToHTAndTauxTVA() {
+    void shouldCalculateTotalPriceAccordingToHTAndVATRate() {
         Menu menu = new Menu();
-        menu.setPrixHT(150);
+        menu.setPrice(150);
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(true);
         menu.setRestaurant(restaurant);
-        menu.setTauxTVA(TauxTVA.NORMAL); // suppose 1.2f
+        menu.setVATRate(VATRate.NORMAL); // suppose 1.2f
 
         assertEquals(180, menu.getTotalPrice());
     }
@@ -129,6 +128,6 @@ class MenuTest {
     void shouldSetAndGetTotalPrice() {
         Menu menu = new Menu();
         menu.setTotalPrice(350);
-        assertEquals(350, menu.getPrixHT());
+        assertEquals(350, menu.getPrice());
     }
 }

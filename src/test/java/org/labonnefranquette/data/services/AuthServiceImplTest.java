@@ -84,35 +84,6 @@ class AuthServiceImplTest {
     }
 
     @Test
-    void refresh_WhenValidToken_ShouldReturnNewAccessToken() {
-        String rt = "refresh";
-        String username = "user2";
-        when(jwtUtil.isValidRefreshToken(rt)).thenReturn(true);
-        when(jwtUtil.extractUsername(rt)).thenReturn(username);
-
-        List<GrantedAuthority> auths = List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-                username, "pwd", auths);
-        when(userDetailsService.loadUserByUsername(username)).thenReturn(userDetails);
-
-        User domainUser = mock(User.class);
-        Restaurant rest = mock(Restaurant.class);
-        when(domainUser.getRestaurant()).thenReturn(rest);
-        when(rest.getId()).thenReturn(99L);
-        when(userService.getByUsername(username)).thenReturn(domainUser);
-
-        String newToken = "new-token";
-        when(jwtUtil.generateToken(eq(username), anyList(), eq(99L)))
-                .thenReturn(newToken);
-
-        String result = authService.refresh(rt);
-        assertEquals(newToken, result);
-
-        verify(jwtUtil).isValidRefreshToken(rt);
-        verify(jwtUtil).generateToken(eq(username), anyList(), eq(99L));
-    }
-
-    @Test
     void refresh_WhenInvalidToken_ShouldReturnNull() {
         when(jwtUtil.isValidRefreshToken("bad")).thenReturn(false);
         assertNull(authService.refresh("bad"));

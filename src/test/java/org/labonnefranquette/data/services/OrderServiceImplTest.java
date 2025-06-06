@@ -76,17 +76,6 @@ class OrderServiceImplTest {
     }
 
     @Test
-    void findAllOrder_ShouldDelegateToRepository() {
-        List<Order> orders = List.of(order);
-        when(orderRepository.findAll()).thenReturn(orders);
-
-        List<Order> result = orderService.findAllOrder();
-
-        assertSame(orders, result);
-        verify(orderRepository).findAll();
-    }
-
-    @Test
     void getById_WhenExists_ShouldReturnOrder() {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.enums.TauxTVA;
+import org.labonnefranquette.data.model.enums.VATRate;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -74,35 +74,35 @@ class AddonTest {
     }
 
     @Test
-    void shouldReturnCorrectTauxTVAFloatWhenTVAEnabled() {
+    void shouldReturnCorrectVATRateFloatWhenTVAEnabled() {
         Addon addon = new Addon();
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(true);
         addon.setRestaurant(restaurant);
-        addon.setTauxTVA(TauxTVA.NORMAL);
+        addon.setVATRate(VATRate.NORMAL);
 
-        assertEquals(1.2f, addon.getTauxTVAFloat(), 0.0001f);
+        assertEquals(1.2f, addon.getVATRateFloat(), 0.0001f);
     }
 
     @Test
-    void shouldReturnAucunTauxTVAFloatWhenTVADisabled() {
+    void shouldReturnAucunVATRateFloatWhenTVADisabled() {
         Addon addon = new Addon();
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(false);
         addon.setRestaurant(restaurant);
-        addon.setTauxTVA(TauxTVA.NORMAL);
+        addon.setVATRate(VATRate.NORMAL);
 
-        assertEquals(TauxTVA.AUCUN.getFloat(), addon.getTauxTVAFloat(), 0.0001f);
+        assertEquals(VATRate.AUCUN.getFloat(), addon.getVATRateFloat(), 0.0001f);
     }
 
     @Test
-    void shouldCalculateTotalPriceAccordingToHTAndTauxTVA() {
+    void shouldCalculateTotalPriceAccordingToHTAndVATRate() {
         Addon addon = new Addon();
-        addon.setPrixHT(100);
+        addon.setPrice(100);
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(true);
         addon.setRestaurant(restaurant);
-        addon.setTauxTVA(TauxTVA.NORMAL);
+        addon.setVATRate(VATRate.NORMAL);
 
         assertEquals(120, addon.getTotalPrice());
     }
@@ -111,6 +111,6 @@ class AddonTest {
     void shouldSetAndGetTotalPrice() {
         Addon addon = new Addon();
         addon.setTotalPrice(250);
-        assertEquals(250, addon.getPrixHT());
+        assertEquals(250, addon.getPrice());
     }
 }

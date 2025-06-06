@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.labonnefranquette.data.model.Addon;
 import org.labonnefranquette.data.model.Restaurant;
-import org.labonnefranquette.data.model.enums.TauxTVA;
+import org.labonnefranquette.data.model.enums.VATRate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
@@ -41,8 +41,8 @@ class AddonRepositoryTest {
         // Given : construction d’un Addon complet
         Addon addon = new Addon();
         addon.setName("Sauce Fromage");
-        addon.setTauxTVA(TauxTVA.NORMAL);
-        addon.setPrixHT(250);
+        addon.setVATRate(VATRate.NORMAL);
+        addon.setPrice(250);
         addon.setRestaurant(restaurant);
 
         // When : on sauvegarde dans la base H2
@@ -53,8 +53,8 @@ class AddonRepositoryTest {
         assertThat(maybe).isPresent();
         Addon found = maybe.get();
         assertThat(found.getName()).isEqualTo(saved.getName());
-        assertThat(found.getTauxTVA()).isEqualTo(saved.getTauxTVA());
-        assertThat(found.getPrixHT()).isEqualTo(250);
+        assertThat(found.getVATRate()).isEqualTo(saved.getVATRate());
+        assertThat(found.getPrice()).isEqualTo(250);
         assertThat(found.getTotalPrice()).isEqualTo(saved.getTotalPrice());
         assertThat(found.getRestaurant().getId()).isEqualTo(saved.getRestaurant().getId());
     }
@@ -65,22 +65,22 @@ class AddonRepositoryTest {
         // Given : trois Addons en base, chacun lié au même restaurant
         Addon a1 = new Addon();
         a1.setName("Extra Ketchup");
-        a1.setTauxTVA(TauxTVA.NORMAL);
-        a1.setPrixHT(100);
+        a1.setVATRate(VATRate.NORMAL);
+        a1.setPrice(100);
         a1.setRestaurant(restaurant);
         addonRepository.save(a1);
 
         Addon a2 = new Addon();
         a2.setName("Bacon Croquant");
-        a2.setTauxTVA(TauxTVA.AUCUN);
-        a2.setPrixHT(300);
+        a2.setVATRate(VATRate.AUCUN);
+        a2.setPrice(300);
         a2.setRestaurant(restaurant);
         addonRepository.save(a2);
 
         Addon a3 = new Addon();
         a3.setName("Nuggets");
-        a3.setTauxTVA(TauxTVA.INTERMEDIAIRE);
-        a3.setPrixHT(200);
+        a3.setVATRate(VATRate.INTERMEDIAIRE);
+        a3.setPrice(200);
         a3.setRestaurant(restaurant);
         addonRepository.save(a3);
 
@@ -100,8 +100,8 @@ class AddonRepositoryTest {
         // Given : un Addon en base
         Addon toRemove = new Addon();
         toRemove.setName("Oignons Frits");
-        toRemove.setTauxTVA(TauxTVA.NORMAL);
-        toRemove.setPrixHT(150);
+        toRemove.setVATRate(VATRate.NORMAL);
+        toRemove.setPrice(150);
         toRemove.setRestaurant(restaurant);
         Addon saved = addonRepository.save(toRemove);
 

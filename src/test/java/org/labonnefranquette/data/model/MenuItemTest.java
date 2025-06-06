@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.labonnefranquette.data.model.enums.TauxTVA;
+import org.labonnefranquette.data.model.enums.VATRate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,42 +95,42 @@ class MenuItemTest {
     }
 
     @Test
-    void shouldSetAndGetTauxTVA() {
+    void shouldSetAndGetVATRate() {
         MenuItem menuItem = new MenuItem();
-        menuItem.setTauxTVA(TauxTVA.NORMAL);
-        assertEquals(TauxTVA.NORMAL, menuItem.getTauxTVA());
+        menuItem.setVATRate(VATRate.NORMAL);
+        assertEquals(VATRate.NORMAL, menuItem.getVATRate());
     }
 
     @Test
-    void shouldReturnCorrectTauxTVAFloatWhenTVAEnabled() {
+    void shouldReturnCorrectVATRateFloatWhenTVAEnabled() {
         MenuItem menuItem = new MenuItem();
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(true);
         menuItem.setRestaurant(restaurant);
-        menuItem.setTauxTVA(TauxTVA.NORMAL); // NORMAL = 1.2f par exemple
+        menuItem.setVATRate(VATRate.NORMAL); // NORMAL = 1.2f par exemple
 
-        assertEquals(1.2f, menuItem.getTauxTVAFloat(), 0.0001f);
+        assertEquals(1.2f, menuItem.getVATRateFloat(), 0.0001f);
     }
 
     @Test
-    void shouldReturnAucunTauxTVAFloatWhenTVADisabled() {
+    void shouldReturnAucunVATRateFloatWhenTVADisabled() {
         MenuItem menuItem = new MenuItem();
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(false);
         menuItem.setRestaurant(restaurant);
-        menuItem.setTauxTVA(TauxTVA.NORMAL);
+        menuItem.setVATRate(VATRate.NORMAL);
 
-        assertEquals(TauxTVA.AUCUN.getFloat(), menuItem.getTauxTVAFloat(), 0.0001f);
+        assertEquals(VATRate.AUCUN.getFloat(), menuItem.getVATRateFloat(), 0.0001f);
     }
 
     @Test
-    void shouldCalculateTotalPriceAccordingToHTAndTauxTVA() {
+    void shouldCalculateTotalPriceAccordingToHTAndVATRate() {
         MenuItem menuItem = new MenuItem();
-        menuItem.setPrixHT(50);
+        menuItem.setPrice(50);
         Restaurant restaurant = new Restaurant();
         restaurant.setIsTVAEnable(true);
         menuItem.setRestaurant(restaurant);
-        menuItem.setTauxTVA(TauxTVA.NORMAL); // suppose 1.2f
+        menuItem.setVATRate(VATRate.NORMAL); // suppose 1.2f
 
         assertEquals(60, menuItem.getTotalPrice());
     }
@@ -139,6 +139,6 @@ class MenuItemTest {
     void shouldSetAndGetTotalPrice() {
         MenuItem menuItem = new MenuItem();
         menuItem.setTotalPrice(120);
-        assertEquals(120, menuItem.getPrixHT());
+        assertEquals(120, menuItem.getPrice());
     }
 }
