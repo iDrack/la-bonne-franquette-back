@@ -36,19 +36,18 @@ class AddonRepositoryTest {
     }
 
     @Test
-    @DisplayName("save() + findById() : un Addon sauvegardé se retrouve correctement")
     void saveAndFindById() {
-        // Given : construction d’un Addon complet
+        // Given
         Addon addon = new Addon();
         addon.setName("Sauce Fromage");
         addon.setVATRate(VATRate.NORMAL);
         addon.setPrice(250);
         addon.setRestaurant(restaurant);
 
-        // When : on sauvegarde dans la base H2
+        // When
         Addon saved = addonRepository.save(addon);
 
-        // Then : on le récupère via findById
+        // Then
         Optional<Addon> maybe = addonRepository.findById(saved.getId());
         assertThat(maybe).isPresent();
         Addon found = maybe.get();
@@ -60,9 +59,8 @@ class AddonRepositoryTest {
     }
 
     @Test
-    @DisplayName("findAll() doit retourner l’ensemble des Addons présents")
     void findAllReturnsAll() {
-        // Given : trois Addons en base, chacun lié au même restaurant
+        // Given
         Addon a1 = new Addon();
         a1.setName("Extra Ketchup");
         a1.setVATRate(VATRate.NORMAL);
@@ -84,10 +82,10 @@ class AddonRepositoryTest {
         a3.setRestaurant(restaurant);
         addonRepository.save(a3);
 
-        // When : on appelle findAll()
+        // When
         List<Addon> liste = addonRepository.findAll();
 
-        // Then : on doit retrouver exactement 3 éléments
+        // Then
         assertThat(liste)
                 .hasSize(3)
                 .extracting(Addon::getName)
@@ -95,9 +93,8 @@ class AddonRepositoryTest {
     }
 
     @Test
-    @DisplayName("deleteById() supprime correctement si l’ID existe")
     void deleteByIdRemovesEntity() {
-        // Given : un Addon en base
+        // Given
         Addon toRemove = new Addon();
         toRemove.setName("Oignons Frits");
         toRemove.setVATRate(VATRate.NORMAL);
@@ -105,10 +102,10 @@ class AddonRepositoryTest {
         toRemove.setRestaurant(restaurant);
         Addon saved = addonRepository.save(toRemove);
 
-        // When : suppression par ID
+        // When
         addonRepository.deleteById(saved.getId());
 
-        // Then : findById() ne doit rien retourner pour cet ID
+        // Then
         Optional<Addon> maybe = addonRepository.findById(saved.getId());
         assertThat(maybe).isEmpty();
     }
