@@ -37,6 +37,8 @@ jobs:
         run: mvn test
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+      - name: Prepare artifact
+        run: mkdir -p staging
       - name: Copy jar into staging directory
         run: cp target/*.jar staging
       - name: Copy .env into staging directory
