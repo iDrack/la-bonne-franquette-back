@@ -1,6 +1,8 @@
 name: Franquette in a JAR
 permissions:
   contents: write
+  packages: write
+  actions: write
 
 on:
   push:
