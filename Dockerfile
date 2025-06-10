@@ -3,7 +3,7 @@ LABEL name="la-franquette-back-docker"
 LABEL maintainer="tdignoire@pm.me"
 LABEL authors="Thomas Dignoire"
 
-COPY target/*.jar /app.jar
+COPY *.jar /app.jar
 
 EXPOSE 8081
 

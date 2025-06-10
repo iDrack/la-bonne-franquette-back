@@ -43,10 +43,6 @@ jobs:
         run: cp -R target/*.jar staging
       - name: Copy Dockerfile into staging repertory
         run: cp Dockerfile staging
-      - name: check filesystem
-        run: ls -a
-      - name: check filesystem
-        run: ls -a staging
       - uses: actions/upload-artifact@v4
         with:
           name: La_bonne_Franquette
