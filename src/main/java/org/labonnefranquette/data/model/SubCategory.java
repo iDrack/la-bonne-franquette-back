@@ -32,7 +32,7 @@ public class SubCategory extends Category {
 
 
     @PostLoad
-    private void onLoad() {
+    void onLoad() {
         if (category != null) {
             this.categoryId = category.getId();
         }

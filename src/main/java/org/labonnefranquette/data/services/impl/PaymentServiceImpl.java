@@ -54,13 +54,13 @@ public class PaymentServiceImpl implements PaymentService {
         int paid = 0;
         String type = order.getPaymentType();
 
-        for (Payment currentPaiement : order.getPayments()) {
-            if (!Objects.equals(type, "AUCUN") && !Objects.equals(currentPaiement.getType(), type)) {
+        for (Payment currentPayment : order.getPayments()) {
+            if (!Objects.equals(type, "AUCUN") && !Objects.equals(currentPayment.getType(), type)) {
                 order.setPaymentType("MIX");
             } else  {
-                order.setPaymentType(currentPaiement.getType());
+                order.setPaymentType(currentPayment.getType());
             }
-            paid += currentPaiement.getPrice();
+            paid += currentPayment.getPrice();
         }
         if (order.getTotalPrice() == paid) {
             order.setPaid(true);
