@@ -95,13 +95,57 @@ jobs:
         with:
           name: franquette-jar
           path: staging/target
-      - name: Copy Docker-compose into staging repertory
-        run: cp docker-compose.yml staging
       - name: Copy Dockerfile into staging repertory
         run: cp Dockerfile staging
-      - name: Copy shell script into staging repertory
-        run: cp runner_la_Franquette.sh staging
       - uses: actions/upload-artifact@v4
         with:
           name: La_bonne_Franquette
           path: staging
+
+  upload-to-server:
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set_tag.outputs.image_tag }}
+
+    steps:
+      # 1. Récupérer l'artefact du job précédent
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: La_bonne_Franquette
+          path: staging
+
+      # 2. Création de la release et création du numéro de version
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "Release v${{ github.run_number }}"
+          body: "Release auto-générée."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      #3. Défini le numéro de version correspondant pour l'image Docker
+      - name: Set image tag
+        id: set_tag
+        run: |
+          echo "image_tag=v${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      # 4. Se connecter au registry GHCR
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.PAT_TOKEN }}
+
+      # 5. Build et push sur GHCR
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .               # dossier du Dockerfile
+          push: true               # push après build
+          tags: |
+            ghcr.io/${{ secrets.REGISTRY_USER }}/api:latest
+            ghcr.io/${{ secrets.REGISTRY_USER }}/api:${{ steps.set_tag.outputs.image_tag }}
