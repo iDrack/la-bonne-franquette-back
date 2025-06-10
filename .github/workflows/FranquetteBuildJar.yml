@@ -109,7 +109,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: .               # dossier du Dockerfile
+          context: staging               # dossier du Dockerfile
           push: true               # push après build
           tags: |
             ghcr.io/${{ secrets.REGISTRY_USER }}/api:latest
