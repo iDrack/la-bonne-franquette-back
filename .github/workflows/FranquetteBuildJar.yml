@@ -9,23 +9,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Setup environment variables in .env
-        run: |
-          touch .env
-          echo "BDD_USER=${{ secrets.BDD_USER }}" >> .env
-          echo "BDD_PASS=${{ secrets.BDD_PASS }}" >> .env
-          echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" >> .env
-          echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
-
   build:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -34,6 +19,14 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
+      - name: Setup environment variables in .env
+        run: |
+          touch .env
+          echo "BDD_USER=${{ secrets.BDD_USER }}" >> .env
+          echo "BDD_PASS=${{ secrets.BDD_PASS }}" >> .env
+          echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" >> .env
+          echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -44,30 +37,19 @@ jobs:
         run: mvn test
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: franquette-jar
-          path: target/*.jar
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: franquette-jar
-          path: staging/target
+      - name: Copy jar into staging directory
+        run: cp target/*.jar staging
+      - name: Copy .env into staging directory
+        run: cp .env staging
       - name: Copy Dockerfile into staging repertory
         run: cp Dockerfile staging
       - uses: actions/upload-artifact@v4
         with:
           name: La_bonne_Franquette
           path: staging
+
   upload-to-server:
-    needs: deploy
+    needs: build
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.set_tag.outputs.image_tag }}
@@ -109,7 +91,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
-          context: staging               # dossier du Dockerfile
+          context: staging         # dossier du Dockerfile
           push: true               # push après build
           tags: |
             ghcr.io/${{ secrets.REGISTRY_USER }}/api:latest
