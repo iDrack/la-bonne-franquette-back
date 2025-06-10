@@ -21,14 +21,12 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-      - name: Setup environment variables in .env
-        run: |
-          touch .env
-          echo "BDD_USER=${{ secrets.BDD_USER }}" >> .env
-          echo "BDD_PASS=${{ secrets.BDD_PASS }}" >> .env
-          echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" >> .env
-          echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
+        env:
+          BDD_USER: ${{ secrets.BDD_USER }}
+          BDD_PASS: ${{ secrets.BDD_PASS }}
+          SPRING_MAIL_ACCOUNT: ${{ secrets.SPRING_MAIL_ACCOUNT }}
+          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+          PORT: ${{ secrets.PORT }}
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -39,6 +37,12 @@ jobs:
         run: mvn test
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+        env:
+          BDD_USER: ${{ secrets.BDD_USER }}
+          BDD_PASS: ${{ secrets.BDD_PASS }}
+          SPRING_MAIL_ACCOUNT: ${{ secrets.SPRING_MAIL_ACCOUNT }}
+          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+          PORT: ${{ secrets.PORT }}
       - name: Prepare artifact
         run: mkdir staging
       - name: Copy jar into staging directory

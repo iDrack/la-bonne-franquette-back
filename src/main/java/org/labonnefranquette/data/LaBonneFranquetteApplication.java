@@ -1,6 +1,5 @@
 package org.labonnefranquette.data;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -9,14 +8,13 @@ import java.util.Objects;
 @SpringBootApplication
 public class LaBonneFranquetteApplication {
 
-	public static void main(String[] args) {
-		Dotenv dotenv = Dotenv.configure().load();
-		System.setProperty("SPRING_MAIL_ACCOUNT", Objects.requireNonNull(dotenv.get("SPRING_MAIL_ACCOUNT")));
-		System.setProperty("SPRING_MAIL_PASSWORD", Objects.requireNonNull(dotenv.get("SPRING_MAIL_PASSWORD")));
-		System.setProperty("BDD_USERNAME", Objects.requireNonNull(dotenv.get("BDD_USERNAME")));
-		System.setProperty("BDD_PASSWORD", Objects.requireNonNull(dotenv.get("BDD_PASSWORD")));
-		System.setProperty("PORT", Objects.requireNonNull(dotenv.get("PORT")));
-		SpringApplication.run(LaBonneFranquetteApplication.class, args);
-		System.out.println("Swagger documentation : " + "http://localhost:" + dotenv.get("PORT") + "/swagger-ui.html");
-	}
+    public static void main(String[] args) {
+        System.setProperty("SPRING_MAIL_ACCOUNT", Objects.requireNonNull(System.getenv("SPRING_MAIL_ACCOUNT")));
+        System.setProperty("SPRING_MAIL_PASSWORD", Objects.requireNonNull(System.getenv("SPRING_MAIL_PASSWORD")));
+        System.setProperty("BDD_USERNAME", Objects.requireNonNull(System.getenv("BDD_USERNAME")));
+        System.setProperty("BDD_PASSWORD", Objects.requireNonNull(System.getenv("BDD_PASSWORD")));
+        System.setProperty("PORT", Objects.requireNonNull(System.getenv("PORT")));
+        SpringApplication.run(LaBonneFranquetteApplication.class, args);
+        System.out.println("Swagger documentation : " + "http://localhost:" + System.getenv("PORT") + "/swagger-ui.html");
+    }
 }
