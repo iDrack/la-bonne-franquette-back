@@ -96,5 +96,5 @@ jobs:
           context: staging         # dossier du Dockerfile
           push: true               # push après build
           tags: |
-            ghcr.io/${{ secrets.REGISTRY_USER }}/api:latest
-            ghcr.io/${{ secrets.REGISTRY_USER }}/api:${{ steps.set_tag.outputs.image_tag }}
+            ghcr.io/${{ secrets.REGISTRY_USER }}/lbfapi:latest
+            ghcr.io/${{ secrets.REGISTRY_USER }}/lbfapi:${{ steps.set_tag.outputs.image_tag }}
