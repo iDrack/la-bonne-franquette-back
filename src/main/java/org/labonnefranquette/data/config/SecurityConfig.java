@@ -5,6 +5,7 @@ import org.labonnefranquette.data.security.filter.JwtAuthenticationFilter;
 import org.labonnefranquette.data.security.service.CustomUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
@@ -32,9 +33,10 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
+                    //    .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/api/v1/user/**", "/api/v1/test-connection", "/api/v1/cache/rafraichir").permitAll()
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers("/api/v1/user/**").permitAll()
@@ -51,9 +53,14 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("http://10.0.2.2:*")
-                .allowedOriginPatterns("http://127.0.0.1:*")
-                .allowedOriginPatterns("http://localhost:*")
+                .allowedOriginPatterns(
+                    "http://localhost:*",
+                    "http://10.0.2.2:*",
+                    "http://127.0.0.1:*",
+                    "https://labonnefranquette.fun",
+                    "https://www.labonnefranquette.fun"
+                    )
+                
                 .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
