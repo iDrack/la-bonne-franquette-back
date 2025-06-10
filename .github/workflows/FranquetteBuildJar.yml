@@ -63,8 +63,8 @@ jobs:
         with:
           name: La_bonne_Franquette
           path: staging
-
   upload-to-server:
+    needs: deploy
     runs-on: ubuntu-latest
     outputs:
       image_tag: ${{ steps.set_tag.outputs.image_tag }}
