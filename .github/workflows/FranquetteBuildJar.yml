@@ -102,3 +102,18 @@ jobs:
           tags: |
             ghcr.io/${{ secrets.REGISTRY_USER }}/lbfapi:latest
             ghcr.io/${{ secrets.REGISTRY_USER }}/lbfapi:${{ steps.set_tag.outputs.image_tag }}
+
+  dispatch:
+    needs: upload-to-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send dispatch to infra repo
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_TOKEN_INFRA }}
+          repository: Franfran62/la-bonne-franquette-infra
+          event-type: deploy-api
+          client-payload: |
+            {
+              "version": "${{ needs.upload-to-server.outputs.image_tag }}"
+            }
