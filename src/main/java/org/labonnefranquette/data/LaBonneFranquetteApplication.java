@@ -14,6 +14,6 @@ public class LaBonneFranquetteApplication {
         System.setProperty("BDD_USERNAME", Objects.requireNonNull(System.getenv("BDD_USERNAME")));
         System.setProperty("BDD_PASSWORD", Objects.requireNonNull(System.getenv("BDD_PASSWORD")));
         SpringApplication.run(LaBonneFranquetteApplication.class, args);
-        System.out.println("Swagger documentation : " + "http://localhost:8080/swagger-ui.html");
+        System.out.println("Swagger documentation : " + "http://localhost:8081/swagger-ui.html");
     }
 }
