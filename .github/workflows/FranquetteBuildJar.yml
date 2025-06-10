@@ -1,4 +1,7 @@
 name: Franquette in a JAR
+permissions:
+  contents: write
+
 on:
   push:
     tags:
