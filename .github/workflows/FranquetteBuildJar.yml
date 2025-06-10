@@ -37,6 +37,8 @@ jobs:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml')}}
           restore-keys: ${{ runner.os }}-m2
+      - name: Run tests
+        run: mvn test
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - name: Upload JAR artifact
@@ -44,49 +46,9 @@ jobs:
         with:
           name: franquette-jar
           path: target/*.jar
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: test
-          MYSQL_DATABASE: franquette-bdd-test
-        ports:
-          - 3306:3306
-        options: >-
-          --name mysql
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Wait for MySQL to be ready
-        run: |
-          for i in {30..0}; do
-          if docker exec mysql mysql -uroot -ptest -e "SELECT 1" &> /dev/null; then
-           break
-          fi
-          echo 'MySQL is unavailable - sleeping'
-          sleep 1
-          done
-          if [ "$i" = 0 ]; then
-          echo 'MySQL did not become available in time' >&2
-          docker logs mysql
-          exit 1
-          fi
-      - name: Force la création des bases de données
-        run: docker exec -i mysql mysql -uroot -ptest < src/main/resources/mySql/franquette_db_init.sql
-      - name: Run tests
-        run: mvn test
-
   deploy:
     runs-on: ubuntu-latest
-    needs: test
+    needs: build
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
