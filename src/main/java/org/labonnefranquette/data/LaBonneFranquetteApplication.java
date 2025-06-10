@@ -13,7 +13,10 @@ public class LaBonneFranquetteApplication {
 		Dotenv dotenv = Dotenv.configure().load();
 		System.setProperty("SPRING_MAIL_ACCOUNT", Objects.requireNonNull(dotenv.get("SPRING_MAIL_ACCOUNT")));
 		System.setProperty("SPRING_MAIL_PASSWORD", Objects.requireNonNull(dotenv.get("SPRING_MAIL_PASSWORD")));
+		System.setProperty("BDD_USERNAME", Objects.requireNonNull(dotenv.get("BDD_USERNAME")));
+		System.setProperty("BDD_PASSWORD", Objects.requireNonNull(dotenv.get("BDD_PASSWORD")));
+		System.setProperty("PORT", Objects.requireNonNull(dotenv.get("PORT")));
 		SpringApplication.run(LaBonneFranquetteApplication.class, args);
-		System.out.println("Swagger documentation : " + "http://localhost:8080/swagger-ui.html");
+		System.out.println("Swagger documentation : " + "http://localhost:" + dotenv.get("PORT") + "/swagger-ui.html");
 	}
 }

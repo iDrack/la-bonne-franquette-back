@@ -60,7 +60,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     }
 
     @Override
-    public T create(T newT, String token) {
+    public T create(T newT, String token) throws NullPointerException {
         Long idRestaurant = jwtUtil.extractRestaurantId(token);
         newT.setRestaurant(restaurantService.findAllById(idRestaurant).orElseThrow(() -> new NullPointerException(String.format("Impossible de trouver de restaurant avec l'ID %s.", idRestaurant))));
         restaurantService.updateCacheVersion(idRestaurant);
