@@ -26,7 +26,6 @@ jobs:
           BDD_PASS: ${{ secrets.BDD_PASS }}
           SPRING_MAIL_ACCOUNT: ${{ secrets.SPRING_MAIL_ACCOUNT }}
           SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
-          PORT: ${{ secrets.PORT }}
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -42,7 +41,6 @@ jobs:
           BDD_PASS: ${{ secrets.BDD_PASS }}
           SPRING_MAIL_ACCOUNT: ${{ secrets.SPRING_MAIL_ACCOUNT }}
           SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
-          PORT: ${{ secrets.PORT }}
       - name: Prepare artifact
         run: mkdir staging
       - name: Copy jar into staging directory
