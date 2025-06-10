@@ -19,14 +19,6 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-      - name: Setup environment variables in .env
-        run: |
-          touch .env
-          echo "BDD_USER=${{ secrets.BDD_USER }}" >> .env
-          echo "BDD_PASS=${{ secrets.BDD_PASS }}" >> .env
-          echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" >> .env
-          echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
@@ -40,13 +32,13 @@ jobs:
       - name: Prepare artifact
         run: mkdir staging
       - name: Copy jar into staging directory
-        run: cp target/*.jar staging/target
-      - name: Copy .env into staging directory
-        run: cp .env staging
+        run: cp -R target/*.jar staging
       - name: Copy Dockerfile into staging repertory
         run: cp Dockerfile staging
       - name: check filesystem
-        run: ls
+        run: ls -a
+      - name: check filesystem
+        run: ls -a target
       - uses: actions/upload-artifact@v4
         with:
           name: La_bonne_Franquette
