@@ -1,4 +1,9 @@
 name: Franquette in a JAR
+permissions:
+  contents: write
+  packages: write
+  actions: write
+
 on:
   push:
     branches:
@@ -8,23 +13,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Setup environment variables in .env
-        run: |
-          touch .env
-          echo "BDD_USER=${{ secrets.BDD_USER }}" >> .env
-          echo "BDD_PASS=${{ secrets.BDD_PASS }}" >> .env
-          echo "SPRING_MAIL_ACCOUNT=${{ secrets.SPRING_MAIL_ACCOUNT }}" >> .env
-          echo "SPRING_MAIL_PASSWORD=${{ secrets.SPRING_MAIL_PASSWORD }}" >> .env
-          echo "PORT=${{ secrets.PORT }}" >> .env
-
   build:
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -33,77 +23,97 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
+        env:
+          BDD_USER: ${{ secrets.BDD_USER }}
+          BDD_PASS: ${{ secrets.BDD_PASS }}
+          SPRING_MAIL_ACCOUNT: ${{ secrets.SPRING_MAIL_ACCOUNT }}
+          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
       - name: Cache Maven dependencies
         uses: actions/cache@v4
         with:
           path: ~/.m2
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml')}}
           restore-keys: ${{ runner.os }}-m2
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-      - name: Upload JAR artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: franquette-jar
-          path: target/*.jar
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: test
-          MYSQL_DATABASE: franquette-bdd-test
-        ports:
-          - 3306:3306
-        options: >-
-          --name mysql
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Wait for MySQL to be ready
-        run: |
-          for i in {30..0}; do
-          if docker exec mysql mysql -uroot -ptest -e "SELECT 1" &> /dev/null; then
-           break
-          fi
-          echo 'MySQL is unavailable - sleeping'
-          sleep 1
-          done
-          if [ "$i" = 0 ]; then
-          echo 'MySQL did not become available in time' >&2
-          docker logs mysql
-          exit 1
-          fi
-      - name: Force la création des bases de données
-        run: docker exec -i mysql mysql -uroot -ptest < src/main/resources/mySql/franquette_db_init.sql
       - name: Run tests
         run: mvn test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-      - name: Download JAR artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: franquette-jar
-          path: staging/target
-      - name: Copy Docker-compose into staging repertory
-        run: cp docker-compose.yml staging
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+        env:
+          BDD_USER: ${{ secrets.BDD_USER }}
+          BDD_PASS: ${{ secrets.BDD_PASS }}
+          SPRING_MAIL_ACCOUNT: ${{ secrets.SPRING_MAIL_ACCOUNT }}
+          SPRING_MAIL_PASSWORD: ${{ secrets.SPRING_MAIL_PASSWORD }}
+      - name: Prepare artifact
+        run: mkdir staging
+      - name: Copy jar into staging directory
+        run: cp -R target/*.jar staging
       - name: Copy Dockerfile into staging repertory
         run: cp Dockerfile staging
-      - name: Copy shell script into staging repertory
-        run: cp runner_la_Franquette.sh staging
       - uses: actions/upload-artifact@v4
         with:
           name: La_bonne_Franquette
           path: staging
+
+  upload-to-server:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      image_tag: ${{ steps.set_tag.outputs.image_tag }}
+
+    steps:
+      # 1. Récupérer l'artefact du job précédent
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: La_bonne_Franquette
+          path: staging
+
+      # 2. Création de la release et création du numéro de version
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ github.run_number }}
+          name: "Release v${{ github.run_number }}"
+          body: "Release auto-générée."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      #3. Défini le numéro de version correspondant pour l'image Docker
+      - name: Set image tag
+        id: set_tag
+        run: |
+          echo "image_tag=v${{ github.run_number }}" >> $GITHUB_OUTPUT
+
+      # 4. Se connecter au registry GHCR
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.REGISTRY_USER }}
+          password: ${{ secrets.PAT_TOKEN }}
+
+      # 5. Build et push sur GHCR
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: staging         # dossier du Dockerfile
+          push: true               # push après build
+          tags: |
+            ghcr.io/${{ secrets.REGISTRY_USER }}/lbfapi:latest
+            ghcr.io/${{ secrets.REGISTRY_USER }}/lbfapi:${{ steps.set_tag.outputs.image_tag }}
+
+  dispatch:
+    needs: upload-to-server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send dispatch to infra repo
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          repository: Franfran62/la-bonne-franquette-infra
+          event-type: deploy-api
+          client-payload: |
+            {
+              "version": "${{ needs.upload-to-server.outputs.image_tag }}"
+            }
