@@ -1,7 +1,7 @@
 package org.labonnefranquette.data.services.impl;
 
 
-import org.labonnefranquette.data.model.interfaces.HasRestaurant;
+import org.labonnefranquette.data.model.interfaces.HasRestaurantAbs;
 import org.labonnefranquette.data.security.JWTUtil;
 import org.labonnefranquette.data.services.GenericService;
 import org.labonnefranquette.data.services.RestaurantService;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository<T, ID>, ID> implements GenericService<T, ID> {
+public class GenericServiceImpl<T extends HasRestaurantAbs, U extends JpaRepository<T, ID>, ID> implements GenericService<T, ID> {
 
     @Autowired
     private RestaurantService restaurantService;
@@ -36,9 +36,7 @@ public class GenericServiceImpl<T extends HasRestaurant, U extends JpaRepository
     public Optional<T> getByName(String name, Long restaurantId) {
         if (!existsByName(name, restaurantId)) return Optional.empty();
 
-        return repository.findAll().stream()
-                .filter(item -> item.getName().equalsIgnoreCase(name) && item.getRestaurant().getId().equals(restaurantId))
-                .findFirst();
+        return repository.findAll().stream().filter(item -> item.getName().equalsIgnoreCase(name) && item.getRestaurant().getId().equals(restaurantId)).findFirst();
     }
 
     @Override

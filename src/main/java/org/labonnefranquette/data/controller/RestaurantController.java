@@ -51,7 +51,6 @@ public class RestaurantController {
         User user;
         try {
             restaurant = restaurantService.create(restaurantCreateDTO.getRestaurantName());
-
             user = userService.create(new UserCreateDto(restaurantCreateDTO.getUsername(), restaurantCreateDTO.getPassword(), restaurant.getId()));
             user = userService.setAdmin(user);
             restaurantService.addUser(restaurant, user);

@@ -43,7 +43,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findAllOrder(String token) {
-        //Ajouter le trie via id Restaurant
         Long idRestaurant = jwtUtil.extractRestaurantId(token);
         return orderRepository.findAllByRestaurant(idRestaurant);
     }

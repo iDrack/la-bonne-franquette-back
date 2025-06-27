@@ -89,7 +89,6 @@ public class UserController {
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = true) String authToken, @RequestBody UserCreateDto userCreateDto) {
         try {
-
             if (!jwtUtil.isAdmin(authToken)) {
                 Map<String, String> retMap = new HashMap<>();
                 retMap.put("Erreur", "Vous n'avez pas les droits nécessaires pour créer un nouvel utilisateur.");
