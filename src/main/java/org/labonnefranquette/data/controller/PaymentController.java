@@ -113,7 +113,6 @@ public class PaymentController {
             @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
             @RequestHeader(value = "Auth-Token", required = false) String authToken) {
         List<PaymentType> listPaymentType = paymentService.getAllPaymentType();
-        if (listPaymentType.isEmpty()) return new ResponseEntity<>(listPaymentType, HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(listPaymentType, HttpStatus.OK);
     }
 
