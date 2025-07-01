@@ -9,6 +9,7 @@ import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.labonnefranquette.data.dto.impl.PaymentCreateDTO;
 import org.labonnefranquette.data.dto.impl.PaymentReadDTO;
+import org.labonnefranquette.data.dto.impl.PaymentTypeDTO;
 import org.labonnefranquette.data.model.Payment;
 import org.labonnefranquette.data.model.PaymentType;
 import org.labonnefranquette.data.services.MailService;
@@ -96,24 +97,6 @@ public class PaymentController {
         } else {
             return new ResponseEntity<>("L'e-mail est invalide.", HttpStatus.METHOD_NOT_ALLOWED);
         }
-    }
-
-    /**
-     * Renvoie la liste des types de paiement disponibles.
-     *
-     * @param authToken JWT pour l'authentification (obligatoire)
-     * @return liste des PaiementType, HTTP 200 ou HTTP 404 si vide
-     */
-    @Operation(
-            summary = "Lister les types de paiement",
-            description = "Récupère tous les types de paiement gérés par l'application."
-    )
-    @GetMapping("/type")
-    public ResponseEntity<List<PaymentType>> getAllByType(
-            @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-            @RequestHeader(value = "Auth-Token", required = false) String authToken) {
-        List<PaymentType> listPaymentType = paymentService.getAllPaymentType();
-        return new ResponseEntity<>(listPaymentType, HttpStatus.OK);
     }
 
     /**
