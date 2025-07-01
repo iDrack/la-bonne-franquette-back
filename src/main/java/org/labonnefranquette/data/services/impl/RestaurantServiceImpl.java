@@ -24,6 +24,22 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     @Override
+    public String getRestaurantNameById(Long id) {
+        return findAllById(id).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + id)).getName();
+    }
+
+    @Override
+    public void updateRestaurantName(Long id, String newName) {
+        Restaurant restaurant = restaurantRepository.findById(id).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + id));
+        Restaurant restaurantFound = restaurantRepository.findByName(newName);
+        if (restaurantFound != null) {
+            throw new IllegalArgumentException("Un Restaurant avec le nom : \"" + newName + "\" éxiste déjà.");
+        }
+        restaurant.setName(newName);
+        restaurantRepository.save(restaurant);
+    }
+
+    @Override
     public int getVersion(Long idRestaurant) {
         return findAllById(idRestaurant).orElseThrow(() -> new RuntimeException("Impossible de trouver le restaurant : " + idRestaurant)).getMenuVersion();
     }
