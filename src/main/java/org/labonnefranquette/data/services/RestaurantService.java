@@ -9,6 +9,10 @@ import java.util.Optional;
 public interface RestaurantService {
     Optional<Restaurant> findAllById(Long id);
 
+    String getRestaurantNameById(Long id);
+
+    void updateRestaurantName(Long id, String newName) throws IllegalArgumentException;
+
     public int getVersion(Long idRestaurant);
 
     public void updateCacheVersion(Long idRestaurant);
