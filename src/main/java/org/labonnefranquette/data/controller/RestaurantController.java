@@ -94,6 +94,9 @@ public class RestaurantController {
                                                @RequestHeader(value = "Auth-Token", required = true) String authToken) {
         try {
             Long restaurantId = jwtUtil.extractRestaurantId(authToken);
+            if (!jwtUtil.isAdmin(authToken)) {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body(Map.of("Erreur", "Vous n'avez pas les droits pour renommer le restaurant."));
+            }
             String restaurantName = restaurantService.getRestaurantNameById(restaurantId);
             return ResponseEntity.ok(Map.of("name", restaurantName));
         } catch (Exception e) {
