@@ -66,6 +66,3 @@ build/
 ### App properties ###
 **/src/main/resources/*
 /ipaddr-QR.png
-src/main/resources/application.properties
-src/main/java/org/labonnefranquette/data/LaBonneFranquetteApplication.java
-src/main/java/org/labonnefranquette/data/config/SecurityConfig.java
