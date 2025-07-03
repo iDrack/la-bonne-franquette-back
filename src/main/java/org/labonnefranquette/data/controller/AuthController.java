@@ -122,7 +122,6 @@ public class AuthController {
      * Rafraîchit l’accessToken en utilisant le refreshToken.
      *
      * @param refreshToken map contenant le refreshToken (obligatoire)
-     * @param authToken    ancien accessToken en header (obligatoire)
      * @return 200 + nouveau accessToken si succès, 400 sinon
      */
     @Operation(
@@ -130,9 +129,7 @@ public class AuthController {
             description = "Génère un nouveau accessToken à partir d’un refreshToken valide."
     )
     @PostMapping(value = "/refresh", produces = "application/json")
-    public ResponseEntity<String> refreshToken(@RequestBody(required = false) Map<String, String> refreshToken,
-                                               @Parameter(in = ParameterIn.HEADER, description = "Auth Token", schema = @Schema(type = "string"))
-                                               @RequestHeader(value = "Auth-Token", required = true) String authToken) {
+    public ResponseEntity<String> refreshToken(@RequestBody(required = true) Map<String, String> refreshToken) {
         try {
             if (!ControlInputTool.checkRefreshToken(refreshToken)) {
                 throw new Exception();
