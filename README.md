@@ -10,10 +10,12 @@ Application écrite en Spring afin de gérer le backend de La Bonne Franquette.
 
 Base de données écrite en mySQL.
 
-## Liens utiles:
+## Les autres dépôts:
 
-* [Trello](https://trello.com/b/SJMgiPY2/2fast2go)
-* [Miro](https://miro.com/app/board/uXjVNdC3XNc=/)
+* [L'application mobile](https://github.com/Franfran62/la-bonne-franquette-appli)
+* [L'API REST](https://github.com/iDrack/la-bonne-franquette-back)
+* [Le dashboard](https://github.com/Franfran62/la-bonne-franquette-website)
+* [La gestion de l'infrastructure](https://github.com/Franfran62/la-bonne-franquette-infra)
 
 ## Informations sur l'environnement de développement
 
